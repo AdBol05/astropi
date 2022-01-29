@@ -5,7 +5,7 @@
 
 # NOTE: some parts of this code are based on examples from the astropi website
 
-# import all libraries needed
+# import all libraries required
 import csv
 from sense_hat import SenseHat
 from pathlib import Path
@@ -41,7 +41,7 @@ def add_csv_data(data_file, data):  # writing data to csv file
 
 
 def read_data(data_file):  # data collection
-    global i  # i as a global variable
+    global i  # readings counter as a global variable
     i = i + 1  # increase readings counter by one
     t = sense.get_temperature()  # get temperature data from sense hat
     h = sense.get_humidity()  # get humidity data from sense hat
@@ -52,7 +52,7 @@ def read_data(data_file):  # data collection
 
 
 base_folder = Path(__file__).parent.resolve()  # determine working directory
-data_file = base_folder / 'data.csv'  # set data.csv file name and location
+data_file = base_folder / 'data.csv'  # set csv file name and location
 sense = SenseHat()  # set up sense hat
 create_csv(data_file)  # create data.csv file
 print("program running...")  # debug
