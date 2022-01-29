@@ -13,12 +13,12 @@ from datetime import datetime, timedelta
 from time import sleep
 import RPi.GPIO as GPIO
 
-startTime = datetime.now()  # get current time
+startTime = datetime.now()  # get pprogram start time
 
 blue = (0, 0, 255)  # colour settings for LED matrix
 black = (0, 0, 0)
 
-GPIO.setmode(GPIO.BCM)  # set GPIO mapping
+GPIO.setmode(GPIO.BCM)  # set GPIO mapping scheme
 GPIO.setup(12, GPIO.IN)  # set pin 12 as input
 
 n = 0  # loop counter
