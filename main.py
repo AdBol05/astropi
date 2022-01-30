@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 from time import sleep
 import RPi.GPIO as GPIO
 
-startTime = datetime.now()  # get pprogram start time
+startTime = datetime.now()  # get program start time
 
 blue = (0, 0, 255)  # colour settings for LED matrix
 black = (0, 0, 0)
