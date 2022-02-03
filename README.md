@@ -12,5 +12,5 @@ One of astropi experiments we are working on.
 
 Measuring changes in life environment of ISS caused by human presence using temperature, humidity, pressure and pir sensors.
 
-required libraries: csv, sense_hat, pathlib, datetime, time, RPi.GPIO
+Required libraries: csv, sense_hat, pathlib, datetime, time, RPi.GPIO
 (should be included with raspbian OS)
