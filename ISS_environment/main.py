@@ -6,7 +6,7 @@
 
 # NOTE: some parts of this code are based on examples from the astropi website
 
-# import all libraries needed
+# import all required libraries
 import csv
 from sense_hat import SenseHat
 from pathlib import Path
