@@ -7,7 +7,7 @@ developed at Laborky.cz
 
 astropi project repository
 
-# Prostredi_ISS
+# ISs_environment
 one of astropi projets Laborky.cz is currently working on
 
 measuring changes in life environment of ISS caused by human presence
