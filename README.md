@@ -9,5 +9,6 @@ astropi project repository
 one of astropi projets Laborky.cz is currently working on
 
 measuring changes in life environment of ISS caused by human presence
+
 required libraries: csv, sense_hat, pathlib, datetime, time, RPi.GPIO
 (should be included with raspbian OS)
