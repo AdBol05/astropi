@@ -5,7 +5,7 @@
 
 # NOTE: some parts of this code are based on examples from the astropi website
 
-# import all libraries required
+# import all libraries needed
 import csv
 from sense_hat import SenseHat
 from pathlib import Path
@@ -52,7 +52,7 @@ def read_data(data_file):  # data collection
 
 
 base_folder = Path(__file__).parent.resolve()  # determine working directory
-data_file = base_folder / 'data.csv'  # set csv file name and location
+data_file = base_folder / 'data.csv'  # set data.csv file name and location
 sense = SenseHat()  # set up sense hat
 create_csv(data_file)  # create data.csv file
 print("program running...")  # debug
@@ -69,10 +69,10 @@ while currentTime < startTime + timedelta(minutes=175):  # run for 175 minutes (
         temp = sense.get_temperature()  # get temperature data from sense hat(used to display temperature to LED matrix)
         sense.show_message("Hello, temperature is %d" % temp, text_colour=blue, back_colour=black)  # print temperature to LED matrix
 
-    if pir == 1:  # run if motion is detected
-        print("Motion detected! Collecting data more frequently...")  # debug
+    if pir == 1:  # run if movement is detected
+        print("Movement detected! Collecting data more frequently...")  # debug
         read_data(data_file)  # collect data from all sensors
-        sense.show_message("Motion detected!")  # print "Motion detected!" to LED matrix
+        sense.show_message("Movement detected!")  # print "Movement detected!" to LED matrix
         sleep(1)  # pause for one second
         for k in range(9):  # run 9 times (10 with data collection above)
             read_data(data_file)  # collect data from all sensors
