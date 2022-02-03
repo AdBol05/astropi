@@ -28,7 +28,7 @@ i = 0  # data readings counter
 def create_csv(data_file):  # creating csv file
     with open(data_file, 'w') as f:  # create csv file and set up logging
         writer = csv.writer(f)  # set up writer
-        header = ("RowNum", " Date/time", " Temperature", " Humidity", " Pressure", " Motion")  # write first line (data type)
+        header = ("RowNum", " Date/time", " Temperature", " Humidity", " Pressure", " Movement")  # write first line (data type)
         writer.writerow(header)  # write header to csv file
         print("Creating data.csv file...")  # debug
 
