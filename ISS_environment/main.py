@@ -65,7 +65,7 @@ while currentTime < startTime + timedelta(minutes=175):  # run for 175 minutes (
     pir = GPIO.input(12)  # define pin 12 as pir and read it's state
     print("loop count: ", n)  # debug
 
-    if n % 60 == 0:  # run every 60 seconds
+    if n % 60 == 0:  # run every 60 loops
         read_data(data_file)  # collect data from all sensors
         temp = sense.get_temperature()  # get temperature data from sense hat(used to display temperature to LED matrix)
         sense.show_message("Hello, temperature is %d" % temp, text_colour=blue, back_colour=black)  # print temperature to LED matrix
