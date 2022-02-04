@@ -48,8 +48,8 @@ def read_data(data_file):  # data collection
     h = sense.get_humidity()  # get humidity data from sense hat
     p = sense.get_pressure()  # get pressure data from sense hat
     row = (i, datetime.now(), t, h, p, pir)  # assign data to row
-    add_csv_data(data_file, row)  # write row to csv file
     print("sensing data...")  # debug
+    add_csv_data(data_file, row)  # write row to csv file
 
 
 base_folder = Path(__file__).parent.resolve()  # determine working directory
