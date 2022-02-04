@@ -1,7 +1,7 @@
 # source code for astropi life in space experiment (ISS environment effected by astronauts presence)
 # by Adam Bolemant - Laborky.cz
 
-# gather data from sensors -> PIR (human presence), temperature, humidity, air pressure
+# gather data from sensors -> PIR (human presence), temperature, humidity, air pressure, light
 # create a table using gathered data
 
 # NOTE: some parts of this code are based on examples from the astropi website
