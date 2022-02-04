@@ -29,7 +29,7 @@ i = 0  # data readings counter
 def create_csv(data_file):  # creating csv file
     with open(data_file, 'w') as f:  # create csv file and set up logging
         writer = csv.writer(f)  # set up writer
-        header = ("RowNum", " Date/time", " Temperature", " Humidity", " Pressure", " Motion")  # write first line (data type)
+        header = ("RowNum", " Date/time", " Temperature", " Humidity", " Pressure", " Light",  " Motion")  # write first line (data type)
         writer.writerow(header)  # write header to csv file
         print("Creating data.csv file...")  # debug
 
@@ -47,7 +47,8 @@ def read_data(data_file):  # data collection
     t = sense.get_temperature()  # get temperature data from sense hat
     h = sense.get_humidity()  # get humidity data from sense hat
     p = sense.get_pressure()  # get pressure data from sense hat
-    row = (i, datetime.now(), t, h, p, pir)  # assign data to row
+    l = sense.color.clear
+    row = (i, datetime.now(), t, h, p, l, pir)  # assign data to row
     print("sensing data...")  # debug
     add_csv_data(data_file, row)  # write row to csv file
 
@@ -55,6 +56,7 @@ def read_data(data_file):  # data collection
 base_folder = Path(__file__).parent.resolve()  # determine working directory
 data_file = base_folder / 'data.csv'  # set data.csv file name and location
 sense = SenseHat()  # set up sense hat
+sense.color.gain = 60
 create_csv(data_file)  # create data.csv file
 print("program running...")  # debug
 
