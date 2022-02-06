@@ -36,7 +36,7 @@ def read_data(data_file):  # data collection
     location = position.subpoint()
     i = i + 1  # increase readings counter by one
     row = (i, datetime.now(), location, sense.get_compass_raw())  # assign data to row
-    #print("sensing data...")  # debug
+    print("sensing data...")  # debug
     add_csv_data(data_file, row)  # write row to csv file
 
 
