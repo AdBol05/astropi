@@ -56,7 +56,7 @@ print("running...")  # debug
 create_csv(data_file)  # create data.csv file
 
 model_file = base_folder/'coral'/'model'/'particle.tflite' #ENTER MODEL FILE
-label_file = base_folder/'coral'/'lable.txt' #ENTER LABEL TXT FILE
+label_file = base_folder/'coral'/'label.txt' #ENTER LABEL TXT FILE
 
 interpreter = make_interpreter(f"{model_file}")  # assign model to interpreter
 image_file = base_folder/'image'/'image.jpg'
