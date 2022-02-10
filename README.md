@@ -31,7 +31,7 @@ Required libraries: csv, sense_hat, pathlib, datetime, time, RPi.GPIO
 (should be included in raspbian OS)
 
 # Particle_detection
-Detecting particles using raspberry pi HQ camera.
+Detecting particles using raspberry pi HQ camera. Deleting empty images and saving only images with a particle detected.
 
 Required libraries: csv, sense_hat, pathlib, datetime, time, picamera, orbit, skyfield.api
 (should be included in raspbian OS)
