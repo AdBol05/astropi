@@ -1,4 +1,4 @@
-importing necessary libraries
+# importing necessary libraries
 import csv
 from sense_hat import SenseHat
 from pathlib import Path
@@ -7,11 +7,17 @@ from time import time, sleep
 from picamera import PiCamera
 from orbit import ISS
 from skyfield.api import load
+from PIL import Image
+from pycoral.adapters import common
+from pycoral.adapters import classify
+from pycoral.utils.edgetpu import make_interpreter
+from pycoral.utils.dataset import read_label_file
+import os
 
 #mainStartTime = time()
 startTime = datetime.now()  # get program start time
 
-counter = 1  # image counter
+# counter = 1  # image counter
 i = 0  # readings counter
 
 def create_csv(data_file):  # creating csv file
@@ -31,9 +37,9 @@ def add_csv_data(data_file, data):  # writing data to csv file
 
 def read_data(data_file):  # data collection
     global i  # readings counter as a global variable
-    t = load.timescale().now()
-    position = ISS.at(t)
-    location = position.subpoint()
+    t = load.timescale().now()  # get timescale
+    position = ISS.at(t)  # get position from timescale
+    location = position.subpoint()  # get location from position
     i = i + 1  # increase readings counter by one
     row = (i, datetime.now(), location, sense.get_compass_raw())  # assign data to row
     print("sensing data...")  # debug
@@ -49,12 +55,35 @@ camera.resolution = (1296, 972)  # set camera resolution
 print("running...")  # debug
 create_csv(data_file)  # create data.csv file
 
-currentTime = datetime.now()
-#10 seconds loop with main code
-while (currentTime < startTime + timedelta(minutes=10)):
-    camera.capture(f"{base_folder}/image_{counter}.jpg")
-    print("took a picture")
-    read_data(data_file)
-    sleep(2)
-    counter += 1
-    currentTime = datetime.now()
+model_file = base_folder/ #ENTER MODEL FILE
+label_file = base_folder/ #ENTER LABEL TXT FILE
+
+interpreter = make_interpreter(f"{model_file}")  # assign model to interpreter
+image_file = base_folder/'img'/'img.jpg'
+interpreter.allocate_tensors()  # set up tensor cores
+size = common.input_size(interpreter)  # resize image
+
+currentTime = datetime.now()  # get current time before loop start
+while (currentTime < startTime + timedelta(minutes=175)):  # run for 175 minutes (3 hours - 5 minutes)
+    camera.capture(f"{base_folder}/img/image.jpg")  # capture camera and save the image
+    print("took a picture")  # debug
+    read_data(data_file)  # gather data
+
+    image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)  # open image
+    common.set_input(interpreter, image)
+    interpreter.invoke()
+    classes = classify.get_classes(interpreter, top_k=1)
+    labels = read_label_file(label_file)
+
+    for c in classes:
+        print("classifying image...")
+        print(f'{labels.get(c.id, c.id)} {c.score:.5f}')
+        if (f'{labels.get(c.id, c.id)}'  == 'day' and float(f'{c.score:.5f}') >= 0.3):
+            print("classified as particle, saving...")
+            os.rename(image_file, base_folder/'img'/f'day_{counter}.jpg')
+            counter += 1
+        else:
+            print("classified as an empty image, deleting...")
+            os.remove(image_file)
+
+    currentTime = datetime.now()  # update current time
