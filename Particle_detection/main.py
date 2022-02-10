@@ -14,7 +14,6 @@ from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.dataset import read_label_file
 import os
 
-#mainStartTime = time()
 startTime = datetime.now()  # get program start time
 
 counter = 1  # image counter
