@@ -17,7 +17,7 @@ import os
 #mainStartTime = time()
 startTime = datetime.now()  # get program start time
 
-# counter = 1  # image counter
+counter = 1  # image counter
 i = 0  # readings counter
 
 def create_csv(data_file):  # creating csv file
@@ -76,14 +76,14 @@ while (currentTime < startTime + timedelta(minutes=175)):  # run for 175 minutes
     labels = read_label_file(label_file)
 
     for c in classes:
-        print("classifying image...")
-        print(f'{labels.get(c.id, c.id)} {c.score:.5f}')
-        if (f'{labels.get(c.id, c.id)}'  == 'day' and float(f'{c.score:.5f}') >= 0.3):
-            print("classified as a particle image, saving...")
-            os.rename(image_file, base_folder/'image'/f'particle_{counter}.jpg')
-            counter += 1
+        print("classifying image...")  # debug
+        print(f'{labels.get(c.id, c.id)} {c.score:.5f}')  # debug
+        if (f'{labels.get(c.id, c.id)}'  == 'day' and float(f'{c.score:.5f}') >= 0.3):  # save only images with particles
+            print("classified as a particle image, saving...")  # debug
+            os.rename(image_file, base_folder/'image'/f'particle_{counter}.jpg')  # rename image to particle(number of picture).jpg
+            counter += 1  # increase image counter by one
         else:
-            print("classified as an empty image, deleting...")
-            os.remove(image_file)
+            print("classified as an empty image, deleting...")  # debug
+            os.remove(image_file)  # delete empty image
 
     currentTime = datetime.now()  # update current time
