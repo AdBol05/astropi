@@ -55,17 +55,17 @@ camera.resolution = (1296, 972)  # set camera resolution
 print("running...")  # debug
 create_csv(data_file)  # create data.csv file
 
-model_file = base_folder/ #ENTER MODEL FILE
-label_file = base_folder/ #ENTER LABEL TXT FILE
+model_file = base_folder/'coral'/'model'/'particle.tflite' #ENTER MODEL FILE
+label_file = base_folder/'coral'/'lable.txt' #ENTER LABEL TXT FILE
 
 interpreter = make_interpreter(f"{model_file}")  # assign model to interpreter
-image_file = base_folder/'img'/'img.jpg'
+image_file = base_folder/'image'/'image.jpg'
 interpreter.allocate_tensors()  # set up tensor cores
 size = common.input_size(interpreter)  # resize image
 
 currentTime = datetime.now()  # get current time before loop start
 while (currentTime < startTime + timedelta(minutes=175)):  # run for 175 minutes (3 hours - 5 minutes)
-    camera.capture(f"{base_folder}/img/image.jpg")  # capture camera and save the image
+    camera.capture(f"{base_folder}/image/image.jpg")  # capture camera and save the image
     print("took a picture")  # debug
     read_data(data_file)  # gather data
 
@@ -79,8 +79,8 @@ while (currentTime < startTime + timedelta(minutes=175)):  # run for 175 minutes
         print("classifying image...")
         print(f'{labels.get(c.id, c.id)} {c.score:.5f}')
         if (f'{labels.get(c.id, c.id)}'  == 'day' and float(f'{c.score:.5f}') >= 0.3):
-            print("classified as particle, saving...")
-            os.rename(image_file, base_folder/'img'/f'day_{counter}.jpg')
+            print("classified as a particle image, saving...")
+            os.rename(image_file, base_folder/'image'/f'particle_{counter}.jpg')
             counter += 1
         else:
             print("classified as an empty image, deleting...")
