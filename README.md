@@ -37,6 +37,7 @@ Required libraries: csv, sense_hat, pathlib, datetime, time, picamera, orbit, sk
 (should be included in Flight OS)
 
 #Coral
+
 Retrained model used for Particle detection
 
                   filestructure: /Coral/train.py                   //training script
