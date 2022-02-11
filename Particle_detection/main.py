@@ -1,4 +1,4 @@
-# importing necessary libraries
+#importing necessary libraries
 import csv
 from sense_hat import SenseHat
 from pathlib import Path
@@ -16,7 +16,7 @@ import os
 
 startTime = datetime.now()  # get program start time
 
-counter = 1  # image counter
+counter = 10000  # image counter (start from 10000 for better naming scheme)
 i = 0  # readings counter
 
 def create_csv(data_file):  # creating csv file
@@ -38,7 +38,7 @@ def read_data(data_file):  # data collection
     global i  # readings counter as a global variable
     t = load.timescale().now()  # get timescale
     position = ISS.at(t)  # get position from timescale
-    location = position.subpoint()  # get location from position
+    location = position.subpoint()  # get position from timescale
     i = i + 1  # increase readings counter by one
     row = (i, datetime.now(), location, sense.get_compass_raw())  # assign data to row
     print("sensing data...")  # debug
@@ -54,17 +54,18 @@ camera.resolution = (1296, 972)  # set camera resolution
 print("running...")  # debug
 create_csv(data_file)  # create data.csv file
 
-model_file = base_folder/'coral'/'model'/'particle.tflite' #ENTER MODEL FILE
-label_file = base_folder/'coral'/'label.txt' #ENTER LABEL TXT FILE
+model_file = base_folder/'coral'/'model'/'particle.tflite' # set model directory
+label_file = base_folder/'coral'/'label.txt' # set label file directory
 
 interpreter = make_interpreter(f"{model_file}")  # assign model to interpreter
-image_file = base_folder/'image'/'image.jpg'
+image_file = base_folder/'image'/'img.jpg'  # set image directory
 interpreter.allocate_tensors()  # set up tensor cores
 size = common.input_size(interpreter)  # resize image
 
 currentTime = datetime.now()  # get current time before loop start
-while (currentTime < startTime + timedelta(minutes=175)):  # run for 175 minutes (3 hours - 5 minutes)
-    camera.capture(f"{base_folder}/image/image.jpg")  # capture camera and save the image
+#10 seconds loop with main code
+while (currentTime < startTime + timedelta(minutes=10)):  # run for 175 minutes (3 hours - 5 minutes)
+    camera.capture(f"{base_folder}/image_{counter}.jpg")  # capture camera and save the image
     print("took a picture")  # debug
     read_data(data_file)  # gather data
 
@@ -77,12 +78,12 @@ while (currentTime < startTime + timedelta(minutes=175)):  # run for 175 minutes
     for c in classes:
         print("classifying image...")  # debug
         print(f'{labels.get(c.id, c.id)} {c.score:.5f}')  # debug
-        if (f'{labels.get(c.id, c.id)}'  == 'day' and float(f'{c.score:.5f}') >= 0.3):  # save only images with particles
-            print("classified as a particle image, saving...")  # debug
+        if (f'{labels.get(c.id, c.id)}'  == 'particle' and float(f'{c.score:.5f}') >= 0.3):  # save only images with particles
+            print("classified as particle, saving...")  # debug
             os.rename(image_file, base_folder/'image'/f'particle_{counter}.jpg')  # rename image to particle(number of picture).jpg
             counter += 1  # increase image counter by one
         else:
-            print("classified as an empty image, deleting...")  # debug
+            print("classified as a blank image, deleting...")  # debug
             os.remove(image_file)  # delete empty image
 
     currentTime = datetime.now()  # update current time
