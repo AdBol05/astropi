@@ -36,8 +36,7 @@ Detecting particles using raspberry pi HQ camera. Deleting empty images and savi
 Required libraries: csv, sense_hat, pathlib, datetime, time, picamera, orbit, skyfield.api, PIL, pycoral, os
 (should be included in Flight OS)
 
-#Coral
-
+# Coral
 Retrained model used for Particle detection
 
                   filestructure: /Coral/train.py                   //training script
