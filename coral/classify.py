@@ -16,7 +16,7 @@ model_file = script_dir/'models/astropi-day-vs-nite.tflite' # name of model
 data_dir = script_dir/'data'  # data directory
 label_file = data_dir/'day-vs-night.txt' # Name of your label file
 
-image_file = data_dir/'tests'/"img_7.jpg" # Name of image for classification
+image_file = data_dir/'tests'/f'img_{counter}.jpg' # Name of image for classification
 interpreter = make_interpreter(f"{model_file}")  # assign model to interpreter
 interpreter.allocate_tensors()  # set up tensor cores
 size = common.input_size(interpreter)  # set image size
