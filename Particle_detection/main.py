@@ -54,21 +54,21 @@ camera.resolution = (1296, 972)  # set camera resolution
 print("running...")  # debug
 create_csv(data_file)  # create data.csv file
 
-model_file = base_folder/'coral'/'model'/'particle.tflite' # set model directory
-label_file = base_folder/'coral'/'label.txt' # set label file directory
+model_file = base_folder/'models'/'particle.tflite' # set model directory
+label_file = base_folder/'label.txt' # set label file directory
 
 interpreter = make_interpreter(f"{model_file}")  # assign model to interpreter
-image_file = base_folder/'image'/'img.jpg'  # set image directory
 interpreter.allocate_tensors()  # set up tensor cores
 size = common.input_size(interpreter)  # resize image
 
 currentTime = datetime.now()  # get current time before loop start
 #10 seconds loop with main code
 while (currentTime < startTime + timedelta(minutes=10)):  # run for 175 minutes (3 hours - 5 minutes)
-    camera.capture(f"{base_folder}/image_{counter}.jpg")  # capture camera and save the image
+    camera.capture(f"{base_folder}/image/img_{counter}.jpg")  # capture camera and save the image
     print("took a picture")  # debug
     read_data(data_file)  # gather data
 
+    image_file = base_folder/'image'/f'img_{counter}.jpg'  # set image directory
     image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)  # open image
     common.set_input(interpreter, image)
     interpreter.invoke()
