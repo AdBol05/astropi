@@ -39,9 +39,11 @@ Required libraries: csv, sense_hat, pathlib, datetime, time, picamera, orbit, sk
 # Coral
 Retrained model used for Particle detection
 
-                  project filestructure: /coral/label.txt                  //label file for classes detrmination
-                                         /coral/model/particle.tflite      //retrained model used for classification
-                                         /image                            //images directory (images are removed, when classified as blank)
+                  project filestructure: /label.txt                  //label file for classes detrmination
+                                         /model/particle.tflite      //retrained model used for classification
+                                         /image                      //images directory (images are removed, when classified as blank)
+                                         /data.csv                   //data output file
+                                         /main.py                    //main script
                                          
                   training filestructure: /Downloads/Coral/classify.py     //classification test script
                                           /Downloads/Coral/train.py        //training script
