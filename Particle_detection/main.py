@@ -62,8 +62,7 @@ interpreter.allocate_tensors()  # set up tensor cores
 size = common.input_size(interpreter)  # resize image
 
 currentTime = datetime.now()  # get current time before loop start
-#10 seconds loop with main code
-while (currentTime < startTime + timedelta(minutes=10)):  # run for 175 minutes (3 hours - 5 minutes)
+while (currentTime < startTime + timedelta(minutes=175)):  # run for 175 minutes (3 hours - 5 minutes)
     camera.capture(f"{base_folder}/image/img_{counter}.jpg")  # capture camera and save the image
     print("took a picture")  # debug
     read_data(data_file)  # gather data
