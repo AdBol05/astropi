@@ -18,6 +18,7 @@ startTime = datetime.now()  # get program start time
 
 counter = 10000  # image counter (start from 10000 for better naming scheme)
 i = 0  # readings counter
+storage = 7200000  # used storage space (headroom for script, label.txt and tflite model)
 
 def create_csv(data_file):  # creating csv file
     with open(data_file, 'w', buffering=1) as f:  # create csv file and set up logging
@@ -62,7 +63,7 @@ interpreter.allocate_tensors()  # set up tensor cores
 size = common.input_size(interpreter)  # resize image
 
 currentTime = datetime.now()  # get current time before loop start
-while (currentTime < startTime + timedelta(minutes=175)):  # run for 175 minutes (3 hours - 5 minutes)
+while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000):  # run for 175 minutes (3 hours - 5 minutes) or until storage is full
     camera.capture(f"{base_folder}/image/img_{counter}.jpg")  # capture camera and save the image
     print("took a picture")  # debug
     read_data(data_file)  # gather data
@@ -80,6 +81,9 @@ while (currentTime < startTime + timedelta(minutes=175)):  # run for 175 minutes
         if (f'{labels.get(c.id, c.id)}'  == 'particle' and float(f'{c.score:.5f}') >= 0.3):  # save only images with particles
             print("classified as particle, saving...")  # debug
             os.rename(image_file, base_folder/'image'/f'particle_{counter}.jpg')  # rename image to particle(number of picture).jpg
+            image_size = os.path.getsize(base_folder/'image'/f'particle_{counter}.jpg')  # get image size
+            storage = storage + image_size  # add image size to used storage
+            print("saved image size: %d" % image_size)
             counter += 1  # increase image counter by one
         else:
             print("classified as a blank image, deleting...")  # debug
