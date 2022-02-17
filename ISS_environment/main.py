@@ -1,11 +1,3 @@
-# source code for astropi life in space experiment (ISS environment effected by astronauts presence)
-# by Adam Bolemant - Laborky.cz
-
-# gather data from sensors -> PIR (human presence), temperature, humidity, air pressure, light
-# create a table using gathered data
-
-# NOTE: some parts of this code are based on examples from the astropi website
-
 # import all required libraries
 import csv
 from sense_hat import SenseHat
@@ -47,7 +39,7 @@ def read_data(data_file):  # data collection
     t = sense.get_temperature()  # get temperature data from sense hat
     h = sense.get_humidity()  # get humidity data from sense hat
     p = sense.get_pressure()  # get pressure data from sense hat
-    l = sense.color.clear  # get light data from sense hat
+    l = sense.color.clear
     row = (i, datetime.now(), t, h, p, l, pir)  # assign data to row
     print("sensing data...")  # debug
     add_csv_data(data_file, row)  # write row to csv file
@@ -56,7 +48,7 @@ def read_data(data_file):  # data collection
 base_folder = Path(__file__).parent.resolve()  # determine working directory
 data_file = base_folder / 'data.csv'  # set data.csv file name and location
 sense = SenseHat()  # set up sense hat
-sense.color.gain = 60  # set color sensor gain
+sense.color.gain = 60
 create_csv(data_file)  # create data.csv file
 print("program running...")  # debug
 
@@ -83,3 +75,4 @@ while currentTime < startTime + timedelta(minutes=175):  # run for 175 minutes (
 
     currentTime = datetime.now()  # update current time
     sleep(1)  # pause one second before next cycle
+print("Program ended")
