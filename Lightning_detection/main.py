@@ -1,0 +1,2 @@
+#  lightning detection program
+#  WIP
