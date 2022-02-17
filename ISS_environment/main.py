@@ -75,4 +75,4 @@ while currentTime < startTime + timedelta(minutes=175):  # run for 175 minutes (
 
     currentTime = datetime.now()  # update current time
     sleep(1)  # pause one second before next cycle
-print("Program ended")
+print("Program ended")  # debug
