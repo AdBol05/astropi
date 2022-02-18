@@ -29,7 +29,7 @@ def create_csv(data_file):  # creating csv file
 def add_csv_data(data_file, data):  # writing data to csv file
     with open(data_file, 'a') as f:  # open csv file
         writer = csv.writer(f)  # set up writer
-        writer.writerow(data)  # write data row to scv file
+        writer.writerow(data)  # write data row to csv file
         print("Writing data to .csv file...")  # debug
 
 
