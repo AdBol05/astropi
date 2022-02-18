@@ -1,5 +1,3 @@
-#  lightning detection program
-#  WIP
 #importing necessary libraries
 import csv
 from sense_hat import SenseHat
@@ -16,6 +14,11 @@ counter = 10000  # image counter (start from 10000 for better naming scheme)
 i = 0  # readings counter
 storage = 7400000  # used storage space (headroom for script, label.txt and tflite model)
 
+vals_x = []
+vals_y = []
+vals_z = []
+peak = False
+
 def create_csv(data_file):  # creating csv file
     with open(data_file, 'w', buffering=1) as f:  # create csv file and set up logging
         writer = csv.writer(f)  # set up writer
@@ -31,6 +34,17 @@ def add_csv_data(data_file, data):  # writing data to csv file
         print("Writing data to .csv file...")  # debug
 
 
+def read_data(data_file):  # data collection
+    global i  # readings counter as a global variable
+    t = load.timescale().now()  # get timescale
+    position = ISS.at(t)  # get position from timescale
+    location = position.subpoint()  # get position from timescale
+    i = i + 1  # increase readings counter by one
+    row = (i, datetime.now(), location, sense.get_compass_raw())  # assign data to row
+    print("sensing data...")  # debug
+    add_csv_data(data_file, row)  # write row to csv file
+
+
 base_folder = Path(__file__).parent.resolve()  # determine working directory
 data_file = base_folder / 'data.csv'  # set data.csv file name and location
 sense = SenseHat() # set up sense hat
@@ -41,16 +55,22 @@ print("running...")  # debug
 create_csv(data_file)  # create data.csv file
 
 currentTime = datetime.now()  # get current time before loop start
-while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000):  # run for 175 minutes (3 hours - 5 minutes) or $    camera.capture(f"{base_folder}/image/img_{counter}.jpg")  # capture camera and save the image
-    print("took a picture")  # debug
+while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000):  # run for 175 minutes (3 hours - 5 minutes) or until storage is full
     read_data(data_file)  # gather data
-    t = load.timescale().now()  # get timescale
-    position = ISS.at(t)  # get position from timescale
-    location = position.subpoint()  # get position from timescale
-    i = i + 1  # increase readings counter by one
-    row = (i, datetime.now(), location, sense.get_compass_raw())  # assign data to row
-    print("sensing data...")  # debug
-    add_csv_data(data_file, row)  # write row to csv file
+    for k in range(10):
+        camera.capture(f"{base_folder}/img_{counter}.jpg")  # capture camera and save the image
+        counter += 1
+        compass = sense.get_compass_raw()
+        vals_x.append(abs(float("{x}".format(**compass))))
+        vals_y.append(abs(float("{y}".format(**compass))))
+        vals_z.append(abs(float("{z}".format(**compass))))
+        sleep(1)
+    print(vals_x)
+    print(vals_y)
+    print(vals_z)
 
+    vals_x.clear()
+    vals_y.clear()
+    vals_z.clear()
     currentTime = datetime.now()  # update current time
 print("Program ended. Timed out or ran out of storage.")
