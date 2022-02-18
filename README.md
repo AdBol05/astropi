@@ -43,7 +43,7 @@ Retrained model used for Particle detection
                                          /particle.tflite            //retrained model used for classification
                                          /data.csv                   //data output file
                                          /main.py                    //main script
-                                         /particle_{counter}.jpg     //images classified as particle images
+                                         /particle_{counter}.jpg     //outputted images classified as particle images
                                          
                   training filestructure: /Downloads/Coral/classify.py     //classification test script
                                           /Downloads/Coral/train.py        //training script
