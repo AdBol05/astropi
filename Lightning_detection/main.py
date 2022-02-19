@@ -20,7 +20,7 @@ delete_counter = 0
 vals_x = []  # value list from magnetometer (x axis)
 vals_y = []  # y axis
 vals_z = []  # z axis
-spike = False  # detected spike
+spike = 0  # detected spike
 
 def create_csv(data_file):  # creating csv file
     with open(data_file, 'w', buffering=1) as f:  # create csv file and set up logging
