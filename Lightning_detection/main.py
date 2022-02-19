@@ -15,7 +15,7 @@ counter = 10000  # image counter (start from 10000 for better naming scheme)
 i = 0  # readings counter
 storage = 7400000  # used storage space (headroom for script and csv file)
 image_size = 0
-delete_counter = 0
+delete_counter = 0  #iamge counter used for deletion
 
 vals_x = []  # value list from magnetometer (x axis)
 vals_y = []  # y axis
@@ -70,30 +70,29 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
         vals_z.append(abs(float("{z}".format(**compass))))  # assign data from magnetometer (z axis) to list vals_z
         sleep(1)  # wait one second
 
-    avrg_x = sum(vals_x) / len(vals_x)  # get average value
-    absmax_x = (max(vals_x) + 10) - avrg_x  # get max value plus deviation
-    avrg_y = sum(vals_y) / len(vals_y)
-    absmax_y = (max(vals_y) + 10) - avrg_y
-    avrg_z = sum(vals_z) / len(vals_z)
-    absmax_z = (max(vals_z) + 10) - avrg_z
+    avrg_x = sum(vals_x) / len(vals_x)  # get average value (x axis)
+    absmax_x = (max(vals_x) + 10) - avrg_x  # get max value plus deviation (X axis)
+    avrg_y = sum(vals_y) / len(vals_y)  # get average value (y axis)
+    absmax_y = (max(vals_y) + 10) - avrg_y  # get max value plus deviation (y axis)
+    avrg_z = sum(vals_z) / len(vals_z)  # get average value (z axis)
+    absmax_z = (max(vals_z) + 10) - avrg_z  # get max value plus deviation (z axis)
 
     for j in range(len(vals_x)):  # compare each pair in list
         if i != 0:
             if (abs(vals_x[j] - vals_x[j - 1]) > absmax_x) or (abs(vals_y[j] - vals_y[j - 1]) > absmax_y) or (abs(vals_z[j] - vals_z[j - 1]) > absmax_z):  # if detected large difference between on values next to each other
                 print("spike detected")  # debug
                 spike = 1
-            else:
-                spike = 0
 
     print(delete_counter)  # debug
+    print(spike)  # debug
 
-    if spike == 0:
+    if spike == 0:  # spike detected
         for d in range(10):  # run ten times (10 images)
             delete_counter = (counter - d) - 1
             os.remove(f"{base_folder}/img_{delete_counter}.jpg")  #remove unnecessary images
             print("removing images...")  # debug
             print(delete_counter)  # debug
-    else:
+    if spike == 1:  # spike not detected
         storage = storage + image_size  # add images size to storage counter
         print("saving images")  #debug
 
