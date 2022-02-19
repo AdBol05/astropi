@@ -81,13 +81,13 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
         if i != 0:
             if (abs(vals_x[j] - vals_x[j - 1]) > absmax_x) or (abs(vals_y[j] - vals_y[j - 1]) > absmax_y) or (abs(vals_z[j] - vals_z[j - 1]) > absmax_z):  # if detected large difference between on values next to each other
                 print("spike detected")  # debug
-                spike = True
+                spike = 1
             else:
-                spike = False
+                spike = 0
 
     print(delete_counter)  # debug
 
-    if spike == False:
+    if spike == 0:
         for d in range(10):  # run ten times (10 images)
             delete_counter = (counter - d) - 1
             os.remove(f"{base_folder}/img_{delete_counter}.jpg")  #remove unnecessary images
@@ -106,7 +106,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
     vals_x.clear()
     vals_y.clear()
     vals_z.clear()
-    spike = False
+    spike = 0
     image_size = 0
 
     currentTime = datetime.now()  # update current time
