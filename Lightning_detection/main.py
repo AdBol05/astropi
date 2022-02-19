@@ -12,7 +12,7 @@ startTime = datetime.now()  # get program start time
 
 counter = 10000  # image counter (start from 10000 for better naming scheme)
 i = 0  # readings counter
-storage = 7400000  # used storage space (headroom for script, label.txt and tflite model)
+storage = 7400000  # used storage space (headroom for script and csv file)
 
 vals_x = []
 vals_y = []
@@ -75,13 +75,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
 
     for j in range(len(vals_x)):
         if i != 0:
-            if abs(vals_x[j] - vals_x[j - 1]) > absmax_x:
-                print("spike detected")
-                spike = True
-            if abs(vals_y[j] - vals_y[j - 1]) > absmax_y:
-                print("spike detected")
-                spike = True
-            if abs(vals_z[j] - vals_z[j - 1]) > absmax_z:
+            if (abs(vals_x[j] - vals_x[j - 1]) > absmax_x) or (abs(vals_y[j] - vals_y[j - 1]) > absmax_y) or (abs(vals_z[j] - vals_z[j - 1]) > absmax_z):
                 print("spike detected")
                 spike = True
             else:
