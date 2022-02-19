@@ -17,7 +17,7 @@ storage = 7400000  # used storage space (headroom for script, label.txt and tfli
 vals_x = []
 vals_y = []
 vals_z = []
-peak = False
+spike = False
 
 def create_csv(data_file):  # creating csv file
     with open(data_file, 'w', buffering=1) as f:  # create csv file and set up logging
@@ -58,19 +58,44 @@ currentTime = datetime.now()  # get current time before loop start
 while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000):  # run for 175 minutes (3 hours - 5 minutes) or until storage is full
     read_data(data_file)  # gather data
     for k in range(10):
-        camera.capture(f"{base_folder}/img_{counter}.jpg")  # capture camera and save the image
+        #camera.capture(f"{base_folder}/img_{counter}.jpg")  # capture camera and save the image
         counter += 1
         compass = sense.get_compass_raw()
         vals_x.append(abs(float("{x}".format(**compass))))
         vals_y.append(abs(float("{y}".format(**compass))))
         vals_z.append(abs(float("{z}".format(**compass))))
         sleep(1)
+
+    avrg_x = sum(vals_x) / len(vals_x)
+    absmax_x = (max(vals_x) + 10) - avrg_x
+    avrg_y = sum(vals_y) / len(vals_y)
+    absmax_y = (max(vals_y) + 10) - avrg_y
+    avrg_z = sum(vals_z) / len(vals_z)
+    absmax_z = (max(vals_z) + 10) - avrg_z
+
+    for j in range(len(vals_x)):
+        if i != 0:
+            if abs(vals_x[j] - vals_x[j - 1]) > absmax_x:
+                print("spike detected")
+                spike = True
+            if abs(vals_y[j] - vals_y[j - 1]) > absmax_y:
+                print("spike detected")
+                spike = True
+            if abs(vals_z[j] - vals_z[j - 1]) > absmax_z:
+                print("spike detected")
+                spike = True
+            else:
+                spike = False
+
     print(vals_x)
     print(vals_y)
     print(vals_z)
 
+    # reset all values
     vals_x.clear()
     vals_y.clear()
     vals_z.clear()
+    spike = False
+
     currentTime = datetime.now()  # update current time
 print("Program ended. Timed out or ran out of storage.")
