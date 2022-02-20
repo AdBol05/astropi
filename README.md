@@ -40,7 +40,7 @@ Required libraries: csv, sense_hat, pathlib, datetime, time, picamera, orbit, sk
 Measuring chages in speed of ISS caused by Earth’s magfnetic field.
 
 # Lightning detection
-Detects spikes in magnetic field caused by storms an Earth and tries to photograp Blue jets, red sprites and ELVES
+Detects spikes in magnetic field caused by storms on Earth and tries to photograp Blue jets, red sprites and ELVES
 ![250px-Upperatmoslight1](https://user-images.githubusercontent.com/98588523/154854886-024aa0d7-b9f0-4820-b4e0-ee78c8081846.jpg)
 
 # Coral
