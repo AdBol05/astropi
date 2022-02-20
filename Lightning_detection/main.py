@@ -14,7 +14,7 @@ startTime = datetime.now()  # get program start time
 counter = 10000  # image counter (start from 10000 for better naming scheme)
 i = 0  # readings counter
 storage = 7400000  # used storage space (headroom for script and csv file)
-image_size = 0
+image_size = 0  # size of saved images
 delete_counter = 0  #iamge counter used for deletion
 
 vals_x = []  # value list from magnetometer (x axis)
@@ -60,9 +60,9 @@ create_csv(data_file)  # create data.csv file
 currentTime = datetime.now()  # get current time before loop start
 while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000):  # run for 175 minutes (3 hours - 5 minutes) or until storage is full
     read_data(data_file)  # gather data
-    for k in range(10):  #run ten times (10 images)
+    for k in range(10):  # run ten times (10 images)
         camera.capture(f"{base_folder}/img_{counter}.jpg")  # capture camera and save the image
-        image_size = image_size + os.path.getsize(base_folder/f'img_{counter}.jpg')  #get image counter
+        image_size = image_size + os.path.getsize(base_folder/f'img_{counter}.jpg')  # get image counter
         counter = counter + 1  # add one to image counter
         compass = sense.get_compass_raw()  # get data from magnetometer (compass)
         vals_x.append(abs(float("{x}".format(**compass))))  # assign data from magnetometer (x axis) to list vals_x
@@ -80,24 +80,24 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
     absmax_z = (max(vals_z) + 3) - avrg_z  # get max value plus deviation (z axis)
 
     for j in range(len(vals_x)):  # compare each pair in list
-        if i != 0:
-            if (abs(vals_x[j] - vals_x[j - 1]) > absmax_x) or (abs(vals_y[j] - vals_y[j - 1]) > absmax_y) or (abs(vals_z[j] - vals_z[j - 1]) > absmax_z):  # if detected large difference between on values next to each other
+        if i != 0:  # ignore first irritation
+            if (abs(vals_x[j] - vals_x[j - 1]) > absmax_x) or (abs(vals_y[j] - vals_y[j - 1]) > absmax_y) or (abs(vals_z[j] - vals_z[j - 1]) > absmax_z):  # if detected large difference between values next to each other
                 print("spike detected")  # debug
-                spike = 1
+                spike = 1  # spike detected
 
     print(delete_counter)  # debug
     print(spike)  # debug
 
-    if spike == 0:  # spike detected
+    if spike == 0:  # if spike is not detected
         for d in range(10):  # run ten times (10 images)
             delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
-            os.remove(f"{base_folder}/img_{delete_counter}.jpg")  #remove unnecessary images
+            os.remove(f"{base_folder}/img_{delete_counter}.jpg")  # remove unnecessary images
             print("removing images...")  # debug
             print(delete_counter)  # debug
-    if spike == 1:  # spike not detected
+    if spike == 1:  # if spike is detected
         storage = storage + image_size  # add images size to storage counter
-        print("saving images")  #debug
-
+        print("saving images")  # debug
+ 
     # debug
     print(vals_x)
     print(vals_y)
@@ -112,4 +112,4 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
     image_size = 0
 
     currentTime = datetime.now()  # update current time
-print("Program ended. Timed out or ran out of storage.")  #debug
+print("Program ended. Timed out or ran out of storage.")  # debug
