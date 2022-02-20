@@ -68,14 +68,16 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
         vals_x.append(abs(float("{x}".format(**compass))))  # assign data from magnetometer (x axis) to list vals_x
         vals_y.append(abs(float("{y}".format(**compass))))  # assign data from magnetometer (y axis) to list vals_y
         vals_z.append(abs(float("{z}".format(**compass))))  # assign data from magnetometer (z axis) to list vals_z
+        print("took a picture")  # debug
+        print(image_size)  # debug
         sleep(1)  # wait one second
 
     avrg_x = sum(vals_x) / len(vals_x)  # get average value (x axis)
-    absmax_x = (max(vals_x) + 10) - avrg_x  # get max value plus deviation (X axis)
+    absmax_x = (max(vals_x) + 3) - avrg_x  # get max value plus deviation (X axis)
     avrg_y = sum(vals_y) / len(vals_y)  # get average value (y axis)
-    absmax_y = (max(vals_y) + 10) - avrg_y  # get max value plus deviation (y axis)
+    absmax_y = (max(vals_y) + 3) - avrg_y  # get max value plus deviation (y axis)
     avrg_z = sum(vals_z) / len(vals_z)  # get average value (z axis)
-    absmax_z = (max(vals_z) + 10) - avrg_z  # get max value plus deviation (z axis)
+    absmax_z = (max(vals_z) + 3) - avrg_z  # get max value plus deviation (z axis)
 
     for j in range(len(vals_x)):  # compare each pair in list
         if i != 0:
@@ -88,7 +90,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
 
     if spike == 0:  # spike detected
         for d in range(10):  # run ten times (10 images)
-            delete_counter = (counter - d) - 1
+            delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
             os.remove(f"{base_folder}/img_{delete_counter}.jpg")  #remove unnecessary images
             print("removing images...")  # debug
             print(delete_counter)  # debug
@@ -100,8 +102,9 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
     print(vals_x)
     print(vals_y)
     print(vals_z)
+    print(storage)
 
-    # reset all values
+    # reset all variables
     vals_x.clear()
     vals_y.clear()
     vals_z.clear()
