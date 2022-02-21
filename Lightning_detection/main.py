@@ -59,8 +59,8 @@ create_csv(data_file)  # create data.csv file
 
 currentTime = datetime.now()  # get current time before loop start
 while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000):  # run for 175 minutes (3 hours - 5 minutes) or until storage is full
-    read_data(data_file)  # gather data
     for k in range(10):  # run ten times (10 images)
+        read_data(data_file)  # gather data
         camera.capture(f"{base_folder}/img_{counter}.jpg")  # capture camera and save the image
         image_size = image_size + os.path.getsize(base_folder/f'img_{counter}.jpg')  # get image counter
         counter = counter + 1  # add one to image counter
