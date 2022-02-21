@@ -22,7 +22,7 @@ Developed at Laborky.cz
                %%%%%%%%%%%%%%%%                        '%%%%'
 
 
-Astropi life in space experiment repository
+Astropi mission space lab repository
 
 # ISS_environment
 Measuring changes in life environment of ISS caused by human presence using temperature, humidity, pressure and pir sensors.
