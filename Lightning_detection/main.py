@@ -1,4 +1,4 @@
-#importing necessary libraries
+# importing necessary libraries
 import csv
 from sense_hat import SenseHat
 from pathlib import Path
@@ -14,7 +14,7 @@ startTime = datetime.now()  # get program start time
 counter = 10000  # image counter (start from 10000 for better naming scheme)
 i = 0  # readings counter
 storage = 7400000  # used storage space (headroom for script and csv file)
-image_size = 0  # size of saved images
+image_size = 0
 delete_counter = 0  #iamge counter used for deletion
 
 vals_x = []  # value list from magnetometer (x axis)
@@ -37,7 +37,7 @@ def add_csv_data(data_file, data):  # writing data to csv file
         print("Writing data to .csv file...")  # debug
 
 
-def read_data(data_file):  # data collection
+def read_data(data_file, compass):  # data collection
     global i  # readings counter as a global variable
     t = load.timescale().now()  # get timescale
     position = ISS.at(t)  # get position from timescale
@@ -59,12 +59,12 @@ create_csv(data_file)  # create data.csv file
 
 currentTime = datetime.now()  # get current time before loop start
 while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000):  # run for 175 minutes (3 hours - 5 minutes) or until storage is full
-    for k in range(10):  # run ten times (10 images)
-        read_data(data_file)  # gather data
+    for k in range(10):  # run ten times (10 images(
+        compass = sense.get_compass_raw()  # get data from magnetometer (compass)
+        read_data(data_file, compass)  # gather data
         camera.capture(f"{base_folder}/img_{counter}.jpg")  # capture camera and save the image
         image_size = image_size + os.path.getsize(base_folder/f'img_{counter}.jpg')  # get image counter
         counter = counter + 1  # add one to image counter
-        compass = sense.get_compass_raw()  # get data from magnetometer (compass)
         vals_x.append(abs(float("{x}".format(**compass))))  # assign data from magnetometer (x axis) to list vals_x
         vals_y.append(abs(float("{y}".format(**compass))))  # assign data from magnetometer (y axis) to list vals_y
         vals_z.append(abs(float("{z}".format(**compass))))  # assign data from magnetometer (z axis) to list vals_z
@@ -80,10 +80,10 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
     absmax_z = (max(vals_z) + 3) - avrg_z  # get max value plus deviation (z axis)
 
     for j in range(len(vals_x)):  # compare each pair in list
-        if i != 0:  # ignore first irritation
+        if i != 0:
             if (abs(vals_x[j] - vals_x[j - 1]) > absmax_x) or (abs(vals_y[j] - vals_y[j - 1]) > absmax_y) or (abs(vals_z[j] - vals_z[j - 1]) > absmax_z):  # if detected large difference between values next to each other
                 print("spike detected")  # debug
-                spike = 1  # spike detected
+                spike = 1  #detected spike
 
     print(delete_counter)  # debug
     print(spike)  # debug
@@ -97,7 +97,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
     if spike == 1:  # if spike is detected
         storage = storage + image_size  # add images size to storage counter
         print("saving images")  # debug
- 
+
     # debug
     print(vals_x)
     print(vals_y)
