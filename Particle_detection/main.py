@@ -18,7 +18,7 @@ startTime = datetime.now()  # get program start time
 
 counter = 10000  # image counter (start from 10000 for better naming scheme)
 i = 0  # readings counter
-storage = 7500  # used storage space (headroom for script, csv file, label.txt and tflite model)
+storage = 7400000  # used storage space (headroom for script, csv file, label.txt and tflite model)
 
 def create_csv(data_file):  # creating csv file
     with open(data_file, 'w', buffering=1) as f:  # create csv file and set up logging
