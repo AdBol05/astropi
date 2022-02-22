@@ -62,7 +62,7 @@ while currentTime < startTime + timedelta(minutes=175):  # run for 175 minutes (
     if n % 60 == 0:  # run every 60 loops
         read_data(data_file)  # collect data from all sensors
         temp = sense.get_temperature()  # get temperature data from sense hat(used to display temperature to LED matrix)
-        sense.show_message("Hello, temperature is %d" % temp, text_colour=blue, back_colour=black)  # print temperature to LED matrix
+        sense.show_message("Hello, temperature is %d C" % temp, text_colour=blue, back_colour=black)  # print temperature to LED matrix
 
     if pir == 1:  # run if motion is detected
         print("Motion detected! Collecting data more frequently...")  # debug
