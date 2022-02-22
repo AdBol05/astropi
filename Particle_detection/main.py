@@ -1,4 +1,4 @@
-#importing necessary libraries
+# importing necessary libraries
 import csv
 from sense_hat import SenseHat
 from pathlib import Path
@@ -83,7 +83,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
             os.rename(image_file, base_folder/f'particle_{counter}.jpg')  # rename image to particle(number of picture).jpg
             image_size = os.path.getsize(base_folder/f'particle_{counter}.jpg')  # get image size
             storage = storage + image_size  # add image size to used storage
-            print("saved image size: %d" % image_size)
+            print("saved image size: %d" % image_size)  # debug
             counter += 1  # increase image counter by one
         else:
             print("classified as a blank image, deleting...")  # debug
