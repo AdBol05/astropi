@@ -90,4 +90,4 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
             os.remove(image_file)  # delete empty image
 
     currentTime = datetime.now()  # update current time
-print("Program ended. Timed out or ran out of storage.")
+print("Program ended. Timed out or ran out of storage.")  # debug
