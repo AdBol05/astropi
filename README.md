@@ -43,14 +43,16 @@ Detects spikes in magnetic field caused by storms on Earth and tries to photogra
 # Coral
 Retrained model used for Particle detection
 
-                  project filestructure: /label.txt                  //label file for classes detrmination
-                                         /particle.tflite            //retrained model used for classification
-                                         /data.csv                   //data output file
-                                         /main.py                    //main script
-                                         /particle_{counter}.jpg     //outputted images classified as particle images
-                                         
-                  training filestructure: /Downloads/Coral/classify.py     //classification test script
-                                          /Downloads/Coral/train.py        //training script
-                                          /Downloads/Coral/models          //models for training
-                                          /Documents/coral/train/blank     //training images {class: "blank"}
-                                          /Documents/coral/train/particle  //training images {class: "particle"}
+    project filestructure: 
+    /label.txt                  //label file for classes detrmination
+    /particle.tflite            //retrained model used for classification
+    /data.csv                   //data output file
+    /main.py                    //main script
+    /particle_{counter}.jpg     //outputted images classified as particle images
+    
+    training filestructure: 
+    /Downloads/Coral/classify.py     //classification test script
+    /Downloads/Coral/train.py        //training script
+    /Downloads/Coral/models          //models for training
+    /Documents/coral/train/blank     //training images {class: "blank"}
+    /Documents/coral/train/particle  //training images {class: "particle"}
