@@ -23,6 +23,9 @@ Developed at Laborky.cz
 
 
 Astropi mission space lab repository
+Runinng the program:
+
+    § python3 main.py
 
 # ISS_environment
 Measuring changes in life environment of ISS caused by human presence using temperature, humidity, pressure and pir sensors.
