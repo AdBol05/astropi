@@ -16,7 +16,7 @@ storage = 10000  # used storage space (headroom for script)
 def create_csv(data_file):  # creating csv file
     with open(data_file, 'w') as f:  # create csv file and set up logging
         writer = csv.writer(f)  # set up writer
-        header = ("RowNum", " Date/time", " Compass", " Compass(raw)", " Accelerometer", " Accelerometer(raw)",  " Gyro", " Gyro(raw)", " Orintation"
+        header = ("RowNum", " Date/time", " Compass", " Compass(raw)", " Accelerometer", " Accelerometer(raw)",  " Gyro", " Gyro(raw)", " Orintation")  # write first line (data type)
         writer.writerow(header)  # write header to csv file
         print("Creating data.csv file...")  # debug
 
