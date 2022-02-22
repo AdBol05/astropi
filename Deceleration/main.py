@@ -34,8 +34,8 @@ def read_data(data_file):  # data collection
     compass = sense.get_compass()  # get compass data
     compass_raw = sense.get_compass_raw()  # get raw compass data
     accel = sense.get_accelerometer()  # get accelerometer data
-    accel_raw = sense.get_accelerometer_raw()  # get accelerometer raw data
-    gyro = sense.get_gyroscope()  # get gyriscope data
+    accel_raw = sense.get_accelerometer_raw()  # get raw accelerometer data
+    gyro = sense.get_gyroscope()  # get gyroscope data
     gyro_raw = sense.get_gyroscope_raw()  # get raw gyroscope data
     orientation = sense.get_orientation()  # get orientation
     row = (i, datetime.now(), compass, compass_raw,  accel_raw, gyro, gyro_raw, orientation)  # assign data to row
@@ -49,12 +49,12 @@ sense = SenseHat()  # set up sense hat
 camera = PiCamera()  # set up camera
 camera.resolution = (1296, 972)  # set camera resolution
 create_csv(data_file)  # create data.csv file
-sense.set_imu_config(True, True, True)  # configure imu
+sense.set_imu_config(True, True, True)  # configure IMU
 print("program running...")  # debug
                   
 # loop start
 currentTime = datetime.now()  # get time before loop start
-while currentTime < startTime + timedelta(minutes=175) and storage < 3000000000:  # run for 175 minutes (3 hours - 5 minutes => 175 minutes)
+while currentTime < startTime + timedelta(minutes=175) and storage < 3000000000:  # run for 175 minutes (3 hours - 5 minutes => 175 minutes) or until storage is full
     n = n + 1  # increase loop counter by one
     print("loop count: ", n)  # debug
     read_data(data_file)  # collect data from all sensors
