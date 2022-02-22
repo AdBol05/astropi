@@ -80,7 +80,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
     absmax_z = (max(vals_z) + 3) - avrg_z  # get max value plus deviation (z axis)
 
     for j in range(len(vals_x)):  # compare each pair in list
-        if i != 0:
+        if j != 0:
             if (abs(vals_x[j] - vals_x[j - 1]) > absmax_x) or (abs(vals_y[j] - vals_y[j - 1]) > absmax_y) or (abs(vals_z[j] - vals_z[j - 1]) > absmax_z):  # if detected large difference between values next to each other
                 print("spike detected")  # debug
                 spike = 1  #detected spike
