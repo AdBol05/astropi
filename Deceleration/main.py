@@ -11,7 +11,7 @@ startTime = datetime.now()  # get program start time
 n = 0  # loop counter
 i = 0  # data readings counter
 counter = 10000  # image counter (start from 10000 for better naming scheme)
-storage = 10000  # used storage space (headroom for script)
+storage = 10000  # used storage space (headroom for script and csv file)
 
 def create_csv(data_file):  # creating csv file
     with open(data_file, 'w') as f:  # create csv file and set up logging
