@@ -23,7 +23,7 @@ storage = 7400000  # used storage space (headroom for script, csv file, label.tx
 def create_csv(data_file):  # creating csv file
     with open(data_file, 'w', buffering=1) as f:  # create csv file and set up logging
         writer = csv.writer(f)  # set up writer
-        header = ("RowNum", "date", "coordinates", "magnetometer")  # write first line (data type)
+        header = ("RowNum", " date", " coordinates", " magnetometer")  # write first line (data type)
         writer.writerow(header)  # write header to csv file
         print("Creating data.csv file...")  # debug
 
@@ -59,7 +59,7 @@ model_file = base_folder/'particle.tflite' # set model directory
 label_file = base_folder/'label.txt' # set label file directory
 
 interpreter = make_interpreter(f"{model_file}")  # assign model to interpreter
-interpreter.allocate_tensors()  # set up tensor cores
+interpreter.allocate_tensors()  # set up TPU
 size = common.input_size(interpreter)  # resize image
 
 currentTime = datetime.now()  # get current time before loop start
@@ -70,10 +70,10 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
 
     image_file = base_folder/f'img_{counter}.jpg'  # set image directory
     image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)  # open image
-    common.set_input(interpreter, image)
-    interpreter.invoke()
-    classes = classify.get_classes(interpreter, top_k=1)
-    labels = read_label_file(label_file)
+    common.set_input(interpreter, image)  # set input
+    interpreter.invoke()  # invoke interpreter
+    classes = classify.get_classes(interpreter, top_k=1)  # get classes
+    labels = read_label_file(label_file)  # get labels from label.txt
 
     for c in classes:
         print("classifying image...")  # debug
