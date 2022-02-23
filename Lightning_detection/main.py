@@ -16,6 +16,7 @@ i = 0  # readings counter
 storage = 10000  # used storage space (headroom for script and csv file)
 image_size = 0  # size of image
 delete_counter = 0  #iamge counter used for deletion
+spike = 0  # spike detection (set as not found)
 
 vals_x = []  # value list from magnetometer (x axis)
 vals_y = []  # y axis
