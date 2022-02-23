@@ -41,7 +41,7 @@ def read_data(data_file, compass):  # data collection
     global i  # readings counter as a global variable
     t = load.timescale().now()  # get timescale
     position = ISS.at(t)  # get position from timescale
-    location = position.subpoint()  # get position from timescale
+    location = position.subpoint()  # get location from position
     i = i + 1  # increase readings counter by one
     row = (i, datetime.now(), location, sense.get_compass_raw())  # assign data to row
     print("sensing data...")  # debug
