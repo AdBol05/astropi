@@ -39,7 +39,7 @@ def read_data(data_file):  # data collection
     t = sense.get_temperature()  # get temperature data from sense hat
     h = sense.get_humidity()  # get humidity data from sense hat
     p = sense.get_pressure()  # get pressure data from sense hat
-    l = sense.color.clear
+    l = sense.color.clear # get light data from sense hat
     row = (i, datetime.now(), t, h, p, l, pir)  # assign data to row
     print("sensing data...")  # debug
     add_csv_data(data_file, row)  # write row to csv file
