@@ -48,7 +48,7 @@ def read_data(data_file):  # data collection
 base_folder = Path(__file__).parent.resolve()  # determine working directory
 data_file = base_folder / 'data.csv'  # set data.csv file name and location
 sense = SenseHat()  # set up sense hat
-sense.color.gain = 60
+sense.color.gain = 60  # set color sensor gain
 create_csv(data_file)  # create data.csv file
 print("program running...")  # debug
 
