@@ -62,6 +62,8 @@ while currentTime < startTime + timedelta(minutes=175) and storage < 3000000000:
     if n % 30 == 0:  # run every 30 loops (60 seconds)
         camera.capture(f"{base_folder}/img_{counter}.jpg")  # capture camera and save the image
         print("took a picture")  # debug
+        image_size = os.path.getsize(base_folder/f'particle_{counter}.jpg') # get image size 
+        storage = storage + image_size # add image size to used storage
         counter = counter + 1  # increase image counter by one
 
     sleep(2)  # pause one second before next cycle
