@@ -5,6 +5,7 @@ from pathlib import Path
 from datetime import datetime, timedelta
 from time import sleep
 from picamera import PiCamera
+import os
 
 startTime = datetime.now()  # get program start time
 
