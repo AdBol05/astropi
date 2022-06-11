@@ -23,6 +23,7 @@ Developed at Laborky.cz
 
 
 Astropi mission space lab repository
+
 Runinng the program:
 
     § python3 main.py
