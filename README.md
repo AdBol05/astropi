@@ -57,3 +57,7 @@ Retrained model used for Particle detection
     /Downloads/Coral/models          //models for training
     /Documents/coral/train/blank     //training images {class: "blank"}
     /Documents/coral/train/particle  //training images {class: "particle"}
+
+#Dataform
+https://github.com/AdBol05/dataform
+Data formatting script
