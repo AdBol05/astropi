@@ -67,17 +67,17 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
         camera.capture(f"{base_folder}/img_{counter}.jpg")  # capture camera and save the image
         image_size = image_size + os.path.getsize(base_folder/f'img_{counter}.jpg')  # get image counter
         counter = counter + 1  # add one to image counter
-        print("took a picture")  # debug
-        print(image_size)  # debug
+        #print("took a picture")  # debug
+        #print(image_size)  # debug
 
         sleep(1)  # wait one second
 
     if spike == 0:  # if spike is not detected
-        for d in range(10):  # run ten times (10 images)
+        for d in range(9):  # run ten times (10 images)
             delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
             os.remove(f"{base_folder}/img_{delete_counter}.jpg")  # remove unnecessary images
             print("removing images...")  # debug
-            print(delete_counter)  # debug
+            #print(delete_counter)  # debug
 
     if spike == 1:  # if spike is detected
         storage = storage + image_size  # add images size to storage counter
