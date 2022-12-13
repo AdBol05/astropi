@@ -1,9 +1,15 @@
 const fs = require('fs');
-const { NetCDFReader } = require("netcdfjs");
+//const { NetCDFReader } = require("netcdfjs");
 
 let args = process.argv.slice(2);
 
 let data = fs.readFileSync(args[0], "utf-8");
-let reader = new NetCDFReader(Buffer.from(data));
 
-console.log(reader);
+console.log("====================================================\n" + "redaing file: " + args[0] + "\n" + "====================================================\n");
+
+/*let reader = new NetCDFReader(Buffer.from(data));
+console.log(reader.getDataVariable("raster_image"));*/
+let dataArr = data.split(";");
+
+console.log(dataArr[372]);
+console.log(dataArr.length);
