@@ -11,11 +11,15 @@ console.log("====================================================\n" + "redaing 
 console.log(reader.getDataVariable("raster_image"));*/
 let dataArr = data.split(";");
 
-console.log(dataArr[321]);
-console.log(dataArr.length);
+//console.log(dataArr[321]);
+//console.log(dataArr.length);
 
 if (!fs.existsSync("./NCtemp")){
     fs.mkdirSync("./NCtemp");
 }
 
-fs.writeFileSync("./NCtemp/321.txt", dataArr[321]);
+let dat = dataArr[321].split("=")[1];
+fs.writeFileSync("./NCtemp/321.txt", dat);
+
+let samples = dat.split(",\n  ");
+console.log(samples[samples.length - 1]);
