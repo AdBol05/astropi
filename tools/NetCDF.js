@@ -14,7 +14,7 @@ let dataArr = data.split(";");
 //console.log(dataArr[321]);
 //console.log(dataArr.length);
 
-if (!fs.existsSync("./NCtemp")){
+if (!fs.existsSync("./NCtemp")) {
     fs.mkdirSync("./NCtemp");
 }
 
@@ -23,3 +23,13 @@ fs.writeFileSync("./NCtemp/321.txt", dat);
 
 let samples = dat.split(",\n  ");
 console.log(samples[samples.length - 1]);
+
+for (i in samples) {
+    //samples[i] = samples[i].replaceAll("\n", "");
+    samples[i] = samples[i].replaceAll(" ", "");
+    console.log("\n========================================================\n\n" + samples[i]);
+    let count = (samples[i].match(/,/g) || []).length;
+    console.log("->" + count);
+}
+
+fs.writeFileSync("./NCtemp/321arr.txt", JSON.stringify(samples));
