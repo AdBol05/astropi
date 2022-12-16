@@ -30,7 +30,7 @@ for (i in samples) {
 const width = 720;
 const height = 500;
 
-const pixels = samples[0];
+const pixels = samples[1];
 
 const jpegData = jpeg.encode({ width, height, data: pixels });
-fs.writeFileSync("./NCtemp/test.jpg", jpegData.data);
+fs.writeFileSync("./NCtemp/test1.jpg", jpegData.data);
