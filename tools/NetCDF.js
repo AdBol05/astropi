@@ -1,6 +1,5 @@
 const fs = require('fs');
 const jpeg = require('jpeg-js');
-//const { NetCDFReader } = require("netcdfjs");
 
 let args = process.argv.slice(2);
 
@@ -22,14 +21,6 @@ fs.writeFileSync("./NCtemp/321.txt", dat);
 let samples = dat.split(",\n  ");
 console.log(samples[args[1]]);
 
-/*for (i in samples) {
-    samples[i] = samples[i].replaceAll(" ", "");
-    console.log("\n========================================================\n\n" + samples[i]);
-    let count = (samples[i].match(/,/g) || []).length;
-    console.log("->" + count);
-}*/
-
-//fs.writeFileSync("./NCtemp/321arr.txt", JSON.stringify(samples));
 const pixels = samples[args[1]];
 
 const width = args[2];
