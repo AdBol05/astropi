@@ -30,5 +30,8 @@ const jpegData = jpeg.encode({ width, height, data: pixels });
 fs.writeFileSync(args[4], jpegData.data);
 
 console.log("========================================================")
+console.log(jpegData);
+
+console.log("========================================================")
 console.log('\x1b[32m%s\x1b[0m',"file written to: " + args[4]);
 console.log("========================================================");
