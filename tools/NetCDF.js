@@ -13,10 +13,10 @@ console.log("========================================================\n");
 
 let dataArr = data.split(";");
 
-if (!fs.existsSync("./NCtemp")) {fs.mkdirSync("./NCtemp");}
+//if (!fs.existsSync("./NCtemp")) {fs.mkdirSync("./NCtemp");}
 
 let dat = dataArr[321].split("=")[1];
-fs.writeFileSync("./NCtemp/321.txt", dat);
+//fs.writeFileSync("./NCtemp/321.txt", dat);
 
 let samples = dat.split(",\n  ");
 console.log(samples[args[1]]);
@@ -27,12 +27,12 @@ const width = args[2];
 const height = args[3];
 
 const jpegData = jpeg.encode({ width, height, data: pixels });
-let outpath = "./NCtemp/" + args[4];
-fs.writeFileSync(outpath, jpegData.data);
+//let outpath = "./NCtemp/" + args[4];
+fs.writeFileSync(args[4], jpegData.data);
 
 console.log("========================================================")
 console.log(jpegData);
 
 console.log("========================================================")
-console.log('\x1b[32m%s\x1b[0m',"file written to: " + outpath);
+console.log('\x1b[32m%s\x1b[0m',"file written to: " + args[4]);
 console.log("========================================================");
