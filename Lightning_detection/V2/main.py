@@ -46,7 +46,14 @@ def read_data(data_file, compass):  # data collection
 
 #some basic init
 base_folder = Path(__file__).parent.resolve()  # determine working directory
-data_file = base_folder / 'data.csv'  # set data.csv file name and location
+
+#create output directories if they don't exist
+if not os.path.exists(f"{base_folder}/temp"):  # check if temp directory exists
+    os.mkdir(f"{base_folder}/temp")  # directory for temporary files
+if not os.path.exists(f"{base_folder}/output"):  # check if output directory exists
+    os.mkdir(f"{base_folder}/output")  # directory for output files
+
+data_file = base_folder / 'output/data.csv'  # set data.csv file name and location
 
 sense = SenseHat() # set up sense hat
 sense.set_imu_config(True, False, False)  # configure imu
@@ -54,11 +61,6 @@ sense.set_imu_config(True, False, False)  # configure imu
 camera = PiCamera()  # set up camera
 camera.resolution = (1296, 972)  # set camera resolution
 
-#create output directories if they don't exist
-if not os.path.exists(f"{base_folder}/temp"):  # check if temp directory exists
-    os.mkdir(f"{base_folder}/temp")  # directory for temporary files
-if not os.path.exists(f"{base_folder}/output"):  # check if output directory exists
-    os.mkdir(f"{base_folder}/output")  # directory for output files
 
 print("running...")  # debug
 create_csv(data_file)  # create data.csv file
@@ -71,11 +73,11 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
         compass = sense.get_compass_raw()  # get data from magnetometer (compass)
         read_data(data_file, compass)  # gather data
 
-        camera.capture(f"{base_folder}/img_{counter}.jpg")  # capture camera and save the image
-        image_size = image_size + os.path.getsize(base_folder/f'img_{counter}.jpg')  # get image counter
+        camera.capture(f"{base_folder}/temp/img_{counter}.jpg")  # capture camera and save the image
+        image_size = image_size + os.path.getsize(base_folder/f'temp/img_{counter}.jpg')  # get image counter
         counter = counter + 1  # add one to image counter
-        image = Image.open(f"{base_folder}/img_{counter}.jpg")
-        image.save(f"{base_folder}/img_{counter}.jpg", exif=image.info["exif"], quality=100)
+        image = Image.open(f"{base_folder}/temp/img_{counter}.jpg")
+        image.save(f"{base_folder}/output/img_{counter}.jpg", exif=image.info["exif"], quality=100)
         #print("took a picture")  # debug
         #print(image_size)  # debug
 
@@ -84,7 +86,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
     if spike == 0:  # if spike is not detected
         for d in range(9):  # run ten times (10 images)
             delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
-            os.remove(f"{base_folder}/img_{delete_counter}.jpg")  # remove unnecessary images
+            os.remove(f"{base_folder}/temp/img_{delete_counter}.jpg")  # remove unnecessary images
             print("removing images...")  # debug
             #print(delete_counter)  # debug
 
