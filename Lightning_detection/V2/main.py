@@ -54,6 +54,12 @@ sense.set_imu_config(True, False, False)  # configure imu
 camera = PiCamera()  # set up camera
 camera.resolution = (1296, 972)  # set camera resolution
 
+#create output directories if they don't exist
+if not os.path.exists("temp"):  # check if temp directory exists
+    os.mkdir("temp")  # directory for temporary files
+if not os.path.exists("output"):  # check if output directory exists
+    os.mkdir("output")  # directory for output files
+
 print("running...")  # debug
 create_csv(data_file)  # create data.csv file
 
