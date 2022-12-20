@@ -55,10 +55,10 @@ camera = PiCamera()  # set up camera
 camera.resolution = (1296, 972)  # set camera resolution
 
 #create output directories if they don't exist
-if not os.path.exists("temp"):  # check if temp directory exists
-    os.mkdir("temp")  # directory for temporary files
-if not os.path.exists("output"):  # check if output directory exists
-    os.mkdir("output")  # directory for output files
+if not os.path.exists(f"{base_folder}/temp"):  # check if temp directory exists
+    os.mkdir(f"{base_folder}/temp")  # directory for temporary files
+if not os.path.exists(f"{base_folder}/output"):  # check if output directory exists
+    os.mkdir(f"{base_folder}/output")  # directory for output files
 
 print("running...")  # debug
 create_csv(data_file)  # create data.csv file
@@ -74,8 +74,8 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
         camera.capture(f"{base_folder}/img_{counter}.jpg")  # capture camera and save the image
         image_size = image_size + os.path.getsize(base_folder/f'img_{counter}.jpg')  # get image counter
         counter = counter + 1  # add one to image counter
-        image = Image.open("{base_folder}/img_{counter}.jpg")
-        image.save("{base_folder}/img_{counter}.jpg", exif=image.info["exif"], quality=100)
+        image = Image.open(f"{base_folder}/img_{counter}.jpg")
+        image.save(f"{base_folder}/img_{counter}.jpg", exif=image.info["exif"], quality=100)
         #print("took a picture")  # debug
         #print(image_size)  # debug
 
