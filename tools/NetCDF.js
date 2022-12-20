@@ -1,3 +1,5 @@
+//* Use ncdump to extract data from .nc file ( install netcdf-bin )
+
 const fs = require('fs');
 const jpeg = require('jpeg-js');
 
