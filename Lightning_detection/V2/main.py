@@ -22,7 +22,7 @@ spike = 0  # spike detection (set as not found)
 def create_csv(data_file):  # creating csv file
     with open(data_file, 'w', buffering=1) as f:  # create csv file and set up logging
         writer = csv.writer(f)  # set up writer
-        header = ("RowNum", "date", "coordinates", "magnetometer")  # write first line (data type)
+        header = ("RowNum", "date", "coordinates-latitude-N", "coordinates-longitude-E", "coordinates-elevation", "magnetometer-X", "magnetometer-Y", "magnetometer-Z")  # write first line (data type)
         writer.writerow(header)  # write header to csv file
         print("Creating data.csv file...")  # debug
 
@@ -40,7 +40,7 @@ def read_data(data_file, compass):  # data collection
     position = ISS.at(t)  # get position from timescale
     location = position.subpoint()  # get location from position
     i = i + 1  # increase readings counter by one
-    row = (i, datetime.now(), location, sense.get_compass_raw())  # assign data to row
+    row = (i, datetime.now(), location, sense.get_compass_raw().x, sense.get_compass_raw().y, sense.get_compas_raw().z)  #! PARSE COORDS AND TEST RAW COMPASS DATA OBJECT (assign data to row)
     print("sensing data...")  # debug
     add_csv_data(data_file, row)  # write row to csv file
 
