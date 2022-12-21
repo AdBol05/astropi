@@ -78,8 +78,8 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
         counter = counter + 1  # add one to image counter
         image = Image.open(f"{base_folder}/temp/img_{counter}.jpg")
         image.save(f"{base_folder}/output/img_{counter}.jpg", exif=image.info["exif"], quality=100)
-        #print("took a picture")  # debug
-        #print(image_size)  # debug
+        print("took a picture")  # debug
+        print(image_size)  # debug
 
         sleep(1)  # wait one second
 
