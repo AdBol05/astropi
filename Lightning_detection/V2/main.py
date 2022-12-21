@@ -4,7 +4,7 @@ import csv
 from sense_hat import SenseHat
 from pathlib import Path
 from datetime import datetime, timedelta
-from time import time, sleep
+from time import sleep
 from picamera import PiCamera
 from orbit import ISS
 from skyfield.api import load
