@@ -40,7 +40,7 @@ def read_data(data_file, compass):  # data collection
     position = ISS.at(t)  # get position from timescale
     location = position.subpoint()  # get location from position
     i = i + 1  # increase readings counter by one
-    row = (i, datetime.now(), location, sense.get_compass_raw().x, sense.get_compass_raw().y, sense.get_compas_raw().z)  #! PARSE COORDS AND TEST RAW COMPASS DATA OBJECT (assign data to row)
+    row = (i, datetime.now(), location, sense.get_compass_raw().x, sense.get_compass_raw().y, sense.get_compas_raw().z)  #! TODO:FIX COORDS AND RAW COMPASS DATA OBJECT (assign data to row)
     print("sensing data...")  # debug
     add_csv_data(data_file, row)  # write row to csv file
 
