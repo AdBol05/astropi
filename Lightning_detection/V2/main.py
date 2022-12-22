@@ -41,7 +41,7 @@ def read_data(data_file, compass):  # data collection
     location = position.subpoint()  # get location from position
     mag = sense.get_compass_raw()
     i = i + 1  # increase readings counter by one
-    row = (i, datetime.now(), location, mag.x, mag.y, mag.z)  #! TODO:FIX COORDS AND RAW COMPASS DATA OBJECT (assign data to row)
+    row = (i, datetime.now(), location, mag.get("x"), mag.get("y"), mag.get("z"))  #! TODO:FIX COORDS AND RAW COMPASS DATA OBJECT (assign data to row)
     print("sensing data...")  # debug
     add_csv_data(data_file, row)  # write row to csv file
 
