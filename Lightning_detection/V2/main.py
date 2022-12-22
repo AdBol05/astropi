@@ -78,7 +78,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
         image_size = image_size + os.path.getsize(base_folder/f'temp/img_{counter}.jpg')  # get image counter
         
         image = Image.open(f"{base_folder}/temp/img_{counter}.jpg")
-        image.save(f"{base_folder}/output/img_{counter}.jpg", exif=image.info["exif"], quality=100)
+        image.save(f"{base_folder}/temp/img_{counter}.jpg", exif=image.info["exif"], quality=100)
         
         counter = counter + 1  # add one to image counter
         
