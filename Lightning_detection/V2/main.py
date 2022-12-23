@@ -43,6 +43,8 @@ def read_data(data_file, compass):  # data collection
     longitude = position.subplong()  #! TODO: FIX
       # get location from position
     mag = sense.get_compass_raw
+
+    print(position)
     
     i = i + 1  # increase readings counter by one
     row = (i, datetime.now(), latitude, longitude, mag.get("x"), mag.get("y"), mag.get("z"))  #! TODO:FIX COORDS AND RAW COMPASS DATA OBJECT (assign data to row)
