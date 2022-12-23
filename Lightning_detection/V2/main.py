@@ -33,7 +33,7 @@ def add_csv_data(data_file, data):  # writing data to csv file
         print("Writing data to .csv file...")  # debug
 
 
-def read_data(data_file, compass):  # data collection
+def read_data(data_file):  # data collection
     global i  # readings counter as a global variable
     position = ISS.at(load.timescale().now()).subpoint()  # get position from timescale
     mag = sense.get_compass_raw()
