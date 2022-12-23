@@ -87,7 +87,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
         
         sleep(1)  # wait one second
 
-    #*process images
+    #* process images
     #! TODO: Spike detection + coral classification
     if spike == 0:  # if spike is not detected
         for d in range(9):  # run ten times (10 images)
