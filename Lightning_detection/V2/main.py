@@ -39,12 +39,10 @@ def read_data(data_file, compass):  # data collection
     
     t = load.timescale().now()  # get timescale
     position = ISS.at(t).subpoint()  # get position from timescale
-    #latitude = position.sublat()  #! TODO: FIX (parse postition variable to latitude and longitude)
-    #longitude = position.sublong()
     mag = sense.get_compass_raw()
     
     i = i + 1  # increase readings counter by one
-    row = (i, datetime.now(), position.latitude, position.longitude, position.elevation, mag.get("x"), mag.get("y"), mag.get("z"))  #! TODO:FIX COORDS (assign data to row)
+    row = (i, datetime.now(), position.latitude, position.longitude, position.elevation, mag.get("x"), mag.get("y"), mag.get("z"))  # assign data to row
     
     print("sensing data...")  # debug
     print(row)
@@ -92,6 +90,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
 
         sleep(1)  # wait one second
 
+    #! TODO: Spike detection + coral classification
     if spike == 0:  # if spike is not detected
         for d in range(9):  # run ten times (10 images)
             delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
