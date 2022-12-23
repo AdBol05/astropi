@@ -21,31 +21,26 @@ spike = 0  # spike detection (set as not found)
 
 def create_csv(data_file):  # creating csv file
     with open(data_file, 'w', buffering=1) as f:  # create csv file and set up logging
-        writer = csv.writer(f)  # set up writer
         header = ("RowNum", "date", "coords-latitude", "coords-longitude", "coords-elevation", "magnetometer-X", "magnetometer-Y", "magnetometer-Z")  # write first line (data type)
-        writer.writerow(header)  # write header to csv file
+        csv.writer(f).writerow(header)  # write header to csv file
         print("Creating data.csv file...")  # debug
 
 
 def add_csv_data(data_file, data):  # writing data to csv file
     with open(data_file, 'a', buffering=1) as f:  # open csv file
-        writer = csv.writer(f)  # set up writer
-        writer.writerow(data)  # write data row to scv file
+        csv.writer(f).writerow(data)  # write data row to scv file
         print("Writing data to .csv file...")  # debug
 
 
 def read_data(data_file, compass):  # data collection
     global i  # readings counter as a global variable
-    
     position = ISS.at(load.timescale().now()).subpoint()  # get position from timescale
     mag = sense.get_compass_raw()
-    
-    i = i + 1  # increase readings counter by one
-    row = (i, datetime.now(), position.latitude, position.longitude, position.elevation, mag.get("x"), mag.get("y"), mag.get("z"))  # assign data to row
-    
     print("sensing data...")  # debug
+    row = (i, datetime.now(), position.latitude, position.longitude, position.elevation, mag.get("x"), mag.get("y"), mag.get("z"))  # assign data to row   
     print(row)
     add_csv_data(data_file, row)  # write row to csv file
+    i = i + 1  # increase readings counter by one
 
 #some basic init
 base_folder = Path(__file__).parent.resolve()  # determine working directory
