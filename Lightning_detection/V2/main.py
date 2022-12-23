@@ -45,12 +45,12 @@ def read_data(data_file, compass):  # data collection
 
 #* set up paths
 base_folder = Path(__file__).parent.resolve()  # determine working directory
-data_file = base_folder / 'output/data.csv'  # set data.csv file name and location
-
-if not os.path.exists(f"{base_folder}/temp"):  # check if temp directory exists
-    os.mkdir(f"{base_folder}/temp")  # directory for temporary files
-if not os.path.exists(f"{base_folder}/output"):  # check if output directory exists
-    os.mkdir(f"{base_folder}/output")  # directory for output files
+data_file = base_folder / 'output/data.csv'  # set data.csv path
+# create output and temp directories if they don't exist
+if not os.path.exists(f"{base_folder}/temp"):
+    os.mkdir(f"{base_folder}/temp")
+if not os.path.exists(f"{base_folder}/output"):
+    os.mkdir(f"{base_folder}/output")
 
 #* sense hat setup (enable magnetometer)
 sense = SenseHat()
