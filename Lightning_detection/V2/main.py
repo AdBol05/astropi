@@ -39,8 +39,8 @@ def read_data(data_file, compass):  # data collection
     
     t = load.timescale().now()  # get timescale
     position = ISS.at(t).subpoint()  # get position from timescale
-    latitude = position.subplat()  # get location from position
-    longitude = position.subplong()
+    latitude = position.subplat()  #! TODO: FIX
+    longitude = position.subplong()  #! TODO: FIX
       # get location from position
     mag = sense.get_compass_raw
     
