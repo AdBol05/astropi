@@ -38,8 +38,8 @@ def read_data(data_file, compass):  # data collection
     global i  # readings counter as a global variable
     t = load.timescale().now()  # get timescale
     position = ISS.at(t).subpoint()  # get position from timescale
-    latitude = position.subplat  # get location from position
-    longitude = position.subplong  # get location from position
+    latitude = position.subplat()  # get location from position
+    longitude = position.subplong()  # get location from position
     mag = sense.get_compass_raw
     i = i + 1  # increase readings counter by one
     row = (i, datetime.now(), latitude, longitude, mag.get("x"), mag.get("y"), mag.get("z"))  #! TODO:FIX COORDS AND RAW COMPASS DATA OBJECT (assign data to row)
