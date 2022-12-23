@@ -47,6 +47,7 @@ def read_data(data_file, compass):  # data collection
     row = (i, datetime.now(), position.latitude, position.longitude, position.elevation, mag.get("x"), mag.get("y"), mag.get("z"))  #! TODO:FIX COORDS (assign data to row)
     
     print("sensing data...")  # debug
+    print(row)
     add_csv_data(data_file, row)  # write row to csv file
 
 #some basic init
