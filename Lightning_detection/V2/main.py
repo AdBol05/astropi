@@ -44,7 +44,7 @@ def read_data(data_file, compass):  # data collection
     mag = sense.get_compass_raw()
     
     i = i + 1  # increase readings counter by one
-    row = (i, datetime.now(), position.latitude, position.longitude, position.elevation, mag.get("x"), mag.get("y"), mag.get("z"))  #! TODO:FIX COORDS (assign data to row)
+    row = (i, datetime.now(), position.latitude.Angle, position.longitude, position.elevation, mag.get("x"), mag.get("y"), mag.get("z"))  #! TODO:FIX COORDS (assign data to row)
     
     print("sensing data...")  # debug
     print(row)
