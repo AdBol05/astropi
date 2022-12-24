@@ -33,6 +33,7 @@ def add_csv_data(data_file, data):  # writing data to csv file
         print("Writing data to .csv file...")  # debug
 
 
+#! Why does it output coords in angles and elevation in au?
 def read_data(data_file):  # data collection
     global i  # readings counter as a global variable
     position = ISS.at(load.timescale().now()).subpoint()  # get position from timescale
