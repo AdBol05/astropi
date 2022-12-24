@@ -22,7 +22,7 @@ spike = 0  # spike detection (set as not found)
 #* define functions
 def create_csv(data_file):  # creating csv file
     with open(data_file, 'w', buffering=1) as f:  # create csv file and set up logging
-        header = ("RowNum", "date", "coords-latitude(degrees)", "coords-longitude(degrees)", "coords-elevation(km)", "magnetometer-X", "magnetometer-Y", "magnetometer-Z")  # write first line (data type)
+        header = ("RowNum", "date", "coords-latitude(DMS)", "coords-longitude(DMS)", "coords-elevation(km)", "magnetometer-X", "magnetometer-Y", "magnetometer-Z")  # write first line (data type)
         csv.writer(f).writerow(header)  # write header to csv file
         print("Creating data.csv file...")  # debug
 
