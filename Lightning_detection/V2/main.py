@@ -49,10 +49,11 @@ def angle2exif(angle):  # convert raw coords angle to EXIF friendly format
     return sign < 0, exif_angle
 
 def capture(cam, cnt):  # take a picture and add metadata to it (cam -> camera, cnt -> image counter) #! Test if base_folder is needed
-    coords = ISS.coordinates()
-    south, exif_lat = angle2exif(coords.latitude)
+    coords = ISS.coordinates()  # get current ISS coordinates
+    south, exif_lat = angle2exif(coords.latitude)  # convert coordinates to exif friendly format
     west, exif_long = angle2exif(coords.longitude)
 
+    # add coordinates to image metadata
     cam.exif_tags['GPS.GPSLatitude'] = exif_lat
     cam.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
     cam.exif_tags['GPS.GPSLongitude'] = exif_long
@@ -81,7 +82,6 @@ sense.set_imu_config(True, False, False)
 #* camera setup (set iamge resolution)
 camera = PiCamera()
 camera.resolution = (1296, 972)
-
 
 #* initialization
 print("running...")  # debug
