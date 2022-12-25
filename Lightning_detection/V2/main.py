@@ -43,6 +43,11 @@ def read_data(data_file):  # data collection
     add_csv_data(data_file, row)  # write row to csv file
     i = i + 1  # increase readings counter by one
 
+def angle2exif(angle):  # convert raw coords angle to EXIF friendly format
+    sign, degrees, minutes, seconds = angle.signed_dms()
+    exif_angle = f'{degrees:.0f}/1,{minutes:.0f}/1,{seconds*10:.0f}/10'
+    return sign < 0, exif_angle
+
 #* set up paths
 base_folder = Path(__file__).parent.resolve()  # determine working directory
 data_file = base_folder / 'output/data.csv'  # set data.csv path
