@@ -48,13 +48,13 @@ def angle2exif(angle):  # convert raw coords angle to EXIF friendly format
     exif_angle = f'{degrees:.0f}/1,{minutes:.0f}/1,{seconds*10:.0f}/10'
     return sign < 0, exif_angle
 
-def capture(cam, cnt):  # take a picture and add metadata to it
+def capture(cam, cnt):  # take a picture and add metadata to it (cam -> camera, cnt -> image counter)
     cam.capture(f"{base_folder}/temp/img_{cnt}.jpg")  # capture camera and save the image
-    image_size = image_size + os.path.getsize(base_folder/f'temp/img_{cnt}.jpg')  # get image counter
-
+    
     # open last image and add metadata to it
     image = Image.open(f"{base_folder}/temp/img_{cnt}.jpg")
     image.save(f"{base_folder}/temp/img_{cnt}.jpg", exif=image.info["exif"], quality=100)
+    image_size = image_size + os.path.getsize(base_folder/f'temp/img_{cnt}.jpg')  # get image counter
 
     print("took a picture")  # debug
     print(image_size)  # debug
@@ -72,7 +72,7 @@ if not os.path.exists(f"{base_folder}/output"):
 sense = SenseHat()
 sense.set_imu_config(True, False, False)
 
-#* camera setup (output resolution)
+#* camera setup (set iamge resolution)
 camera = PiCamera()
 camera.resolution = (1296, 972)
 
@@ -85,9 +85,10 @@ currentTime = datetime.now()  # get current time before loop start
 
 #* Main loop
 while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000):  # run for 175 minutes (3 hours - 5 minutes) or until storage is full
-    for k in range(10):  # run ten times (10 images)
-        read_data(data_file)  # gather data
-        capture(camera, counter)
+    #* take 10 images
+    for k in range(10):
+        read_data(data_file)  # get data from all snsors and write to output file
+        capture(camera, counter)  # capture image and add metadata to it
         counter = counter + 1  # add one to image counter
         sleep(1)  # wait one second
 
