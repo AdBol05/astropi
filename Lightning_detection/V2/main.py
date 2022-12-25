@@ -49,11 +49,17 @@ def angle2exif(angle):  # convert raw coords angle to EXIF friendly format
     return sign < 0, exif_angle
 
 def capture(cam, cnt):  # take a picture and add metadata to it (cam -> camera, cnt -> image counter)
-    cam.capture(f"{base_folder}/temp/img_{cnt}.jpg")  # capture camera and save the image
+    coords = ISS.coordinates()
+    south, exif_lat = angle2exif(coords.latitude)
+    west, exif_long = angle2exif(coords.longitude)
+
+    cam.exif_tags['GPS.GPSLatitude'] = exif_lat
+    cam.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
+    cam.exif_tags['GPS.GPSLongitude'] = exif_long
+    cam.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
     
-    # open last image and add metadata to it
-    image = Image.open(f"{base_folder}/temp/img_{cnt}.jpg")
-    image.save(f"{base_folder}/temp/img_{cnt}.jpg", exif=image.info["exif"], quality=100)
+    cam.capture(f"{base_folder}/temp/img_{cnt}.jpg")  # capture camera and save the image
+
     image_size = image_size + os.path.getsize(base_folder/f'temp/img_{cnt}.jpg')  # get image counter
 
     print("took a picture")  # debug
