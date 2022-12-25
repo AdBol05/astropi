@@ -48,7 +48,7 @@ def angle2exif(angle):  # convert raw coords angle to EXIF friendly format
     exif_angle = f'{degrees:.0f}/1,{minutes:.0f}/1,{seconds*10:.0f}/10'
     return sign < 0, exif_angle
 
-def capture(cam, cnt):  # take a picture and add metadata to it (cam -> camera, cnt -> image counter)
+def capture(cam, cnt):  # take a picture and add metadata to it (cam -> camera, cnt -> image counter) #! Test if base_folder is needed
     coords = ISS.coordinates()
     south, exif_lat = angle2exif(coords.latitude)
     west, exif_long = angle2exif(coords.longitude)
