@@ -86,13 +86,9 @@ currentTime = datetime.now()  # get current time before loop start
 #* Main loop
 while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000):  # run for 175 minutes (3 hours - 5 minutes) or until storage is full
     for k in range(10):  # run ten times (10 images)
-        compass = sense.get_compass_raw()  # get data from magnetometer (compass)
         read_data(data_file)  # gather data
-
         capture(camera, counter)
-
         counter = counter + 1  # add one to image counter
-        
         sleep(1)  # wait one second
 
     #* process images
