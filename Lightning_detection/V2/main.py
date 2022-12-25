@@ -48,6 +48,17 @@ def angle2exif(angle):  # convert raw coords angle to EXIF friendly format
     exif_angle = f'{degrees:.0f}/1,{minutes:.0f}/1,{seconds*10:.0f}/10'
     return sign < 0, exif_angle
 
+def capture(cnt):  # take a picture and add metadata to it
+    camera.capture(f"{base_folder}/temp/img_{cnt}.jpg")  # capture camera and save the image
+    image_size = image_size + os.path.getsize(base_folder/f'temp/img_{cnt}.jpg')  # get image counter
+
+    # open last image and add metadata to it
+    image = Image.open(f"{base_folder}/temp/img_{cnt}.jpg")
+    image.save(f"{base_folder}/temp/img_{cnt}.jpg", exif=image.info["exif"], quality=100)
+
+    print("took a picture")  # debug
+    print(image_size)  # debug
+
 #* set up paths
 base_folder = Path(__file__).parent.resolve()  # determine working directory
 data_file = base_folder / 'output/data.csv'  # set data.csv path
@@ -78,15 +89,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
         compass = sense.get_compass_raw()  # get data from magnetometer (compass)
         read_data(data_file)  # gather data
 
-        camera.capture(f"{base_folder}/temp/img_{counter}.jpg")  # capture camera and save the image
-        image_size = image_size + os.path.getsize(base_folder/f'temp/img_{counter}.jpg')  # get image counter
-        
-        # open last image and add metadata to it
-        image = Image.open(f"{base_folder}/temp/img_{counter}.jpg")
-        image.save(f"{base_folder}/temp/img_{counter}.jpg", exif=image.info["exif"], quality=100)
-        
-        print("took a picture")  # debug
-        print(image_size)  # debug
+        capture(counter)
 
         counter = counter + 1  # add one to image counter
         
