@@ -17,10 +17,15 @@ const keys = head.split(",");
 
 let data = [];
 
-for (i in input) {
-    data.push(input[i].split(","));
-    //console.log(sample);
+for (i in input[0].split(",")) {
+    data.push([]);
 }
+for (i in data){
+    for (j in input[i].split(",")){
+        data[i].push(input[j].split(",")[0]);
+    }
+}
+
 console.log(data);
 
 //* arrays in object are made from array of arrays
