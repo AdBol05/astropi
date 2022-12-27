@@ -34,7 +34,7 @@ def add_csv_data(data_file, data):  # writing data to csv file
 def read_data(data_file):  # data collection
     global i  # readings counter as a global variable
     position = ISS.at(load.timescale().now()).subpoint()  # get position from timescale
-    mag = sense.get_compass_raw()
+    mag = sense.get_compass_raw()  # get magnetometer data
 
     print("sensing data...")  # debug
     row = (i, datetime.now(), position.latitude.signed_dms(), position.longitude.signed_dms(), position.elevation.km, mag.get("x"), mag.get("y"), mag.get("z"))  # assign data to row   
