@@ -6,24 +6,14 @@ let input = fs.readFileSync(args[0], "utf-8");
 
 input = input.split("\n");
 
-let head = input[0];
+let keys = input[0].split(",");
 input.shift();
-
-/*console.log(head);
-console.log(data[0]);
-console.log(data[1]);*/
-
-const keys = head.split(",");
 
 let data = [];
 
 for (i in input[0].split(",")) {
     data.push([]);
 }
-
-/*for (j in input[i].split(",")) {
-    data[i].push(input[j].split(",")[0]);
-}*/
 
 for(i in data){
     data[i].push(i);
