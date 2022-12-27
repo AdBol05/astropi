@@ -14,10 +14,13 @@ console.log(data[0]);
 console.log(data[1]);*/
 
 const keys = head.split(",");
-const output = Object.fromEntries(keys.map(key => [key, 0]));
-console.log(output);
 
 for (i in data) {
     let sample = data[i].split(",");
     console.log(sample);
 }
+
+//* arrays in object are meda from array of arrays
+
+let output = Object.fromEntries(keys.map(key => [key, "data placeholder"]));
+console.log(output);
