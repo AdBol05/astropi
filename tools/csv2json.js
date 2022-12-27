@@ -20,15 +20,19 @@ let data = [];
 for (i in input[0].split(",")) {
     data.push([]);
 }
-for (i in data){
-    for (j in input[i].split(",")){
-        data[i].push(input[j].split(",")[0]);
-    }
+
+/*for (j in input[i].split(",")) {
+    data[i].push(input[j].split(",")[0]);
+}*/
+
+for(i in data){
+    data[i].push(i);
 }
 
 console.log(data);
 
 //* arrays in object are made from array of arrays
 
-let output = Object.fromEntries(keys.map(key => [key, "data placeholder"]));
+let l = 0;
+let output = Object.fromEntries(keys.map(key => [key, data[l++]]));
 console.log(output);
