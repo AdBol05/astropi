@@ -45,6 +45,7 @@ def read_data(data_file):  # data collection
     position = ISS.at(load.timescale().now()).subpoint()  # get position from timescale
     mag = sense.get_compass_raw()  # get magnetometer data
 
+    #! TODO: improve coords format (dms messing with csv)
     print("sensing data...")  # debug
     row = (i, datetime.now(), position.latitude.signed_dms(), position.longitude.signed_dms(), position.elevation.km, mag.get("x"), mag.get("y"), mag.get("z"))  # assign data to row   
     
@@ -57,7 +58,7 @@ def angle2exif(angle):  # convert raw coords angle to EXIF friendly format
     exif_angle = f'{degrees:.0f}/1,{minutes:.0f}/1,{seconds*10:.0f}/10'
     return sign < 0, exif_angle
 
-def capture(cam, cnt):  # take a picture and add metadata to it (cam -> camera, cnt -> image counter) #! Test if base_folder is needed
+def capture(cam, cnt):  # take a picture and add metadata to it (cam -> camera, cnt -> image counter)
     coords = ISS.coordinates()  # get current ISS coordinates
     south, exif_lat = angle2exif(coords.latitude)  # convert coordinates to exif friendly format
     west, exif_long = angle2exif(coords.longitude)
