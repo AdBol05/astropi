@@ -50,7 +50,7 @@ def read_data(data_file):  # data collection
     
     print(row)
     add_csv_data(data_file, row)  # write row to csv file
-    i = i + 1  # increase readings counter by one
+    i += 1  # increase readings counter by one
 
 def angle2exif(angle):  # convert raw coords angle to EXIF friendly format
     sign, degrees, minutes, seconds = angle.signed_dms()
@@ -93,8 +93,8 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
     for k in range(10):
         read_data(data_file)  # get data from all snsors and write to output file
         capture(camera, counter)  # capture image and add metadata to it
-        image_size = image_size + os.path.getsize(base_folder/f'temp/img_{counter}.jpg')  # get image counter
-        counter = counter + 1  # add one to image counter
+        image_size = image_size + os.path.getsize(base_folder/f'temp/img_{counter}.jpg')  # add size of new image
+        counter += 1  # add one to image counter
         sleep(1)  # wait one second
 
     #* process images
