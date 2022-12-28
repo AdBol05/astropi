@@ -8,20 +8,17 @@ input = input.split("\n");
 
 let keys = input[0].split(",");
 input.shift();
-
 let data = [];
 
-for (i in input[0].split(",")) {
-    data.push([]);
-}
-
-for(i in data){
-    data[i].push(i);
+for (i in input[0].split(",")) {data.push([]);}
+for (i in input){
+    for(j in data){
+        data[j].push(input[i].split(",")[j]);
+    }
 }
 
 console.log(data);
-
-//* arrays in object are made from array of arrays
+console.log("--------------------------");
 
 let l = 0;
 let output = Object.fromEntries(keys.map(key => [key, data[l++]]));
