@@ -93,7 +93,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
     for k in range(10):
         read_data(data_file)  # get data from all snsors and write to output file
         capture(camera, counter)  # capture image and add metadata to it
-        image_size = image_size + os.path.getsize(base_folder/f'temp/img_{cnt}.jpg')  # get image counter
+        image_size = image_size + os.path.getsize(base_folder/f'temp/img_{counter}.jpg')  # get image counter
         counter = counter + 1  # add one to image counter
         sleep(1)  # wait one second
 
