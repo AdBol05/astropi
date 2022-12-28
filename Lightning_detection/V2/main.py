@@ -19,6 +19,15 @@ image_size = 0  # size of image
 delete_counter = 0  #iamge counter used for deletion
 spike = 0  # spike detection (set as not found)
 
+#* set up paths
+base_folder = Path(__file__).parent.resolve()  # determine working directory
+data_file = base_folder / 'output/data.csv'  # set data.csv path
+# create output and temp directories if they don't exist
+if not os.path.exists(f"{base_folder}/temp"):
+    os.mkdir(f"{base_folder}/temp")
+if not os.path.exists(f"{base_folder}/output"):
+    os.mkdir(f"{base_folder}/output")
+
 #* define functions
 def create_csv(data_file):  # creating csv file
     with open(data_file, 'w', buffering=1) as f:  # create csv file and set up logging
@@ -66,15 +75,6 @@ def capture(cam, cnt):  # take a picture and add metadata to it (cam -> camera, 
     print("took a picture")  # debug
     print(image_size)  # debug
 
-#* set up paths
-base_folder = Path(__file__).parent.resolve()  # determine working directory
-data_file = base_folder / 'output/data.csv'  # set data.csv path
-# create output and temp directories if they don't exist
-if not os.path.exists(f"{base_folder}/temp"):
-    os.mkdir(f"{base_folder}/temp")
-if not os.path.exists(f"{base_folder}/output"):
-    os.mkdir(f"{base_folder}/output")
-
 #* sense hat setup (enable magnetometer)
 sense = SenseHat()
 sense.set_imu_config(True, False, False)
@@ -87,7 +87,6 @@ camera.resolution = (1296, 972)
 print("running...")  # debug
 create_csv(data_file)  # create data.csv file
 currentTime = datetime.now()  # get current time before loop start
-
 
 #* Main loop
 while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000):  # run for 175 minutes (3 hours - 5 minutes) or until storage is full
