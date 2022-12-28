@@ -47,7 +47,7 @@ def read_data(data_file):  # data collection
 
     #! TODO: improve coords format (dms messing with csv)
     print("sensing data...")  # debug
-    row = (i, datetime.now(), position.latitude.signed_dms(), position.longitude.signed_dms(), position.elevation.km, mag.get("x"), mag.get("y"), mag.get("z"))  # assign data to row   
+    row = (i, datetime.now(), position.latitude, position.longitude, position.elevation.km, mag.get("x"), mag.get("y"), mag.get("z"))  # assign data to row   
     
     print(row)
     add_csv_data(data_file, row)  # write row to csv file
