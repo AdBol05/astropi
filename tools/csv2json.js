@@ -22,7 +22,7 @@ for (i in input){
 
 let l = 0;
 let output = Object.fromEntries(keys.map(key => [key, data[l++]]));
-console.log(output);
+//console.log(output);
 
 if(args[1] !== undefined){fs.writeFileSync(args[1], JSON.stringify(output));}
 else{fs.writeFileSync(args[0].replace(".csv", ".json"), JSON.stringify(output));}
