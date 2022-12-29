@@ -45,7 +45,6 @@ def read_data(data_file):  # data collection
     position = ISS.at(load.timescale().now()).subpoint()  # get position from timescale
     mag = sense.get_compass_raw()  # get magnetometer data
 
-    #! TODO: improve coords format (dms messing with csv)
     print("sensing data...")  # debug
     row = (i, datetime.now(), position.latitude, position.longitude, position.elevation.km, mag.get("x"), mag.get("y"), mag.get("z"))  # assign data to row   
     
@@ -70,7 +69,6 @@ def capture(cam, cnt):  # take a picture and add metadata to it (cam -> camera, 
     cam.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
     
     cam.capture(f"{base_folder}/temp/img_{cnt}.jpg")  # capture camera and save the image
-
 
     print("took a picture")  # debug
     print(image_size)  # debug
