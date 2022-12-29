@@ -126,5 +126,5 @@ while (currentTime < startTime + timedelta(minutes=1) and storage < 3000000000):
 
 print("Program ended. Timed out or ran out of storage.")  # debug
 time_eplased = currentTime - startTime
-storage_used = storage / (1024 * 1024)
+storage_used = round(storage / (1024 * 1024), 3)
 print(f"Time elapsed: {time_eplased}, storage used: {storage_used}MB")
