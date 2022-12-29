@@ -103,7 +103,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
             delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
             os.remove(f"{base_folder}/temp/img_{delete_counter:03d}.jpg")  # remove unnecessary images
             print("removing images...")  # debug
-            #print(delete_counter)  # debug
+            print(delete_counter)  # debug
 
     if spike == 1:  # if spike is detected
         storage = storage + image_size  # add images size to storage counter
