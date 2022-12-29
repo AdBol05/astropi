@@ -14,6 +14,7 @@ import os
 startTime = datetime.now()  # get program start time
 counter = 10000  # image counter (start from 10000 for better naming scheme)
 i = 0  # readings counter
+global storage 
 storage = 10000  # used storage space (headroom for script and csv file)
 delete_counter = 0  #iamge counter used for deletion
 spike = 0  # spike detection (set as not found)
