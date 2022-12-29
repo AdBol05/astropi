@@ -70,7 +70,7 @@ def capture(cam, cnt):  # take a picture and add metadata to it (cam -> camera, 
     
     cam.capture(f"{base_folder}/temp/img_{cnt:03d}.jpg")  # capture camera and save the image
 
-    print("took a picture")  # debug
+    print("took a picture: " + cnt)  # debug
     print(image_size)  # debug
 
 #* sense hat setup (enable magnetometer)
@@ -100,7 +100,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
     #! TODO: Spike detection + coral classification
     if spike == 0:  # if spike is not detected
         for d in range(9):  # run ten times (10 images)
-            delete_counter = (counter - d) - 2  # resovle number of images selected to be deleted
+            delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
             os.remove(f"{base_folder}/temp/img_{delete_counter:03d}.jpg")  # remove unnecessary images
             print("removing images...")  # debug
             print(delete_counter)  # debug
