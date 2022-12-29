@@ -124,7 +124,7 @@ while (currentTime < startTime + timedelta(minutes=1) and storage < 3000000000):
 
     currentTime = datetime.now()  # update current time
 
-print("Program ended. Timed out or ran out of storage.")  # debug
+print("Program ended. All output files are in the \"output\" folder. \"temp\" folder can be ignored.")  # debug
 time_eplased = currentTime - startTime
 storage_used = round(storage / (1024 * 1024), 3)
 print(f"Time elapsed: {time_eplased}, storage used: {storage_used}MB")
