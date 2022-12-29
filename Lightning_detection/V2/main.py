@@ -45,7 +45,7 @@ def read_data(data_file):  # data collection
     position = ISS.at(load.timescale().now()).subpoint()  # get position from timescale
     mag = sense.get_compass_raw()  # get magnetometer data
 
-    print("sensing data...")  # debug
+    print(f"reading data... used storage: {storage}")  # debug
     row = (i, datetime.now(), position.latitude, position.longitude, position.elevation.km, mag.get("x"), mag.get("y"), mag.get("z"))  # assign data to row   
     
     print(row)
