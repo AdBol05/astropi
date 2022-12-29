@@ -95,6 +95,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
         counter += 1  # add one to image counter
         sleep(1)  # wait one second
 
+    print("-------------------------------------------------------------------------------")  # debug 
     #* process images
     #! TODO: Spike detection + coral classification
     if spike == 0:  # if spike is not detected
