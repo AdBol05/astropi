@@ -108,7 +108,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
             else:  # save last image
                 print(f"saving image: {delete_counter}") # debug
                 os.replace(f"{base_folder}/temp/img_{delete_counter}", f"{base_folder}/output/img_{delete_counter}")
-                storage += os.path.getsize(base_folder/f'temp/img_{delete_counter:03d}.jpg')
+                storage += os.path.getsize(base_folder/f'output/img_{delete_counter:03d}.jpg')
 
     if spike == 1:  # if spike is detected
         storage += image_size  # add images size to storage counter
