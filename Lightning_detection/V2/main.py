@@ -70,7 +70,7 @@ def capture(cam, cnt):  # take a picture and add metadata to it (cam -> camera, 
     
     cam.capture(f"{base_folder}/temp/img_{cnt:03d}.jpg")  # capture camera and save the image
 
-    print("took a picture: " + cnt)  # debug
+    print(f"took a picture: {cnt}")  # debug
     print(image_size)  # debug
 
 #* sense hat setup (enable magnetometer)
@@ -102,8 +102,8 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
         for d in range(9):  # run ten times (10 images)
             delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
             os.remove(f"{base_folder}/temp/img_{delete_counter:03d}.jpg")  # remove unnecessary images
-            print("removing images...")  # debug
-            print(delete_counter)  # debug
+            print(f"removing image: {delete_counter}")  # debug
+            #print(delete_counter)  # debug
 
     if spike == 1:  # if spike is detected
         storage = storage + image_size  # add images size to storage counter
