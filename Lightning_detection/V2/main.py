@@ -115,6 +115,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
     #* reset variables
     spike = 0
     image_size = 0
+    print("\n") # debug
 
     currentTime = datetime.now()  # update current time
 
