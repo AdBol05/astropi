@@ -91,7 +91,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
     for k in range(10):
         read_data(data_file)  # get data from all snsors and write to output file
         capture(camera, counter)  # capture image and add metadata to it
-        image_size = image_size + os.path.getsize(base_folder/f'temp/img_{counter:03d}.jpg')  # add size of new image
+        # image_size = image_size + os.path.getsize(base_folder/f'temp/img_{counter:03d}.jpg')  # add size of new image
         counter += 1  # add one to image counter
         sleep(1)  # wait one second
         print("-------------------------------------------------------------------------------")  # debug 
@@ -111,12 +111,15 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
                 storage += os.path.getsize(base_folder/f'output/img_{delete_counter:03d}.jpg')  # add image size to used storage space
 
     if spike == 1:  # if spike is detected
-        storage += image_size  # add images size to storage counter
         print("saving all images")  # debug
+        for d in range(10):  # run ten times (move all images)
+            move_counter = (counter - d) - 1  # resovle number of images selected to be dmoved
+            os.replace(f"{base_folder}/temp/img_{move_counter}.jpg", f"{base_folder}/output/img_{move_counter}.jpg")  # move image to output folder
+            storage += os.path.getsize(base_folder/f'output/img_{move_counter:03d}.jpg')  # add image size to used storage space
 
     #* reset variables
     spike = 0
-    image_size = 0
+    #image_size = 0
     print("===============================================================================") # debug
 
     currentTime = datetime.now()  # update current time
