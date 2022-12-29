@@ -68,7 +68,7 @@ def capture(cam, cnt):  # take a picture and add metadata to it (cam -> camera, 
     cam.exif_tags['GPS.GPSLongitude'] = exif_long
     cam.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
     
-    cam.capture(f"{base_folder}/temp/img_{cnt}.jpg")  # capture camera and save the image
+    cam.capture(f"{base_folder}/temp/img_{cnt:03d}.jpg")  # capture camera and save the image
 
     print("took a picture")  # debug
     print(image_size)  # debug
