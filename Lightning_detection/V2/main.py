@@ -86,7 +86,7 @@ create_csv(data_file)  # create data.csv file
 currentTime = datetime.now()  # get current time before loop start
 
 #* Main loop
-while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000):  # run for 175 minutes (3 hours - 5 minutes) or until storage is full
+while (currentTime < startTime + timedelta(minutes=1) and storage < 3000000000):  # run for 175 minutes (3 hours - 5 minutes) or until storage is full
     #* take 10 images
     for k in range(10):
         read_data(data_file)  # get data from all snsors and write to output file
@@ -125,3 +125,6 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
     currentTime = datetime.now()  # update current time
 
 print("Program ended. Timed out or ran out of storage.")  # debug
+time_eplased = currentTime - startTime
+storage_used = storage / (1024 * 1024)
+print(f"Time elapsed: {time_eplased}, storage used: {storage_used}MB")
