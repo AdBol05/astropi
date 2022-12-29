@@ -22,7 +22,7 @@ spike = 0  # spike detection (set as not found)
 #* set up paths
 base_folder = Path(__file__).parent.resolve()  # determine working directory
 data_file = base_folder / 'output/data.csv'  # set data.csv path
-# create output and temp directories if they don't exist
+# create output and temporary directories if they don't exist
 if not os.path.exists(f"{base_folder}/temp"):
     os.mkdir(f"{base_folder}/temp")
 if not os.path.exists(f"{base_folder}/output"):
