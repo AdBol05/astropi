@@ -100,7 +100,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
     #! TODO: Spike detection + coral classification
     if spike == 0:  # if spike is not detected
         for d in range(10):  # run ten times (delete nine images and save one as a backup)
-            delete_counter = (counter - d) - 2  # resovle number of images selected to be deleted
+            delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
             if d != 10:  # delete first nine images
                 os.remove(f"{base_folder}/temp/img_{delete_counter:03d}.jpg")  # remove unnecessary images
                 print(f"removing image: {delete_counter}")  # debug
