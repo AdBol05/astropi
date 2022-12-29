@@ -92,7 +92,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
     for k in range(10):
         read_data(data_file)  # get data from all snsors and write to output file
         capture(camera, counter)  # capture image and add metadata to it
-        image_size = image_size + os.path.getsize(base_folder/f'temp/img_{counter}.jpg')  # add size of new image
+        image_size = image_size + os.path.getsize(base_folder/f'temp/img_{counter:03d}.jpg')  # add size of new image
         counter += 1  # add one to image counter
         sleep(1)  # wait one second
 
@@ -101,7 +101,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
     if spike == 0:  # if spike is not detected
         for d in range(9):  # run ten times (10 images)
             delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
-            os.remove(f"{base_folder}/temp/img_{delete_counter}.jpg")  # remove unnecessary images
+            os.remove(f"{base_folder}/temp/img_{delete_counter:03d}.jpg")  # remove unnecessary images
             print("removing images...")  # debug
             #print(delete_counter)  # debug
 
