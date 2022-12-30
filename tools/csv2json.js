@@ -18,12 +18,12 @@ let data = [];
 for (i in input[0].split(",")) { data.push([]); }
 for (i in input) {
     for (j in data) {
-        data[j].push(input[i].split(",")[j]);
+        data[j].push(input[i].replace("\r","").split(",")[j]);
     }
 }
 
 let l = 0;
-let output = Object.fromEntries(keys.map(key => [key, data[l++]]));
+let output = Object.fromEntries(keys.map(key => [key.replace("\r", ""), data[l++]]));
 //console.log(output);
 
 if (args[1] !== undefined) { fs.writeFileSync(args[1], JSON.stringify(output)); }
