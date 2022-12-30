@@ -31,7 +31,7 @@ if not os.path.exists(f"{base_folder}/output"):
 #* define functions
 def create_csv(data_file):  # creating csv file
     with open(data_file, 'w', buffering=1) as f:  # create csv file and set up logging
-        header = ("RowNum", "date", "coords-latitude-deg", "coords-longitude-deg", "coords-elevation-km-", "magnetometer-X", "magnetometer-Y", "magnetometer-Z")  # write first line (data type)
+        header = ("RowNum", "date", "coords_latitude_deg", "coords_longitude_deg", "coords_elevation_km", "magnetometer_X", "magnetometer_Y", "magnetometer_Z")  # write first line (data type)
         csv.writer(f).writerow(header)  # write header to csv file
         print("Creating data.csv file...")  # debug
 
