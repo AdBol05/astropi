@@ -10,7 +10,7 @@ from orbit import ISS
 from skyfield.api import load
 import os
 
-#* define variables 
+#* define variables
 startTime = datetime.now()  # get program start time
 counter = 10000  # image counter (start from 10000 for better naming scheme)
 i = 0  # readings counter
@@ -46,8 +46,8 @@ def read_data(data_file):  # data collection
     mag = sense.get_compass_raw()  # get magnetometer data
 
     print(f"reading data... used storage: {storage}")  # debug
-    row = (i, datetime.now(), position.latitude, position.longitude, position.elevation.km, mag.get("x"), mag.get("y"), mag.get("z"))  # assign data to row   
-    
+    row = (i, datetime.now(), position.latitude, position.longitude, position.elevation.km, mag.get("x"), mag.get("y"), mag.get("z"))  # assign data to row
+
     print(row)
     add_csv_data(data_file, row)  # write row to csv file
     i += 1  # increase readings counter by one
@@ -67,7 +67,7 @@ def capture(cam, cnt):  # take a picture and add metadata to it (cam -> camera, 
     cam.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
     cam.exif_tags['GPS.GPSLongitude'] = exif_long
     cam.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
-    
+
     cam.capture(f"{base_folder}/temp/img_{cnt:03d}.jpg")  # capture camera and save the image
 
     print(f"took a picture: {cnt} size: {image_size}")  # debug
@@ -95,7 +95,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
         # image_size = image_size + os.path.getsize(base_folder/f'temp/img_{counter:03d}.jpg')  # add size of new image
         counter += 1  # add one to image counter
         sleep(1)  # wait one second
-        print("-------------------------------------------------------------------------------")  # debug 
+        print("-------------------------------------------------------------------------------")  # debug
 
     #* process images
     #! TODO: Spike detection + coral classification
