@@ -8,6 +8,10 @@ from time import sleep
 from picamera import PiCamera
 from orbit import ISS
 from skyfield.api import load
+from pycoral.adapters import common
+from pycoral.adapters import classify
+from pycoral.utils.edgetpu import make_interpreter
+from pycoral.utils.dataset import read_label_file
 import os
 
 #* define variables
@@ -81,6 +85,14 @@ camera = PiCamera()
 camera.resolution = (1296, 972)
 camera.zoom = (0.20, 0.155, 0.80, 0.845)
 
+#* coral setup
+#! TODO: train and implement coral 
+model_file = base_folder/'model.tflite' # set model directory
+label_file = base_folder/'label.txt' # set label file directory
+interpreter = make_interpreter(f"{model_file}")  # assign model to interpreter
+interpreter.allocate_tensors()  # set up TPU
+size = common.input_size(interpreter)  # resize image
+
 #* initialization
 print("running...")  # debug
 create_csv(data_file)  # create data.csv file
@@ -99,6 +111,23 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
 
     #* process images
     #! TODO: Spike detection + coral classification
+
+    """ Ignore this for now
+    for c in classes:
+        print("classifying image...")  # debug
+        print(f'{labels.get(c.id, c.id)} {c.score:.5f}')  # debug
+        if (f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # save only images with particles
+            print("classified as lightning, saving...")  # debug
+            os.rename(image_file, base_folder/output/f'particle_{counter}.jpg')  # rename image to particle(number of picture).jpg
+            image_size = os.path.getsize(base_folder/output/f'particle_{counter}.jpg')  # get image size
+            storage = storage + image_size  # add image size to used storage
+            print("saved image size: %d" % image_size)  # debug
+            counter += 1  # increase image counter by one
+        else:
+            print("classified as a blank image, deleting...")  # debug
+            os.remove(image_file)  # delete empty image
+    """
+
     if spike == 0:  # if spike is not detected
         for d in range(10):  # run ten times (delete nine images and save one as a backup)
             delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
