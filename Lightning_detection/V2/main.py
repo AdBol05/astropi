@@ -145,13 +145,13 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
         for d in range(10):  # run ten times (delete nine images and save one as a backup)
             delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
             if d != 9:  # delete first nine images
-                os.remove(f"{temporary_folder}/img_{delete_counter:03d}.jpg")  # remove unnecessary images
+                os.remove(f"{temporary_folder}/img_{delete_counter}.jpg")  # remove unnecessary images
                 print(f"removing image: {delete_counter}")  # debug
                 #print(delete_counter)  # debug
             else:  # save last image
                 print(f"saving image: {delete_counter}") # debug
                 os.replace(f"{temporary_folder}/img_{delete_counter}.jpg", f"{output_folder}/img_{delete_counter}.jpg")  # move image to output folder
-                storage += os.path.getsize(output_folder/f'img_{delete_counter:03d}.jpg')  # add image size to used storage space
+                storage += os.path.getsize(output_folder/f'img_{delete_counter}.jpg')  # add image size to used storage space
 
     if spike == 1:  # if spike is detected
         print("saving all images")  # debug
