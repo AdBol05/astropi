@@ -30,9 +30,11 @@ temporary_folder = base_folder/'temp';
 data_file = output_folder/'data.csv'  # set data.csv path
 # create output and temporary directories if they don't exist
 if not os.path.exists(temporary_folder):
+    print(f"Creating temporary directory in: {temporary_folder} ...")
     os.mkdir(temporary_folder)
 if not os.path.exists(output_folder):
     os.mkdir(output_folder)
+    print(f"Creating output directory in: {output_folder} ...")
 
 #* define functions
 def create_csv(data_file):  # creating csv file
@@ -54,7 +56,7 @@ def read_data(data_file):  # data collection
     print(f"reading data... used storage: {storage}")  # debug
     row = (i, datetime.now(), position.latitude, position.longitude, position.elevation.km, mag.get("x"), mag.get("y"), mag.get("z"))  # assign data to row
 
-    print(row)
+    #print(row)
     add_csv_data(data_file, row)  # write row to csv file
     i += 1  # increase readings counter by one
 
