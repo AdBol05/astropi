@@ -27,7 +27,7 @@ spike = 0  # spike detection (set as not found)
 base_folder = Path(__file__).parent.resolve()  # determine working directory
 output_folder = base_folder/'output';
 temporary_folder = base_folder/'temp';
-data_file = base_folder / 'output/data.csv'  # set data.csv path
+data_file = output_folder / '/data.csv'  # set data.csv path
 # create output and temporary directories if they don't exist
 if not os.path.exists(temporary_folder):
     os.mkdir(temporary_folder)
@@ -151,14 +151,14 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
             else:  # save last image
                 print(f"saving image: {delete_counter}") # debug
                 os.replace(f"{temporary_folder}/img_{delete_counter}.jpg", f"{output_folder}/img_{delete_counter}.jpg")  # move image to output folder
-                storage += os.path.getsize(output_folder/f'img_{delete_counter}.jpg')  # add image size to used storage space
+                storage += os.path.getsize(f"{output_folder}/img_{delete_counter}.jpg")  # add image size to used storage space
 
     if spike == 1:  # if spike is detected
         print("saving all images")  # debug
         for d in range(10):  # run ten times (move all images)
             move_counter = (counter - d) - 1  # resovle number of images selected to be dmoved
             os.replace(f"{temporary_folder}/img_{move_counter}.jpg", f"{output_folder}/img_{move_counter}.jpg")  # move image to output folder
-            storage += os.path.getsize(output_folder/f'img_{move_counter:03d}.jpg')  # add image size to used storage space
+            storage += os.path.getsize(f"{output_folder}/img_{move_counter}.jpg")  # add image size to used storage space
 
     #* reset variables
     spike = 0
