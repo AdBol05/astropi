@@ -100,7 +100,6 @@ size = common.input_size(interpreter)  # resize image
 """ 
 
 #* initialization
-print("running...")  # debug
 create_csv(data_file)  # create data.csv file
 currentTime = datetime.now()  # get current time before loop start
 
@@ -113,7 +112,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
         # image_size = image_size + os.path.getsize(base_folder/f'temp/img_{counter:03d}.jpg')  # add size of new image
         counter += 1  # add one to image counter
         sleep(1)  # wait one second
-        print("-------------------------------------")  # debug
+        print("-----------------------------------------")  # debug
 
     #* process images
     #! TODO: Spike detection + coral classification
@@ -165,7 +164,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
     #* reset variables
     spike = 0
     #image_size = 0
-    print("=====================================") # debug
+    print("=========================================") # debug
 
     currentTime = datetime.now()  # update current time
 
