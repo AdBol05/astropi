@@ -30,18 +30,18 @@ temporary_folder = base_folder/'temp';
 data_file = output_folder/'data.csv'  # set data.csv path
 # create output and temporary directories if they don't exist
 if not os.path.exists(temporary_folder):
-    print(f"Creating temporary directory in: {temporary_folder} ...")
+    print(f"Creating temporary directory in: {temporary_folder}")
     os.mkdir(temporary_folder)
 if not os.path.exists(output_folder):
     os.mkdir(output_folder)
-    print(f"Creating output directory in: {output_folder} ...")
+    print(f"Creating output directory in: {output_folder}")
 
 #* define functions
 def create_csv(data_file):  # creating csv file
     with open(data_file, 'w', buffering=1) as f:  # create csv file and set up logging
+        print(f"Creating data.csv file in {data_file}")  # debug
         header = ("RowNum", "date", "coords_latitude_deg", "coords_longitude_deg", "coords_elevation_km", "magnetometer_X", "magnetometer_Y", "magnetometer_Z")  # write first line (data type)
         csv.writer(f).writerow(header)  # write header to csv file
-        print("Creating data.csv file...")  # debug
 
 def add_csv_data(data_file, data):  # writing data to csv file
     with open(data_file, 'a', buffering=1) as f:  # open csv file
@@ -113,7 +113,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
         # image_size = image_size + os.path.getsize(base_folder/f'temp/img_{counter:03d}.jpg')  # add size of new image
         counter += 1  # add one to image counter
         sleep(1)  # wait one second
-        print("-------------------------------------------------------------------------------")  # debug
+        print("-------------------------------------")  # debug
 
     #* process images
     #! TODO: Spike detection + coral classification
@@ -165,7 +165,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
     #* reset variables
     spike = 0
     #image_size = 0
-    print("===============================================================================") # debug
+    print("=====================================") # debug
 
     currentTime = datetime.now()  # update current time
 
