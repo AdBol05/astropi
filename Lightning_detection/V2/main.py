@@ -119,7 +119,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
 
     #*Ignore this for now
     """
-    image_file = temporary_folder/f'img_{counter}.jpg'  # set image directory
+    image_file = f"{temporary_folder}/img_{counter}.jpg"  # set image directory
     image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)  # open image
     common.set_input(interpreter, image)  # set input
     interpreter.invoke()  # invoke interpreter
@@ -131,11 +131,11 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
         print(f'{labels.get(c.id, c.id)} {c.score:.5f}')  # debug
         if (f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # save only images with particles
             print("classified as lightning, saving...")  # debug
-            os.rename(image_file, temporary_folder/f'particle_{counter}.jpg')  # rename image to particle(number of picture).jpg
-            os.replace(temporary_folder/f'particle_{counter}.jpg', output_folder/f'particle_{counter}.jpg')
-            image_size = os.path.getsize(output_folder/f'particle_{counter}.jpg')  # get image size
+            os.rename(image_file, f"{temporary_folder}/particle_{counter}.jpg")  # rename image to particle(number of picture).jpg
+            os.replace(f"{temporary_folder}/particle_{counter}.jpg", f"{output_folder}/particle_{counter}.jpg")
+            image_size = os.path.getsize(f"{output_folder}/particle_{counter}.jpg")  # get image size
             storage = storage + image_size  # add image size to used storage
-            print("saved image size: %d" % image_size)  # debug
+            print("saved image size: {image_size}")  # debug
             counter += 1  # increase image counter by one
         else:
             print("classified as a blank image, deleting...")  # debug
