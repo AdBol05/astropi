@@ -19,15 +19,18 @@ startTime = datetime.now()  # get program start time
 counter = 10000  # image counter (start from 10000 for better naming scheme)
 i = 0  # readings counter
 storage = 10000  # used storage space (headroom for script and csv file)
+max_storage = 3000000000
 image_size = 0  # size of image
 delete_counter = 0  #iamge counter used for deletion
 spike = 0  # spike detection (set as not found)
 
-#* set up paths
+#* set up paths (resolve all paths and create file structure)
 base_folder = Path(__file__).parent.resolve()  # determine working directory
 output_folder = base_folder/'output';
 temporary_folder = base_folder/'temp';
 data_file = output_folder/'data.csv'  # set data.csv path
+# model_file = base_folder/'model.tflite' # set model directory
+# label_file = base_folder/'label.txt' # set label file directory
 # create output and temporary directories if they don't exist
 if not os.path.exists(temporary_folder):
     print(f"Creating temporary directory in: {temporary_folder}")
@@ -53,7 +56,7 @@ def read_data(data_file):  # data collection
     position = ISS.at(load.timescale().now()).subpoint()  # get position from timescale
     mag = sense.get_compass_raw()  # get magnetometer data
 
-    print(f"reading data... used storage: {storage}")  # debug
+    print(f"reading data... used storage: {storage}/{max_storage}")  # debug
     row = (i, datetime.now(), position.latitude, position.longitude, position.elevation.km, mag.get("x"), mag.get("y"), mag.get("z"))  # assign data to row
 
     #print(row)
@@ -87,13 +90,11 @@ sense.set_imu_config(True, False, False)
 #* camera setup (set iamge resolution and zoom)
 camera = PiCamera()
 camera.resolution = (1296, 972)
-camera.zoom = (0.20, 0.155, 0.80, 0.845)
+camera.zoom = (0.20, 0.155, 0.80, 0.845) #! TODO: fix image crop
 
 #* coral setup
 #! TODO: train and implement coral
 """
-model_file = base_folder/'model.tflite' # set model directory
-label_file = base_folder/'label.txt' # set label file directory
 interpreter = make_interpreter(f"{model_file}")  # assign model to interpreter
 interpreter.allocate_tensors()  # set up TPU
 size = common.input_size(interpreter)  # resize image
@@ -104,7 +105,7 @@ create_csv(data_file)  # create data.csv file
 currentTime = datetime.now()  # get current time before loop start
 
 #* Main loop
-while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000):  # run for 175 minutes (3 hours - 5 minutes) or until storage is full
+while (currentTime < startTime + timedelta(minutes=175) and storage < max_storage):  # run for 175 minutes (3 hours - 5 minutes) or until storage is full
     #* take 10 images
     for k in range(10):
         read_data(data_file)  # get data from all snsors and write to output file
