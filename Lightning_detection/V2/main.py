@@ -20,7 +20,6 @@ counter = 10000  # image counter (start from 10000 for better naming scheme)
 i = 0  # readings counter
 storage = 10000  # used storage space (headroom for script and csv file)
 max_storage = 3000000000
-image_size = 0  # size of image
 delete_counter = 0  #iamge counter used for deletion
 spike = 0  # spike detection (set as not found)
 
@@ -81,7 +80,7 @@ def capture(cam, cnt):  # take a picture and add metadata to it (cam -> camera, 
 
     cam.capture(f"{temporary_folder}/img_{cnt:03d}.jpg")  # capture camera and save the image
 
-    print(f"took a picture: {cnt} size: {image_size}")  # debug
+    print(f"took a picture: {cnt}")  # debug
 
 #* sense hat setup (enable magnetometer)
 sense = SenseHat()
@@ -111,7 +110,6 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < max_storag
         read_data(data_file)  # get data from all snsors and write to output file
         storage += os.path.getsize(data_file)  # add data.csv file size of storage counter
         capture(camera, counter)  # capture image and add metadata to it
-        # image_size = image_size + os.path.getsize(base_folder/f'temp/img_{counter:03d}.jpg')  # add size of new image
         counter += 1  # add one to image counter
         sleep(1)  # wait one second
         print("-----------------------------------------")  # debug
@@ -135,9 +133,8 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < max_storag
             print("classified as lightning, saving...")  # debug
             os.rename(image_file, f"{temporary_folder}/particle_{counter}.jpg")  # rename image to particle(number of picture).jpg
             os.replace(f"{temporary_folder}/particle_{counter}.jpg", f"{output_folder}/particle_{counter}.jpg")
-            image_size = os.path.getsize(f"{output_folder}/particle_{counter}.jpg")  # get image size
-            storage = storage + image_size  # add image size to used storage
-            print("saved image size: {image_size}")  # debug
+            storage += os.path.getsize(f"{output_folder}/particle_{counter}.jpg")  # add image size to used storage
+            print("saved image, storage used: {storage}")  # debug
             counter += 1  # increase image counter by one
         else:
             print("classified as a blank image, deleting...")  # debug
@@ -166,7 +163,6 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < max_storag
 
     #* reset variables
     spike = 0
-    #image_size = 0
     print("=========================================") # debug
 
     currentTime = datetime.now()  # update current time
