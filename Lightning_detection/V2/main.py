@@ -29,10 +29,10 @@ output_folder = base_folder/'output';
 temporary_folder = base_folder/'temp';
 data_file = base_folder / 'output/data.csv'  # set data.csv path
 # create output and temporary directories if they don't exist
-if not os.path.exists(f"{base_folder}/temp"):
-    os.mkdir(f"{base_folder}/temp")
-if not os.path.exists(f"{base_folder}/output"):
-    os.mkdir(f"{base_folder}/output")
+if not os.path.exists(temporary_folder):
+    os.mkdir(temporary_folder)
+if not os.path.exists(output_folder):
+    os.mkdir(output_folder)
 
 #* define functions
 def create_csv(data_file):  # creating csv file
@@ -95,7 +95,6 @@ label_file = base_folder/'label.txt' # set label file directory
 interpreter = make_interpreter(f"{model_file}")  # assign model to interpreter
 interpreter.allocate_tensors()  # set up TPU
 size = common.input_size(interpreter)  # resize image
-
 """ 
 
 #* initialization
