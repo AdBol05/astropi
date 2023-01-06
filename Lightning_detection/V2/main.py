@@ -18,8 +18,8 @@ import os
 startTime = datetime.now()  # get program start time
 counter = 10000  # image counter (start from 10000 for better naming scheme)
 i = 0  # readings counter
-storage = 10000  # used storage space (headroom for script and csv file)
-max_storage = 3000000000
+storage = 10000  # used storage space (headroom for script)
+max_storage = 3000000000  #TODO find ou the exact storage limit
 delete_counter = 0  #iamge counter used for deletion
 spike = 0  # spike detection (set as not found)
 
