@@ -109,6 +109,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < max_storag
     #* take 10 images
     for k in range(10):
         read_data(data_file)  # get data from all snsors and write to output file
+        storage += os.path.getsize(data_file)  # add data.csv file size of storage counter
         capture(camera, counter)  # capture image and add metadata to it
         # image_size = image_size + os.path.getsize(base_folder/f'temp/img_{counter:03d}.jpg')  # add size of new image
         counter += 1  # add one to image counter
@@ -162,7 +163,6 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < max_storag
             os.replace(f"{temporary_folder}/img_{move_counter}.jpg", f"{output_folder}/img_{move_counter}.jpg")  # move image to output folder
             storage += os.path.getsize(f"{output_folder}/img_{move_counter}.jpg")  # add image size to used storage space
 
-    storage += os.path.getsize(data_file)  # add data.csv file size of storage counter
 
     #* reset variables
     spike = 0
