@@ -162,6 +162,8 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < max_storag
             os.replace(f"{temporary_folder}/img_{move_counter}.jpg", f"{output_folder}/img_{move_counter}.jpg")  # move image to output folder
             storage += os.path.getsize(f"{output_folder}/img_{move_counter}.jpg")  # add image size to used storage space
 
+    storage += os.path.getsize(data_file)  # add data.csv file size of storage counter
+
     #* reset variables
     spike = 0
     #image_size = 0
