@@ -25,6 +25,8 @@ spike = 0  # spike detection (set as not found)
 
 #* set up paths
 base_folder = Path(__file__).parent.resolve()  # determine working directory
+output_folder = base_folder/'output';
+temporary_folder = base_folder/'temp';
 data_file = base_folder / 'output/data.csv'  # set data.csv path
 # create output and temporary directories if they don't exist
 if not os.path.exists(f"{base_folder}/temp"):
@@ -72,7 +74,7 @@ def capture(cam, cnt):  # take a picture and add metadata to it (cam -> camera, 
     cam.exif_tags['GPS.GPSLongitude'] = exif_long
     cam.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
 
-    cam.capture(f"{base_folder}/temp/img_{cnt:03d}.jpg")  # capture camera and save the image
+    cam.capture(f"{temporary_folder}/img_{cnt:03d}.jpg")  # capture camera and save the image
 
     print(f"took a picture: {cnt} size: {image_size}")  # debug
 
@@ -86,12 +88,15 @@ camera.resolution = (1296, 972)
 camera.zoom = (0.20, 0.155, 0.80, 0.845)
 
 #* coral setup
-#! TODO: train and implement coral 
+#! TODO: train and implement coral
+"""
 model_file = base_folder/'model.tflite' # set model directory
 label_file = base_folder/'label.txt' # set label file directory
 interpreter = make_interpreter(f"{model_file}")  # assign model to interpreter
 interpreter.allocate_tensors()  # set up TPU
 size = common.input_size(interpreter)  # resize image
+
+""" 
 
 #* initialization
 print("running...")  # debug
@@ -113,6 +118,14 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
     #! TODO: Spike detection + coral classification
 
     """ Ignore this for now
+
+    image_file = base_folder/f'img_{counter}.jpg'  # set image directory
+    image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)  # open image
+    common.set_input(interpreter, image)  # set input
+    interpreter.invoke()  # invoke interpreter
+    classes = classify.get_classes(interpreter, top_k=1)  # get classes
+    labels = read_label_file(label_file)  # get labels from label.txt
+
     for c in classes:
         print("classifying image...")  # debug
         print(f'{labels.get(c.id, c.id)} {c.score:.5f}')  # debug
@@ -132,20 +145,20 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
         for d in range(10):  # run ten times (delete nine images and save one as a backup)
             delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
             if d != 9:  # delete first nine images
-                os.remove(f"{base_folder}/temp/img_{delete_counter:03d}.jpg")  # remove unnecessary images
+                os.remove(f"{temporary_folder}/img_{delete_counter:03d}.jpg")  # remove unnecessary images
                 print(f"removing image: {delete_counter}")  # debug
                 #print(delete_counter)  # debug
             else:  # save last image
                 print(f"saving image: {delete_counter}") # debug
-                os.replace(f"{base_folder}/temp/img_{delete_counter}.jpg", f"{base_folder}/output/img_{delete_counter}.jpg")  # move image to output folder
-                storage += os.path.getsize(base_folder/f'output/img_{delete_counter:03d}.jpg')  # add image size to used storage space
+                os.replace(f"{temporary_folder}/img_{delete_counter}.jpg", f"{output_folder}/img_{delete_counter}.jpg")  # move image to output folder
+                storage += os.path.getsize(output_folder/f'/img_{delete_counter:03d}.jpg')  # add image size to used storage space
 
     if spike == 1:  # if spike is detected
         print("saving all images")  # debug
         for d in range(10):  # run ten times (move all images)
             move_counter = (counter - d) - 1  # resovle number of images selected to be dmoved
-            os.replace(f"{base_folder}/temp/img_{move_counter}.jpg", f"{base_folder}/output/img_{move_counter}.jpg")  # move image to output folder
-            storage += os.path.getsize(base_folder/f'output/img_{move_counter:03d}.jpg')  # add image size to used storage space
+            os.replace(f"{temporary_folder}/img_{move_counter}.jpg", f"{output_folder}/img_{move_counter}.jpg")  # move image to output folder
+            storage += os.path.getsize(output_folder/f'img_{move_counter:03d}.jpg')  # add image size to used storage space
 
     #* reset variables
     spike = 0
@@ -154,7 +167,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < 3000000000
 
     currentTime = datetime.now()  # update current time
 
-print("Program ended. All output files are in the \"output\" folder. \"temp\" folder can be ignored.")  # debug
+print(f"Program ended. All output files are located in {output_folder}")  # debug
 time_eplased = currentTime - startTime
 storage_used = round(storage / (1024 * 1024), 3)
 print(f"Time elapsed: {time_eplased}, storage used: {storage_used}MB")
