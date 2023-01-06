@@ -175,4 +175,4 @@ print(f"Program ended. All output files are located in {output_folder}")  # debu
 time_eplased = currentTime - startTime
 storage_used = round(storage / (1024 * 1024), 3)
 max_storage_form = round(max_storage / (1024 * 1024), 3)
-print(f"Time elapsed: {time_eplased}, storage used: {storage_used}/{max_storage_used}MB")
+print(f"Time elapsed: {time_eplased}, storage used: {storage_used}/{max_storage_form}MB")
