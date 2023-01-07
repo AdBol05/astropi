@@ -1,4 +1,5 @@
-# importing necessary libraries
+
+#* importing necessary libraries
 from PIL import Image
 import csv
 from sense_hat import SenseHat
@@ -28,9 +29,9 @@ base_folder = Path(__file__).parent.resolve()  # determine working directory
 output_folder = base_folder/'output';
 temporary_folder = base_folder/'temp';
 data_file = output_folder/'data.csv'  # set data.csv path
-# model_file = base_folder/'model.tflite' # set model directory
-# label_file = base_folder/'label.txt' # set label file directory
-# create output and temporary directories if they don't exist
+#? model_file = base_folder/'model.tflite' # set model directory
+#? label_file = base_folder/'label.txt' # set label file directory
+#? create output and temporary directories if they don't exist
 if not os.path.exists(temporary_folder):
     print(f"Creating temporary directory in: {temporary_folder}")
     os.mkdir(temporary_folder)
@@ -89,10 +90,10 @@ sense.set_imu_config(True, False, False)
 #* camera setup (set iamge resolution and zoom)
 camera = PiCamera()
 camera.resolution = (1296, 972)
-camera.zoom = (0.20, 0.155, 0.80, 0.845) #! TODO: fix image crop
+camera.zoom = (0.20, 0.155, 0.80, 0.845) #TODO: fix image crop
 
 #* coral setup
-#! TODO: train and implement coral
+#TODO: train and implement coral
 """
 interpreter = make_interpreter(f"{model_file}")  # assign model to interpreter
 interpreter.allocate_tensors()  # set up TPU
@@ -115,9 +116,9 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < max_storag
         print("-----------------------------------------")  # debug
 
     #* process images
-    #! TODO: Spike detection + coral classification
+    #TODO: Spike detection + coral classification
 
-    #*Ignore this for now
+    #?Ignore this for now
     """
     image_file = f"{temporary_folder}/img_{counter}.jpg"  # set image directory
     image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)  # open image
