@@ -21,7 +21,7 @@ dataFile = os.path.join(dataPath, "data")
 
 def csvWriter(file, id):
     try:
-        with open("{}{}.csv".formmar(str(file),str(id)), "w") as f:
+        with open("{}{}.csv".format(str(file),str(id)), "w") as f:
             writer = csv.writer(f)
             writer.writerow("index", "time", "compass", "compassRawX", "compassRawY", "compassRawZ")
             i = 0
@@ -30,7 +30,7 @@ def csvWriter(file, id):
                 writer.writerow(i, task[0], task[1], task[2].get("x"), task[2].get("y"), task[2].get("z"))
     except:
         e = sys.exc_info()#[0]
-        print('Judge thread closed due to exception')
+        print('Writer thread closed due to exception')
         print('  E: {}'.format( e))
 
 
