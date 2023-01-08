@@ -1,3 +1,4 @@
 secret/
 tools/node_modules/
 tools/NCtemp/
+*/.vs
