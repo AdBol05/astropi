@@ -23,7 +23,7 @@ def csvWriter(file, id):
     try:
         with open("{}{}.csv".format(str(file),str(id)), "w") as f:
             writer = csv.writer(f)
-            writer.writerow("index", "time", "compass", "compassRawX", "compassRawY", "compassRawZ")
+            writer.writerow(["index", "time", "compass", "compassRawX", "compassRawY", "compassRawZ"])
             i = 0
             while datetime.now() < endTime:
                 task = csvWrite.get()
