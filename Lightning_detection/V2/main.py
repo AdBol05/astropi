@@ -84,6 +84,10 @@ def capture(cam, cnt):  # take a picture and add metadata to it (cam -> camera, 
 
     print(f"took a picture: {cnt}")  # debug
 
+def move(cnt):
+    os.replace(f"{temporary_folder}/img_{delete_counter}.jpg", f"{output_folder}/img_{cnt}.jpg")  # move image to output folder
+
+
 #* sense hat setup (enable magnetometer)
 sense = SenseHat()
 sense.set_imu_config(True, False, False)
@@ -151,14 +155,14 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < max_storag
                 #print(delete_counter)  # debug
             else:  # save last image
                 print(f"saving image: {delete_counter}") # debug
-                os.replace(f"{temporary_folder}/img_{delete_counter}.jpg", f"{output_folder}/img_{delete_counter}.jpg")  # move image to output folder
+                move(delete_counter)
                 storage += os.path.getsize(f"{output_folder}/img_{delete_counter}.jpg")  # add image size to used storage space
 
     if spike == 1:  # if spike is detected
         print("saving all images")  # debug
         for d in range(sequence):  # save all images
             move_counter = (counter - d) - 1  # resovle number of images selected to be dmoved
-            os.replace(f"{temporary_folder}/img_{move_counter}.jpg", f"{output_folder}/img_{move_counter}.jpg")  # move image to output folder
+            move(move_counter)
             storage += os.path.getsize(f"{output_folder}/img_{move_counter}.jpg")  # add image size to used storage space
 
 
