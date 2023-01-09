@@ -56,9 +56,11 @@ def read_data(data_file):  # data collection
     global i  # readings counter as a global variable
     position = ISS.at(load.timescale().now()).subpoint()  # get position from timescale
     mag = sense.get_compass_raw()  # get magnetometer data
+    time = datetime.now()
+    time_eplased = time - startTime
 
-    print(f"reading data... used storage: {storage}/{max_storage}")  # debug
-    row = (i, datetime.now(), position.latitude, position.longitude, position.elevation.km, mag.get("x"), mag.get("y"), mag.get("z"))  # assign data to row
+    print(f"reading data... used storage: {storage}/{max_storage} time elapsed: {time_eplased}")  # debug
+    row = (i, time, position.latitude, position.longitude, position.elevation.km, mag.get("x"), mag.get("y"), mag.get("z"))  # assign data to row
 
     #print(row)
     add_csv_data(data_file, row)  # write row to csv file
