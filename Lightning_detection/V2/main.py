@@ -23,6 +23,7 @@ storage = 10000  # used storage space (headroom for script)
 max_storage = 3000000000  #TODO find ou the exact storage limit
 delete_counter = 0  #iamge counter used for deletion
 spike = 0  # spike detection (set as not found)
+sequence = 100  # number of images/values to get each loop
 
 #* set up paths (resolve all paths and create file structure)
 base_folder = Path(__file__).parent.resolve()  # determine working directory
@@ -106,8 +107,7 @@ currentTime = datetime.now()  # get current time before loop start
 
 #* Main loop
 while (currentTime < startTime + timedelta(minutes=175) and storage < max_storage):  # run for 175 minutes (3 hours - 5 minutes) or until storage is full
-    #* take 10 images
-    for k in range(10):
+    for k in range(sequence):
         read_data(data_file)  # get data from all snsors and write to output file
         storage += os.path.getsize(data_file)  # add data.csv file size of storage counter
         capture(camera, counter)  # capture image and add metadata to it
@@ -143,9 +143,9 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < max_storag
     """
 
     if spike == 0:  # if spike is not detected
-        for d in range(10):  # run ten times (delete nine images and save one as a backup)
+        for d in range(sequence):  # run a couple times (save the only last image)
             delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
-            if d != 9:  # delete first nine images
+            if d != (sequence-1):  # leave the last image
                 os.remove(f"{temporary_folder}/img_{delete_counter}.jpg")  # remove unnecessary images
                 print(f"removing image: {delete_counter}")  # debug
                 #print(delete_counter)  # debug
@@ -156,7 +156,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < max_storag
 
     if spike == 1:  # if spike is detected
         print("saving all images")  # debug
-        for d in range(10):  # run ten times (move all images)
+        for d in range(sequence):  # save all images
             move_counter = (counter - d) - 1  # resovle number of images selected to be dmoved
             os.replace(f"{temporary_folder}/img_{move_counter}.jpg", f"{output_folder}/img_{move_counter}.jpg")  # move image to output folder
             storage += os.path.getsize(f"{output_folder}/img_{move_counter}.jpg")  # add image size to used storage space
