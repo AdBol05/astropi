@@ -15,6 +15,8 @@ from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.dataset import read_label_file
 import os
 
+import threading, queue #? hopefully multithreading (1:CSV data, 2:image collection)
+
 #* define variables
 startTime = datetime.now()  # get program start time
 counter = 10000  # image counter (start from 10000 for better naming scheme)
@@ -105,7 +107,7 @@ camera.zoom = (0.20, 0.155, 0.80, 0.845) #TODO: fix image crop
 interpreter = make_interpreter(f"{model_file}")  # assign model to interpreter
 interpreter.allocate_tensors()  # set up TPU
 size = common.input_size(interpreter)  # resize image
-""" 
+"""
 
 #* initialization
 create_csv(data_file)  # create data.csv file
