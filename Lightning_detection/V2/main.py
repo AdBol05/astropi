@@ -63,7 +63,7 @@ def read_data(data_file):  # data collection
     with open(data_file, 'a', buffering=1) as f:  # open csv file
         csv.writer(f).writerow(data)  # write data row to scv file
         print("Writing data to .csv file...")  # debug
-        
+
     i += 1  # increase readings counter by one
 
 def angle2exif(angle):  # convert raw coords angle to EXIF friendly format
@@ -118,7 +118,6 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < max_storag
         storage += os.path.getsize(data_file)  # add data.csv file size of storage counter
         capture(camera, counter)  # capture image and add metadata to it
         counter += 1  # add one to image counter
-        sleep(1)  # wait one second
         print("-----------------------------------------")  # debug
 
     #* process images
