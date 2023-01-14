@@ -146,6 +146,7 @@ def image_collect(count):
     for k in range(sequence):
         capture(camera, count)  # capture image and add metadata to it
         count += 1
+        sleep(1) # wait one second
 
 
 threading.Thread(target=data_collect, args=[data_file, storage]).start()
