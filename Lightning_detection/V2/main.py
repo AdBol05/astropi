@@ -20,14 +20,15 @@ import queue  # ? hopefully multithreading (1:CSV data, 2:image collection)
 
 # * define variables
 startTime = datetime.now()  # get program start time
-global counter
-counter = 10000  # image counter (start from 10000 for better naming scheme)
 i = 0  # readings counter
-storage = 10000  # used storage space (headroom for script)
 max_storage = 3000000000  # TODO find ou the exact storage limit
 delete_counter = 0  # iamge counter used for deletion
 spike = False  # spike detection (set as not found)
 sequence = 100  # number of images/values to get each loop
+global storage
+storage = 10000  # used storage space (headroom for script)
+global counter
+counter = 10000  # image counter (start from 10000 for better naming scheme)
 
 # * set up paths (resolve all paths and create file structure)
 base_folder = Path(__file__).parent.resolve()  # determine working directory
