@@ -142,8 +142,7 @@ def data_collect(data_file):
 
     spike = False  # reset spike logic value
 
-def image_collect(cnt):
-    i
+def image_collect():
     for k in range(sequence):
         capture(camera, counter)  # capture image and add metadata to it
         counter += 1
