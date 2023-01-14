@@ -25,7 +25,6 @@ startTime = datetime.now()  # get program start time
 counter = 10000  # image counter (start from 10000 for better naming scheme)
 storage = 10000  # used storage space (headroom for script)
 max_storage = 3000000000  #TODO find ou the exact storage limit
-delete_counter = 0  #iamge counter used for deletion
 
 #* set up paths (resolve all paths and create file structure)
 base_folder = Path(__file__).parent.resolve()  # determine working directory
@@ -87,7 +86,7 @@ def capture(cam, cnt):  # take a picture and add metadata to it (cam -> camera, 
     print(f"took a picture: {cnt}")  # debug
 
 def move(cnt):
-    os.replace(f"{temporary_folder}/img_{delete_counter}.jpg", f"{output_folder}/img_{cnt}.jpg")  # move image to output folder
+    os.replace(f"{temporary_folder}/img_{cnt}.jpg", f"{output_folder}/img_{cnt}.jpg")  # move image to output folder
 
 
 #* sense hat setup (enable magnetometer)
