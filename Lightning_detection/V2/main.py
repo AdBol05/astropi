@@ -148,7 +148,7 @@ def image_collect(cnt):
         counter += 1
 
 
-threading.Thread(target=data_collect, args=(data_file)).start()
+threading.Thread(target=data_collect, args=[data_file]).start()
 threading.Thread(target=image_collect).start()
 
 """
