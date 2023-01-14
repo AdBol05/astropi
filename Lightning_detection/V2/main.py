@@ -126,7 +126,7 @@ create_csv(data_file)  # create data.csv file
 currentTime = datetime.now()  # get current time before loop start
 
 
-def data_collect(data_file):
+def data_collect(data_file, storage):
     for k in range(sequence):
         # get data from all snsors and write to output file
         read_data(data_file, "-")
@@ -142,14 +142,14 @@ def data_collect(data_file):
 
     spike = False  # reset spike logic value
 
-def image_collect():
+def image_collect(count):
     for k in range(sequence):
-        capture(camera, counter)  # capture image and add metadata to it
+        capture(camera, count)  # capture image and add metadata to it
         counter += 1
 
 
-threading.Thread(target=data_collect, args=[data_file]).start()
-threading.Thread(target=image_collect).start()
+threading.Thread(target=data_collect, args=[data_file, storage]).start()
+threading.Thread(target=image_collect, args=[counter]).start()
 
 """
 #* Main loop
