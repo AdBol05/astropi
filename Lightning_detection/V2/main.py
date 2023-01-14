@@ -15,7 +15,7 @@ from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.dataset import read_label_file
 import os
 
-import threading, queue #? hopefully multithreading (1:CSV data, 2:image collection)
+# ? import threading, queue # hopefully multithreading (1:CSV data, 2:image collection)
 
 #* define variables
 i = 0  # readings counter
@@ -81,7 +81,6 @@ def capture(cam, cnt):  # take a picture and add metadata to it (cam -> camera, 
     cam.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
     cam.exif_tags['GPS.GPSLongitude'] = exif_long
     cam.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
-    cam.exif_tags['Created'] = datetime.now()
 
     cam.capture(f"{temporary_folder}/img_{cnt:03d}.jpg")  # capture camera and save the image
 
