@@ -121,10 +121,8 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < max_storag
         capture(camera, counter)  # capture image and add metadata to it
         counter += 1  # add one to image counter
     
-        time_eplased = datetime.now() - startTime
-
-        print(f"used storage: {storage}/{max_storage} time elapsed: {time_eplased}")
-        print(f"csv file size: {os.path.getsize(data_file)}")
+        time_eplased = datetime.now() - startTime  # get process uptime
+        print(f"used storage: {storage}/{max_storage} time elapsed: {time_eplased}")  # debug
         print("-----------------------------------------")  # debug
 
     #* process images
