@@ -155,6 +155,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < max_storag
     if spike == 0:  # if spike is not detected
         for d in range(sequence):  # run a couple times (save the only last image)
             delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
+            print(f"removing images: {counter - 1} - {counter - sequence - 1}")
             if d != (sequence-1):  # delete all images except for the last one
                 os.remove(f"{temporary_folder}/img_{delete_counter}.jpg")  # remove unnecessary images
                 print(f"removing image: {delete_counter}")  # debug
