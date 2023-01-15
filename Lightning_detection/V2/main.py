@@ -153,18 +153,18 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < max_storag
     """
 
     if spike == 0:  # if spike is not detected
-        print(f"*removing images: {counter - sequence + 1} - {counter - 1}")
+        print(f"#removing images: {counter - sequence + 1} - {counter - 1}")
         for d in range(sequence):  # run a couple times (save the only last image)
             delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
             if d != (sequence-1):  # delete all images except for the last one
                 os.remove(f"{temporary_folder}/img_{delete_counter}.jpg")  # remove unnecessary images
             else:  # save last image
-                print(f"*saving image: {delete_counter}") # debug
+                print(f"#saving image: {delete_counter}") # debug
                 move("img", delete_counter)
                 storage += os.path.getsize(f"{output_folder}/img_{delete_counter}.jpg")  # add image size to used storage space
 
     if spike == 1:  # if spike is detected
-        print("saving all images")  # debug
+        print("#saving all images")  # debug
         for d in range(sequence):  # save all images
             move_counter = (counter - d) - 1  # resovle number of images selected to be dmoved
             move("spike", move_counter)
@@ -177,8 +177,8 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < max_storag
 
     currentTime = datetime.now()  # update current time
 
-print(f"Program ended. All output files are located in {output_folder}")  # debug
+print(f"#Program ended. All output files are located in {output_folder}")  # debug
 time_eplased = currentTime - startTime
 storage_used = round(storage / (1024 * 1024), 3)
 max_storage_form = round(max_storage / (1024 * 1024), 3)
-print(f"Time elapsed: {time_eplased}, storage used: {storage_used}/{max_storage_form}MB")
+print(f"#Time elapsed: {time_eplased}, storage used: {storage_used}/{max_storage_form}MB")
