@@ -122,6 +122,7 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < max_storag
         
         capture(camera, counter)  # capture image and add metadata to it
         counter += 1  # add one to image counter
+        print(f"csv file size: {os.path.getsize(data_file)}")
         print("-----------------------------------------")  # debug
 
     #* process images
