@@ -23,7 +23,7 @@ spike = 0  # spike detection (set as not found)
 sequence = 100  # number of images/values to get each loop
 startTime = datetime.now()  # get program start time
 counter = 10000  # image counter (start from 10000 for better naming scheme)
-storage = 10000  # used storage space (headroom for script)
+storage = 25000  # used storage space (headroom for script)
 max_storage = 3000000000  #TODO find ou the exact storage limit
 
 #* set up paths (resolve all paths and create file structure)
