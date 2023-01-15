@@ -113,8 +113,13 @@ currentTime = datetime.now()  # get current time before loop start
 #* Main loop
 while (currentTime < startTime + timedelta(minutes=175) and storage < max_storage):  # run for 175 minutes (3 hours - 5 minutes) or until storage is full
     for k in range(sequence):
+        if counter != 1000:  # ignore for first iteration
+            csv_size_prev = os.path.getsize(data_file)  # get size of data.csv file before data is written
+            storage -= csv_size_prev  # subtract old data.csv file size from storage counter 
+
         read_data(data_file)  # get data from all snsors and write to output file
-        #! storage += os.path.getsize(data_file)  # add data.csv file size of storage counter
+        storage += os.path.getsize(data_file)  # add new data.csv file size of storage counter
+        
         capture(camera, counter)  # capture image and add metadata to it
         counter += 1  # add one to image counter
         print("-----------------------------------------")  # debug
@@ -149,10 +154,9 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < max_storag
     if spike == 0:  # if spike is not detected
         for d in range(sequence):  # run a couple times (save the only last image)
             delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
-            if d != (sequence-1):  # leave the last image
+            if d != (sequence-1):  # delete all images except for the last one
                 os.remove(f"{temporary_folder}/img_{delete_counter}.jpg")  # remove unnecessary images
                 print(f"removing image: {delete_counter}")  # debug
-                #print(delete_counter)  # debug
             else:  # save last image
                 print(f"saving image: {delete_counter}") # debug
                 move("img", delete_counter)
@@ -174,6 +178,6 @@ while (currentTime < startTime + timedelta(minutes=175) and storage < max_storag
 
 print(f"Program ended. All output files are located in {output_folder}")  # debug
 time_eplased = currentTime - startTime
-storage_used = round(storage / (1024 * 1024 * 1024), 3)
-max_storage_form = round(max_storage / (1024 * 1024 * 1024), 3)
+storage_used = round(storage / (1024 * 1024), 3)
+max_storage_form = round(max_storage / (1024 * 1024), 3)
 print(f"Time elapsed: {time_eplased}, storage used: {storage_used}/{max_storage_form}MB")
