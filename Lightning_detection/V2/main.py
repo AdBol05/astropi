@@ -53,13 +53,11 @@ def read_data(data_file):  # data collection
     global i  # readings counter as a global variable
     position = ISS.at(load.timescale().now()).subpoint()  # get position from timescale
     mag = sense.get_compass_raw()  # get magnetometer data
-
-    print("reading data...")  # debug
     data = (i, datetime.now(), position.latitude, position.longitude, position.elevation.km, mag.get("x"), mag.get("y"), mag.get("z"))  # assign data to row
 
     with open(data_file, 'a', buffering=1) as f:  # open csv file
         csv.writer(f).writerow(data)  # write data row to scv file
-        print("Writing data to .csv file...")  # debug
+        print("Written data to .csv file")  # debug
 
     i += 1  # increase readings counter by one
 
