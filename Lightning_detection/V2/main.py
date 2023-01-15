@@ -113,7 +113,7 @@ currentTime = datetime.now()  # get current time before loop start
 #* Main loop
 while (currentTime < startTime + timedelta(minutes=175) and storage < max_storage):  # run for 175 minutes (3 hours - 5 minutes) or until storage is full
     for k in range(sequence):
-        if counter != 1000:  # ignore for first iteration
+        if counter != 10000:  # ignore for first iteration
             csv_size_prev = os.path.getsize(data_file)  # get size of data.csv file before data is written
             storage -= csv_size_prev  # subtract old data.csv file size from storage counter 
 
