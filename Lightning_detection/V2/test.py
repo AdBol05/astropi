@@ -118,6 +118,7 @@ def get_images(startTime, storage_limit, camera, counter, time_limit):
 #* initialization
 create_csv(data_file)  # create data.csv file
 print("starting threads")
+#! THREADS RUN SYNCHRONOURSLY NOW FOR SOME REASON
 threading.Thread(target = get_data, args = [startTime, 2500000, data_file, time_limit]).start()
 threading.Thread(target = get_images, args = [startTime, 2997500000 , camera, 10000, time_limit]).start()
 
