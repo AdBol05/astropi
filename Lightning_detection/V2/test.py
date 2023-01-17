@@ -20,6 +20,7 @@ import threading, queue # hopefully multithreading (1:CSV data, 2:image collecti
 #* define variables
 startTime = datetime.now()  # get program start time
 spike = 0  # spike detection (set as not found)
+i = 0
 time_limit = 5  # runtime limit in minutes
 
 #* set up paths (resolve all paths and create file structure)
@@ -111,6 +112,7 @@ def get_images(startTime, storage_limit, camera, counter, time_limit):
     while (currentTime < startTime + timedelta(minutes=time_limit) and storage < storage_limit):
         capture(camera, counter)
         counter += 1  # add one to image counter
+        #TODO: save images to output and add size to storage counter
         print(f"Took image: {counter}, used image storages: {storage}")
 
 #* initialization
