@@ -104,6 +104,7 @@ def get_data(startTime, storage_limit, data_file, time_limit):
         storage += os.path.getsize(data_file)  # add new data.csv file size of storage counter
         currentTime = datetime.now()  # get current time before loop start
         print(f"Read data from sensors, used data storage: {storage}")
+        sleep(1)
 
 def get_images(startTime, storage_limit, camera, counter, time_limit, sequence):
     storage = 0
@@ -114,7 +115,7 @@ def get_images(startTime, storage_limit, camera, counter, time_limit, sequence):
             capture(camera, counter)
             counter += 1  # add one to image counter
             #TODO: save images to output and add size to storage counter
-            print(f"Took image: {counter}, used image storages: {storage}")
+            print(f"Took image: {counter}, used image storage: {storage}")
 
         if spike == 0:  # if spike is not detected
             print(f"#removing images: {counter - sequence + 1} - {counter - 1}")
