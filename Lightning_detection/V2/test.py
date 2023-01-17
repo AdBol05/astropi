@@ -19,7 +19,6 @@ import threading, queue # hopefully multithreading (1:CSV data, 2:image collecti
 
 #* define variables
 startTime = datetime.now()  # get program start time
-spike = 0  # spike detection (set as not found)
 i = 0
 time_limit = 5  # runtime limit in minutes
 
@@ -106,21 +105,41 @@ def get_data(startTime, storage_limit, data_file, time_limit):
         currentTime = datetime.now()  # get current time before loop start
         print(f"Read data from sensors, used data storage: {storage}")
 
-def get_images(startTime, storage_limit, camera, counter, time_limit):
+def get_images(startTime, storage_limit, camera, counter, time_limit, sequence):
     storage = 0
+    spike = 0
     currentTime = datetime.now()  # get current time before loop start
     while (currentTime < startTime + timedelta(minutes=time_limit) and storage < storage_limit):
-        capture(camera, counter)
-        counter += 1  # add one to image counter
-        #TODO: save images to output and add size to storage counter
-        print(f"Took image: {counter}, used image storages: {storage}")
+        for k in range(sequence):
+            capture(camera, counter)
+            counter += 1  # add one to image counter
+            #TODO: save images to output and add size to storage counter
+            print(f"Took image: {counter}, used image storages: {storage}")
+
+        if spike == 0:  # if spike is not detected
+            print(f"#removing images: {counter - sequence + 1} - {counter - 1}")
+            for d in range(sequence):  # run a couple times (save the only last image)
+                delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
+                if d != (sequence-1):  # delete all images except for the last one
+                    os.remove(f"{temporary_folder}/img_{delete_counter}.jpg")  # remove unnecessary images
+                else:  # save last image
+                    print(f"#saving image: {delete_counter}") # debug
+                    move("img", delete_counter)
+                    storage += os.path.getsize(f"{output_folder}/img_{delete_counter}.jpg")  # add image size to used storage space
+
+        if spike == 1:  # if spike is detected
+            print("#saving all images")  # debug
+            for d in range(sequence):  # save all images
+                move_counter = (counter - d) - 1  # resovle number of images selected to be dmoved
+                move("spike", move_counter)
+                storage += os.path.getsize(f"{output_folder}/spike_{move_counter}.jpg")  # add image size to used storage space
 
 #* initialization
 create_csv(data_file)  # create data.csv file
 print("starting threads")
-#! THREADS RUN SYNCHRONOURSLY NOW FOR SOME REASON
+#! THREADS RUN SYNCHRONOUSLY NOW FOR SOME REASON
 threading.Thread(target = get_data, args = [startTime, 2500000, data_file, time_limit]).start()
-threading.Thread(target = get_images, args = [startTime, 2997500000 , camera, 10000, time_limit]).start()
+threading.Thread(target = get_images, args = [startTime, 2997500000 , camera, 10000, time_limit, 10]).start()
 
 
 print(f"#Program ended. All output files are located in {output_folder}")  # debug
