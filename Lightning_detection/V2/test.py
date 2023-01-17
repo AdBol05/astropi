@@ -134,6 +134,9 @@ def get_images(startTime, storage_limit, camera, counter, time_limit, sequence):
                 move_counter = (counter - d) - 1  # resovle number of images selected to be dmoved
                 move("spike", move_counter)
                 storage += os.path.getsize(f"{output_folder}/spike_{move_counter}.jpg")  # add image size to used storage space
+        
+        currentTime = datetime.now()  # get current time before loop start
+
 
 #* initialization
 create_csv(data_file)  # create data.csv file
