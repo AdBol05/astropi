@@ -150,6 +150,7 @@ def get_images(startTime, storage_limit, camera, counter, time_limit, sequence, 
 #* initialization
 create_csv(data_file)  # create data.csv file
 print("starting threads")
+#! thread timing needs to be fixed (data collection ends way too soon) ...idk why
 threading.Thread(target = get_data, args = [startTime, 2500000, data_file, time_limit]).start()
 threading.Thread(target = get_images, args = [startTime, 2997500000 , camera, 10000, time_limit, 10, output_folder, temporary_folder]).start()
 
