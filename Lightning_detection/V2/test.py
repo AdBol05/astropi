@@ -106,6 +106,10 @@ def get_data(startTime, storage_limit, data_file, time_limit):
         print(f"Read data from sensors, used data storage: {storage}")
         sleep(1)
 
+    print("----------------------------------")
+    print(f"Data collection thread exited, storage used: {storage}, time elapsed: {datetime.now() - startTime}")
+    print("----------------------------------")
+
 def get_images(startTime, storage_limit, camera, counter, time_limit, sequence):
     storage = 0
     spike = 0
@@ -123,6 +127,7 @@ def get_images(startTime, storage_limit, camera, counter, time_limit, sequence):
                 delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
                 if d != (sequence-1):  # delete all images except for the last one
                     os.remove(f"{temporary_folder}/img_{delete_counter}.jpg")  # remove unnecessary images
+                    print(f"#Removing image: {delete_counter}")
                 else:  # save last image
                     print(f"#saving image: {delete_counter}") # debug
                     move("img", delete_counter)
@@ -136,6 +141,9 @@ def get_images(startTime, storage_limit, camera, counter, time_limit, sequence):
                 storage += os.path.getsize(f"{output_folder}/spike_{move_counter}.jpg")  # add image size to used storage space
         
         currentTime = datetime.now()  # get current time before loop start
+    print("----------------------------------")
+    print(f"Image thread exited, storage used: {storage}, time elapsed: {datetime.now() - startTime}")
+    print("----------------------------------")
 
 
 #* initialization
