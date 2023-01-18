@@ -104,9 +104,9 @@ def get_data(startTime, endTime, storage_limit, data_file):
         print(f"Read data from sensors, used data storage: {storage}")
         sleep(1)
 
-    print("----------------------------------")
+    print("#------------------------------------------------------------------------------------------------------#")
     print(f"Data collection thread exited, storage used: {storage}, time elapsed: {datetime.now() - startTime}")
-    print("----------------------------------")
+    print("#------------------------------------------------------------------------------------------------------#")
 
 def get_images(startTime, endTime, storage_limit, camera, counter, sequence, output_folder, temporary_folder):
     storage = 0
@@ -140,9 +140,9 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         
         currentTime = datetime.now()  # update time
     
-    print("----------------------------------")
+    print("#------------------------------------------------------------------------------------------------------#")
     print(f"Image thread exited, storage used: {storage}, time elapsed: {datetime.now() - startTime}")
-    print("----------------------------------")
+    print("#------------------------------------------------------------------------------------------------------#")
 
 
 #* initialization
@@ -152,5 +152,7 @@ print("starting threads")
 threading.Thread(target = get_data, args = [startTime, endTime, data_storage_limit, data_file]).start()
 threading.Thread(target = get_images, args = [startTime, endTime, image_storage_limit , camera, 10000, 10, output_folder, temporary_folder]).start()
 
-print(f"#Program ended. All output files are located in {output_folder}")  # debug
-print(f"#Time elapsed: {datetime.now() - startTime}")
+print("#------------------------------------------------------------------------------------------------------#")
+print(f"Program ended. All output files are located in {output_folder}")  # debug
+print(f"Time elapsed: {datetime.now() - startTime}")
+print("#------------------------------------------------------------------------------------------------------#")
