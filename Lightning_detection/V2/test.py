@@ -19,7 +19,7 @@ import threading, queue # hopefully multithreading (1:CSV data, 2:image collecti
 
 #* define variables
 startTime = datetime.now()  # get program start time
-endTime = startTime + timedelta(minutes=5)
+endTime = startTime + timedelta(minutes=175)
 data_storage_limit = 3000000   # Max data.csv file size is 3MB
 image_storage_limit = 2990000000  # Max combined image size is 2.99GB
 
@@ -148,7 +148,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
 #* initialization
 create_csv(data_file)  # create data.csv file
 print("starting threads")
-#* define two threads (one for image collection, and one for sensor reading)
+# define two threads (one for image collection, and one for sensor reading)
 t1 = threading.Thread(target = get_data, args = [startTime, endTime, data_storage_limit, data_file])
 t2 = threading.Thread(target = get_images, args = [startTime, endTime, image_storage_limit , camera, 10000, 10, output_folder, temporary_folder])
 
