@@ -20,8 +20,8 @@ import threading, queue # hopefully multithreading (1:CSV data, 2:image collecti
 #* define variables
 startTime = datetime.now()  # get program start time
 endTime = startTime + datetime.timedelta(minutes=5)
-data_storage_limit = 2500000
-image_storage_limit = 2997500000
+data_storage_limit = 3000000   # Max data.csv file size is 3MB
+image_storage_limit = 2990000000  # Max combined image size is 2.99GB
 
 #* set up paths (resolve all paths and create file structure)
 base_folder = Path(__file__).parent.resolve()  # determine working directory
