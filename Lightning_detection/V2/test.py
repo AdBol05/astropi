@@ -73,7 +73,7 @@ def capture(cam, count):  # take a picture and add metadata to it (cam -> camera
 
     cam.capture(f"{temporary_folder}/img_{count}.jpg")  # capture camera and save the image
 
-    print(f"took a picture: {count}")  # debug
+    #print(f"took a picture: {count}")  # debug
 
 def move(name, cnt):
     os.replace(f"{temporary_folder}/img_{cnt}.jpg", f"{output_folder}/{name}_{cnt}.jpg")  # move image to output folder
@@ -95,8 +95,7 @@ def get_data(startTime, endTime, storage_limit, data_file):
     currentTime = datetime.now()  # get current time before loop start
     while (currentTime < endTime and storage < storage_limit):
         if counter != 0:  # ignore for first iteration
-            csv_size_prev = os.path.getsize(data_file)  # get size of data.csv file before data is written
-            storage -= csv_size_prev  # subtract old data.csv file size from storage counter
+            storage -= os.path.getsize(data_file)  # subtract old data.csv file size from storage counter
     
         read_data(data_file, counter)  # get data from all snsors and write to output file
         storage += os.path.getsize(data_file)  # add new data.csv file size to storage counter
@@ -125,7 +124,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                 delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
                 if d != (sequence-1):  # delete all images except for the last one
                     os.remove(f"{temporary_folder}/img_{delete_counter}.jpg")  # remove unnecessary images
-                    print(f"#Removing image: {delete_counter}")
+                    #print(f"#Removing image: {delete_counter}")
                 else:  # save last image
                     print(f"#saving image: {delete_counter}") # debug
                     move("img", delete_counter)
@@ -149,8 +148,14 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
 create_csv(data_file)  # create data.csv file
 print("starting threads")
 #! thread timing needs to be fixed (data collection ends way too soon) ...idk why
-threading.Thread(target = get_data, args = [startTime, endTime, data_storage_limit, data_file]).start()
-threading.Thread(target = get_images, args = [startTime, endTime, image_storage_limit , camera, 10000, 10, output_folder, temporary_folder]).start()
+t1 = threading.Thread(target = get_data, args = [startTime, endTime, data_storage_limit, data_file])
+t2 = threading.Thread(target = get_images, args = [startTime, endTime, image_storage_limit , camera, 10000, 10, output_folder, temporary_folder])
+
+t1.start()
+t2.start()
+
+t1.join()
+t2.join()
 
 print("#------------------------------------------------------------------------------------------------------#")
 print(f"Program ended. All output files are located in {output_folder}")  # debug
