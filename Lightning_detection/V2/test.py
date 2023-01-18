@@ -100,6 +100,7 @@ def get_data(startTime, endTime, storage_limit, data_file):
         read_data(data_file, counter)  # get data from all snsors and write to output file
         storage += os.path.getsize(data_file)  # add new data.csv file size to storage counter
         currentTime = datetime.now()  # update time
+        counter += 1
         print(f"Read data from sensors, used data storage: {storage}")
         sleep(1)
 
