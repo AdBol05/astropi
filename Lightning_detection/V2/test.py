@@ -101,8 +101,8 @@ def get_data(startTime, storage_limit, data_file, time_limit):
             storage -= csv_size_prev  # subtract old data.csv file size from storage counter
     
         read_data(data_file)  # get data from all snsors and write to output file
-        storage += os.path.getsize(data_file)  # add new data.csv file size of storage counter
-        currentTime = datetime.now()  # get current time before loop start
+        storage += os.path.getsize(data_file)  # add new data.csv file size to storage counter
+        currentTime = datetime.now()  # update time
         print(f"Read data from sensors, used data storage: {storage}")
         sleep(1)
 
@@ -110,7 +110,7 @@ def get_data(startTime, storage_limit, data_file, time_limit):
     print(f"Data collection thread exited, storage used: {storage}, time elapsed: {datetime.now() - startTime}")
     print("----------------------------------")
 
-def get_images(startTime, storage_limit, camera, counter, time_limit, sequence):
+def get_images(startTime, storage_limit, camera, counter, time_limit, sequence, output_folder, temporary_folder):
     storage = 0
     spike = 0
     currentTime = datetime.now()  # get current time before loop start
@@ -140,7 +140,8 @@ def get_images(startTime, storage_limit, camera, counter, time_limit, sequence):
                 move("spike", move_counter)
                 storage += os.path.getsize(f"{output_folder}/spike_{move_counter}.jpg")  # add image size to used storage space
         
-        currentTime = datetime.now()  # get current time before loop start
+        currentTime = datetime.now()  # update time
+    
     print("----------------------------------")
     print(f"Image thread exited, storage used: {storage}, time elapsed: {datetime.now() - startTime}")
     print("----------------------------------")
@@ -150,7 +151,7 @@ def get_images(startTime, storage_limit, camera, counter, time_limit, sequence):
 create_csv(data_file)  # create data.csv file
 print("starting threads")
 threading.Thread(target = get_data, args = [startTime, 2500000, data_file, time_limit]).start()
-threading.Thread(target = get_images, args = [startTime, 2997500000 , camera, 10000, time_limit, 10]).start()
+threading.Thread(target = get_images, args = [startTime, 2997500000 , camera, 10000, time_limit, 10, output_folder, temporary_folder]).start()
 
 
 print(f"#Program ended. All output files are located in {output_folder}")  # debug
