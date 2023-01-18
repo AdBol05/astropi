@@ -86,7 +86,7 @@ sense.set_imu_config(True, False, False)
 #* camera setup (set iamge resolution and zoom)
 camera = PiCamera()
 camera.resolution = (1296, 972)
-camera.zoom = (0.20, 0.155, 0.80, 0.845) #TODO: fix image crop
+#TODO: fix image crop camera.zoom = (0.20, 0.155, 0.80, 0.845) 
 
 #* define thread functions
 def get_data(startTime, endTime, storage_limit, data_file):
@@ -148,15 +148,15 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
 #* initialization
 create_csv(data_file)  # create data.csv file
 print("starting threads")
-#! thread timing needs to be fixed (data collection ends way too soon) ...idk why
+#* define two threads (one for image collection, and one for sensor reading)
 t1 = threading.Thread(target = get_data, args = [startTime, endTime, data_storage_limit, data_file])
 t2 = threading.Thread(target = get_images, args = [startTime, endTime, image_storage_limit , camera, 10000, 10, output_folder, temporary_folder])
 
-t1.start()
-t2.start()
+t1.start()  # start threads
+t2.start()  # start threads
 
-t1.join()
-t2.join()
+t1.join()  # wait for threads to finish
+t2.join()  # wait for threads to finish
 
 print("#------------------------------------------------------------------------------------------------------#")
 print(f"Program ended. All output files are located in {output_folder}")  # debug
