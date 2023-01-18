@@ -19,8 +19,9 @@ import threading, queue # hopefully multithreading (1:CSV data, 2:image collecti
 
 #* define variables
 startTime = datetime.now()  # get program start time
-i = 0
-time_limit = 5  # runtime limit in minutes
+endTime = startTime + datetime.timedelta(minutes=5)
+data_storage_limit = 2500000
+image_storage_limit = 2997500000
 
 #* set up paths (resolve all paths and create file structure)
 base_folder = Path(__file__).parent.resolve()  # determine working directory
@@ -45,24 +46,21 @@ def create_csv(data_file):  # creating csv file
         csv.writer(f).writerow(header)  # write header to csv file
 
 
-def read_data(data_file):  # data collection
-    global i  # readings counter as a global variable
+def read_data(data_file, count):  # data collection
     position = ISS.at(load.timescale().now()).subpoint()  # get position from timescale
     mag = sense.get_compass_raw()  # get magnetometer data
-    data = (i, datetime.now(), position.latitude, position.longitude, position.elevation.km, mag.get("x"), mag.get("y"), mag.get("z"))  # assign data to row
+    data = (count, datetime.now(), position.latitude, position.longitude, position.elevation.km, mag.get("x"), mag.get("y"), mag.get("z"))  # assign data to row
 
     with open(data_file, 'a', buffering=1) as f:  # open csv file
         csv.writer(f).writerow(data)  # write data row to scv file
         print("Written data to .csv file")  # 175debug
-
-    i += 1  # increase readings counter by one
 
 def angle2exif(angle):  # convert raw coords angle to EXIF friendly format
     sign, degrees, minutes, seconds = angle.signed_dms()
     exif_angle = f'{degrees:.0f}/1,{minutes:.0f}/1,{seconds*10:.0f}/10'
     return sign < 0, exif_angle
 
-def capture(cam, cnt):  # take a picture and add metadata to it (cam -> camera, cnt -> image counter)
+def capture(cam, count):  # take a picture and add metadata to it (cam -> camera, cnt -> image counter)
     coords = ISS.coordinates()  # get current ISS coordinates
     south, exif_lat = angle2exif(coords.latitude)  # convert coordinates to exif friendly format
     west, exif_long = angle2exif(coords.longitude)
@@ -73,9 +71,9 @@ def capture(cam, cnt):  # take a picture and add metadata to it (cam -> camera, 
     cam.exif_tags['GPS.GPSLongitude'] = exif_long
     cam.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
 
-    cam.capture(f"{temporary_folder}/img_{cnt:03d}.jpg")  # capture camera and save the image
+    cam.capture(f"{temporary_folder}/img_{count}.jpg")  # capture camera and save the image
 
-    print(f"took a picture: {cnt}")  # debug
+    print(f"took a picture: {count}")  # debug
 
 def move(name, cnt):
     os.replace(f"{temporary_folder}/img_{cnt}.jpg", f"{output_folder}/{name}_{cnt}.jpg")  # move image to output folder
@@ -91,16 +89,16 @@ camera.resolution = (1296, 972)
 camera.zoom = (0.20, 0.155, 0.80, 0.845) #TODO: fix image crop
 
 #* define thread functions
-def get_data(startTime, storage_limit, data_file, time_limit):
+def get_data(startTime, endTime, storage_limit, data_file):
     storage = 0
     counter = 0
     currentTime = datetime.now()  # get current time before loop start
-    while (currentTime < startTime + timedelta(minutes=time_limit) and storage < storage_limit):
+    while (currentTime < endTime and storage < storage_limit):
         if counter != 0:  # ignore for first iteration
             csv_size_prev = os.path.getsize(data_file)  # get size of data.csv file before data is written
             storage -= csv_size_prev  # subtract old data.csv file size from storage counter
     
-        read_data(data_file)  # get data from all snsors and write to output file
+        read_data(data_file, counter)  # get data from all snsors and write to output file
         storage += os.path.getsize(data_file)  # add new data.csv file size to storage counter
         currentTime = datetime.now()  # update time
         print(f"Read data from sensors, used data storage: {storage}")
@@ -110,11 +108,11 @@ def get_data(startTime, storage_limit, data_file, time_limit):
     print(f"Data collection thread exited, storage used: {storage}, time elapsed: {datetime.now() - startTime}")
     print("----------------------------------")
 
-def get_images(startTime, storage_limit, camera, counter, time_limit, sequence, output_folder, temporary_folder):
+def get_images(startTime, endTime, storage_limit, camera, counter, sequence, output_folder, temporary_folder):
     storage = 0
     spike = 0
     currentTime = datetime.now()  # get current time before loop start
-    while (currentTime < startTime + timedelta(minutes=time_limit) and storage < storage_limit):
+    while (currentTime < endTime and storage < storage_limit):
         for k in range(sequence):
             capture(camera, counter)
             counter += 1  # add one to image counter
@@ -151,9 +149,8 @@ def get_images(startTime, storage_limit, camera, counter, time_limit, sequence, 
 create_csv(data_file)  # create data.csv file
 print("starting threads")
 #! thread timing needs to be fixed (data collection ends way too soon) ...idk why
-threading.Thread(target = get_data, args = [startTime, 2500000, data_file, time_limit]).start()
-threading.Thread(target = get_images, args = [startTime, 2997500000 , camera, 10000, time_limit, 10, output_folder, temporary_folder]).start()
-
+threading.Thread(target = get_data, args = [startTime, endTime, data_storage_limit, data_file]).start()
+threading.Thread(target = get_images, args = [startTime, endTime, image_storage_limit , camera, 10000, 10, output_folder, temporary_folder]).start()
 
 print(f"#Program ended. All output files are located in {output_folder}")  # debug
 print(f"#Time elapsed: {datetime.now() - startTime}")
