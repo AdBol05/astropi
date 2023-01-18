@@ -94,10 +94,10 @@ def get_data(startTime, endTime, storage_limit, data_file):
     counter = 0
     currentTime = datetime.now()  # get current time before loop start
     while (currentTime < endTime and storage < storage_limit):
-        if counter != 0:  # ignore for first iteration
+        if counter != 0:  # ignore first iteration
             storage -= os.path.getsize(data_file)  # subtract old data.csv file size from storage counter
     
-        read_data(data_file, counter)  # get data from all snsors and write to output file
+        read_data(data_file, counter)  # get data from all sensors and write to output file
         storage += os.path.getsize(data_file)  # add new data.csv file size to storage counter
         currentTime = datetime.now()  # update time
         counter += 1
@@ -125,7 +125,6 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                 delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
                 if d != (sequence-1):  # delete all images except for the last one
                     os.remove(f"{temporary_folder}/img_{delete_counter}.jpg")  # remove unnecessary images
-                    #print(f"#Removing image: {delete_counter}")
                 else:  # save last image
                     print(f"#saving image: {delete_counter}") # debug
                     move("img", delete_counter)
