@@ -40,14 +40,14 @@ if not os.path.exists(output_folder):
 def create_csv(data_file):  # creating csv file
     with open(data_file, 'w', buffering=1) as f:  # create csv file and set up logging
         print(f"Creating data.csv file in {data_file}")  # debug
-        header = ("RowNum", "date", "latitude_deg", "longitude_deg", "elevation_km", "magnetometer_X", "magnetometer_Y", "magnetometer_Z")  # write first line (data type)
+        header = ("RowNum", "date", "coords", "magnetometer_X", "magnetometer_Y", "magnetometer_Z")  # write first line (data type)
         csv.writer(f).writerow(header)  # write header to csv file
 
 
 def read_data(data_file, count):  # data collection
-    position = ISS.coordinates()  # get position from timescale
+    coords = ISS.coordinates()  # get position from timescale
     mag = sense.get_compass_raw()  # get magnetometer data
-    data = (count, datetime.now(), position.latitude, position.longitude, position.elevation.km, mag.get("x"), mag.get("y"), mag.get("z"))  # assign data to row
+    data = (count, datetime.now(), coords, mag.get("x"), mag.get("y"), mag.get("z"))  # assign data to row
 
     with open(data_file, 'a', buffering=1) as f:  # open csv file
         csv.writer(f).writerow(data)  # write data row to scv file
