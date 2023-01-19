@@ -11,12 +11,24 @@ let input = fs.readFileSync(args[0], "utf-8");
 console.log("processing...");
 
 input = input.split("\n");
+
+if(input[0].includes("coordinates")){
+    input[0] = input[0].replace("coordinates", " Latitude, Longitude, Elevation");
+}
+
 let keys = input[0].split(",");
 input.shift();
 let data = [];
 
 for (i in input[0].split(",")) { data.push([]); }
 for (i in input) {
+    if(input[i].includes("IERS2010")){
+        input[i] = input[i].replaceAll("IERS2010 latitude ", "");
+        input[i] = input[i].replaceAll(" longitude ", ",");
+        input[i] = input[i].replaceAll(" longitude ", ",");
+        input[i] = input[i].replaceAll(" elevation ", ",");
+        input[i] = input[i].replaceAll(" m,", ",");
+    }
     for (j in data) {
         data[j].push(input[i].replace("\r","").split(",")[j]);
     }
