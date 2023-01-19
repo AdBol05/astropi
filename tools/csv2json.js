@@ -12,8 +12,8 @@ console.log("processing...");
 
 input = input.split("\n");
 
-if(input[0].includes("coordinates")){
-    input[0] = input[0].replace("coordinates", " Latitude, Longitude, Elevation");
+if(input[0].includes("coords")){
+    input[0] = input[0].replace("coords", " Latitude, Longitude, Elevation");
 }
 
 let keys = input[0].split(",");
