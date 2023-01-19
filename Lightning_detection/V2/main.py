@@ -8,7 +8,6 @@ from datetime import datetime, timedelta
 from time import sleep
 from picamera import PiCamera
 from orbit import ISS
-from skyfield.api import load
 from pycoral.adapters import common
 from pycoral.adapters import classify
 from pycoral.utils.edgetpu import make_interpreter
@@ -46,7 +45,7 @@ def create_csv(data_file):  # creating csv file
 
 
 def read_data(data_file, count):  # data collection
-    position = ISS.at(load.timescale().now()).subpoint()  # get position from timescale
+    position = ISS.coordinates()  # get position from timescale
     mag = sense.get_compass_raw()  # get magnetometer data
     data = (count, datetime.now(), position.latitude, position.longitude, position.elevation.km, mag.get("x"), mag.get("y"), mag.get("z"))  # assign data to row
 
