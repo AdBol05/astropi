@@ -12,27 +12,32 @@ console.log("processing...");
 
 input = input.split("\n");
 
-if(input[0].includes("coords")){
-    input[0] = input[0].replace("coords", " Latitude, Longitude, Elevation");
-}
+
+if(input[0].includes("coords")){input[0] = input[0].replace("coords", " Latitude,Longitude,Elevation");}
+
 
 let keys = input[0].split(",");
+for (i in keys){keys[i] = keys[i].trim();}
+
+console.log(keys);
+
 input.shift();
 let data = [];
 
 for (i in input[0].split(",")) { data.push([]); }
 for (i in input) {
     if(input[i].includes("IERS2010")){
-        input[i] = input[i].replaceAll("IERS2010 latitude ", "");
-        input[i] = input[i].replaceAll(" longitude ", ",");
-        input[i] = input[i].replaceAll(" longitude ", ",");
-        input[i] = input[i].replaceAll(" elevation ", ",");
+        input[i] = input[i].replaceAll("IERS2010 latitude ", "").trim();
+        input[i] = input[i].replaceAll(" longitude ", ",").trim();
+        input[i] = input[i].replaceAll(" longitude ", ",").trim();
+        input[i] = input[i].replaceAll(" elevation ", ",").trim();
         input[i] = input[i].replaceAll(" m,", ",");
     }
-    for (j in data) {
-        data[j].push(input[i].replace("\r","").split(",")[j]);
-    }
+    for (j in data) {data[j].push(input[i].replace("\r","").split(",")[j]);}
+    console.log(input[i]);
 }
+
+console.log(data);
 
 let l = 0;
 let output = Object.fromEntries(keys.map(key => [key.replace("\r", ""), data[l++]]));
