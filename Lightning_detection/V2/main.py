@@ -152,9 +152,9 @@ t2 = threading.Thread(target = get_images, args = [startTime, endTime, image_sto
 t1.start()  # start threads
 t2.start()  # start threads
 
-storage_used = t1.join() +  t2.join()  # wait for threads to finish
+t1.join()
+t2.join()  # wait for threads to finish
 
 print("#------------------------------------------------------------------------------------------------------#")
-print(f"Program ended. All output files are located in {output_folder}")  # debug
-print(f"Time elapsed: {datetime.now() - startTime}, used storage space: {storage_used}/{3*1024*1024}MB")
+print(f"Program ended. All output files are located in {output_folder}")  # debug, used storage space: {storage_used/(1024*1024)}/3072MB")
 print("#------------------------------------------------------------------------------------------------------#")
