@@ -17,7 +17,7 @@ import threading, queue
 
 #* define variables
 startTime = datetime.now()  # get program start time
-endTime = startTime + timedelta(minutes=2)
+endTime = startTime + timedelta(minutes=2)  # run program for 175 minutes (5min headroom from the 3hr limit)
 data_storage_limit = 3000000   # Max data.csv file size is 3MB
 image_storage_limit = 2990000000  # Max combined image size is 2.99GB
 
@@ -102,7 +102,7 @@ def get_data(startTime, endTime, storage_limit, data_file):
         sleep(1)
 
     print("#------------------------------------------------------------------------------------------------------#")
-    print(f"Data collection thread exited, storage used: {storage}, time elapsed: {datetime.now() - startTime}")
+    print(f"Data collection thread exited, storage used: {storage/(1024*1024)}/{storage_limit/(1024*1024)}MB, time elapsed: {datetime.now() - startTime}")
     print("#------------------------------------------------------------------------------------------------------#")
     return storage
 
@@ -138,7 +138,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         currentTime = datetime.now()  # update time
     
     print("#------------------------------------------------------------------------------------------------------#")
-    print(f"Image thread exited, storage used: {storage}, time elapsed: {datetime.now() - startTime}")
+    print(f"Image thread exited, storage used: {storage/(1024*1024)}/{storage_limit/(1024*1024)}MB, time elapsed: {datetime.now() - startTime}")
     print("#------------------------------------------------------------------------------------------------------#")
     return storage
 
