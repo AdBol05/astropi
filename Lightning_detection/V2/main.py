@@ -17,7 +17,7 @@ import threading, queue
 
 #* define variables
 startTime = datetime.now()  # get program start time
-endTime = startTime + timedelta(minutes=175)
+endTime = startTime + timedelta(minutes=2)
 data_storage_limit = 3000000   # Max data.csv file size is 3MB
 image_storage_limit = 2990000000  # Max combined image size is 2.99GB
 
