@@ -63,18 +63,13 @@ def capture(cam, count):  # take a picture and add metadata to it (cam -> camera
     south, exif_lat = angle2exif(coords.latitude)  # convert coordinates to exif friendly format
     west, exif_long = angle2exif(coords.longitude)
 
-    print(f"EXIF coords: {exif_lat}, {exif_long}")
-
     # add coordinates to image metadata
     cam.exif_tags['GPS.GPSLatitude'] = exif_lat
     cam.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
     cam.exif_tags['GPS.GPSLongitude'] = exif_long
     cam.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
-    cam.exif_tags['GPS.GPSAltitude'] = f'{coords.elevation.km:.0f}/1'
-    cam.exif_tags['GPS.GPSAltitudeRef'] = 0
 
     cam.capture(f"{temporary_folder}/img_{count}.jpg")  # capture camera and save the image
-
     #print(f"took a picture: {count}")  # debug
 
 def move(name, cnt):
@@ -109,6 +104,7 @@ def get_data(startTime, endTime, storage_limit, data_file):
     print("#------------------------------------------------------------------------------------------------------#")
     print(f"Data collection thread exited, storage used: {storage}, time elapsed: {datetime.now() - startTime}")
     print("#------------------------------------------------------------------------------------------------------#")
+    return storage
 
 def get_images(startTime, endTime, storage_limit, camera, counter, sequence, output_folder, temporary_folder):
     storage = 0
@@ -144,7 +140,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
     print("#------------------------------------------------------------------------------------------------------#")
     print(f"Image thread exited, storage used: {storage}, time elapsed: {datetime.now() - startTime}")
     print("#------------------------------------------------------------------------------------------------------#")
-
+    return storage
 
 #* initialization
 create_csv(data_file)  # create data.csv file
@@ -156,10 +152,9 @@ t2 = threading.Thread(target = get_images, args = [startTime, endTime, image_sto
 t1.start()  # start threads
 t2.start()  # start threads
 
-t1.join()  # wait for threads to finish
-t2.join()  # wait for threads to finish
+storage_used = t1.join() +  t2.join()  # wait for threads to finish
 
 print("#------------------------------------------------------------------------------------------------------#")
 print(f"Program ended. All output files are located in {output_folder}")  # debug
-print(f"Time elapsed: {datetime.now() - startTime}")
+print(f"Time elapsed: {datetime.now() - startTime}, used storage space: {storage_used}/{3*1024*1024}MB")
 print("#------------------------------------------------------------------------------------------------------#")
