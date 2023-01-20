@@ -68,7 +68,7 @@ def capture(cam, count):  # take a picture and add metadata to it (cam -> camera
     cam.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
     cam.exif_tags['GPS.GPSLongitude'] = exif_long
     cam.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
-    cam.exif_tags['GPS.GPSAltitude'] = coords.elevation.km
+    cam.exif_tags['GPS.GPSAltitude'] = int(coords.elevation.km)
     cam.exif_tags['GPS.GPSAltitude'] = 0
 
     cam.capture(f"{temporary_folder}/img_{count}.jpg")  # capture camera and save the image
