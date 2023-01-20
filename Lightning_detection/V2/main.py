@@ -102,7 +102,7 @@ def get_data(startTime, endTime, storage_limit, data_file):
         sleep(1)
 
     print("#------------------------------------------------------------------------------------------------------#")
-    print(f"Data collection thread exited, storage used: {round(storage/(1024*1024))}/{round(storage_limit/(1024*1024))}MB, time elapsed: {datetime.now() - startTime}")
+    print(f"Data collection thread exited, storage used: {round(storage/(1024*1024), 3)}/{round(storage_limit/(1024*1024), 3)}MB, time elapsed: {datetime.now() - startTime}")
     print("#------------------------------------------------------------------------------------------------------#")
     return storage
 
@@ -138,7 +138,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         currentTime = datetime.now()  # update time
     
     print("#------------------------------------------------------------------------------------------------------#")
-    print(f"Image thread exited, storage used: {round(storage/(1024*1024))}/{round(storage_limit/(1024*1024))}MB, time elapsed: {datetime.now() - startTime}")
+    print(f"Image thread exited, storage used: {round(storage/(1024*1024), 3)}/{round(storage_limit/(1024*1024), 3)}MB, time elapsed: {datetime.now() - startTime}")
     print("#------------------------------------------------------------------------------------------------------#")
     return storage
 
