@@ -40,7 +40,7 @@ if not os.path.exists(output_folder):
 def create_csv(data_file):  # creating csv file
     with open(data_file, 'w', buffering=1) as f:  # create csv file and set up logging
         print(f"Creating data.csv file in {data_file}")  # debug
-        header = ("RowNum", "date", "coords", "magnetometer_X", "magnetometer_Y", "magnetometer_Z")  # write first line (data type)
+        header = ("index", "date", "coords", "magnetometer_X", "magnetometer_Y", "magnetometer_Z")  # write first line (data type)
         csv.writer(f).writerow(header)  # write header to csv file
 
 
