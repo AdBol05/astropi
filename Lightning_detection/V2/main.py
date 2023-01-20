@@ -149,11 +149,13 @@ print("starting threads")
 t1 = threading.Thread(target = get_data, args = [startTime, endTime, data_storage_limit, data_file])
 t2 = threading.Thread(target = get_images, args = [startTime, endTime, image_storage_limit , camera, 10000, 10, output_folder, temporary_folder])
 
-t1.start()  # start threads
-t2.start()  # start threads
+#* start threads
+t1.start()
+t2.start()
 
+#* wait for threads to finish
 t1.join()
-t2.join()  # wait for threads to finish
+t2.join()
 
 print("#------------------------------------------------------------------------------------------------------#")
 print(f"Program ended. All output files are located in {output_folder}")  # debug, used storage space: {storage_used/(1024*1024)}/3072MB")
