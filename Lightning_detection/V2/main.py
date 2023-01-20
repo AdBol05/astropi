@@ -62,14 +62,14 @@ def capture(cam, count):  # take a picture and add metadata to it (cam -> camera
     coords = ISS.coordinates()  # get current ISS coordinates
     south, exif_lat = angle2exif(coords.latitude)  # convert coordinates to exif friendly format
     west, exif_long = angle2exif(coords.longitude)
-    elevation = coords.elevation
 
     # add coordinates to image metadata
     cam.exif_tags['GPS.GPSLatitude'] = exif_lat
     cam.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
     cam.exif_tags['GPS.GPSLongitude'] = exif_long
     cam.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
-    cam.exif_tags['GPS.GPSElevation'] = elevation
+    cam.exif_tags['GPS.GPSAltitude'] = coords.elevation
+    cam.exif_tags['GPS.GPSAltitude'] = 0
 
     cam.capture(f"{temporary_folder}/img_{count}.jpg")  # capture camera and save the image
 
