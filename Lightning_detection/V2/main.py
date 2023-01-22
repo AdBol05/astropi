@@ -112,6 +112,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
     spike = 0
     currentTime = datetime.now()  # get current time before loop start
     
+    #* attempt to initialize coral TPU
     try:
         interpreter = make_interpreter(f"{model_file}")  # assign model to interpreter
         interpreter.allocate_tensors()  # set up TPU
