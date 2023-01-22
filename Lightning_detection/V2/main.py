@@ -13,6 +13,7 @@ from pycoral.adapters import classify
 from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.dataset import read_label_file
 import os
+import sys
 import threading, queue
 
 #* define variables
@@ -26,9 +27,10 @@ base_folder = Path(__file__).parent.resolve()  # determine working directory
 output_folder = base_folder/'output';
 temporary_folder = base_folder/'temp';
 data_file = output_folder/'data.csv'  # set data.csv path
-#? model_file = base_folder/'model.tflite' # set model directory
-#? label_file = base_folder/'label.txt' # set label file directory
-#? create output and temporary directories if they don't exist
+model_file = ''  #? base_folder/'model.tflite' # set model directory
+label_file = ''  #? base_folder/'label.txt' # set label file directory
+
+#* create output and temporary directories if they don't exist
 if not os.path.exists(temporary_folder):
     print(f"Creating temporary directory in: {temporary_folder}")
     os.mkdir(temporary_folder)
@@ -105,10 +107,20 @@ def get_data(startTime, endTime, storage_limit, data_file):
     print(f"Data collection thread exited, storage used: {round(storage/(1024*1024), 3)}/{round(storage_limit/(1024*1024), 3)}MB, time elapsed: {datetime.now() - startTime}")
     print("#------------------------------------------------------------------------------------------------------#")
 
-def get_images(startTime, endTime, storage_limit, camera, counter, sequence, output_folder, temporary_folder):
+def get_images(startTime, endTime, storage_limit, camera, counter, sequence, output_folder, temporary_folder, model_file, label_file):
     storage = 0
     spike = 0
     currentTime = datetime.now()  # get current time before loop start
+    
+    try:
+        interpreter = make_interpreter(f"{model_file}")  # assign model to interpreter
+        interpreter.allocate_tensors()  # set up TPU
+        size = common.input_size(interpreter)  # resize image
+    except:
+        e = sys.exc_info()#[0]
+        print('Failed to initialize coral TPU')
+        print('  Error: {}'.format( e))
+    
     while (currentTime < endTime and storage < storage_limit):
         for k in range(sequence):
             capture(camera, counter)
@@ -145,7 +157,7 @@ create_csv(data_file)  # create data.csv file
 print("starting threads")
 # define two threads (one for image collection, and one for sensor reading)
 t1 = threading.Thread(target = get_data, args = [startTime, endTime, data_storage_limit, data_file])
-t2 = threading.Thread(target = get_images, args = [startTime, endTime, image_storage_limit , camera, 10000, 10, output_folder, temporary_folder])
+t2 = threading.Thread(target = get_images, args = [startTime, endTime, image_storage_limit , camera, 10000, 10, output_folder, temporary_folder, model_file, label_file])
 
 #* start threads
 t1.start()
