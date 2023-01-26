@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from time import sleep
 from picamera import PiCamera
 from orbit import ISS
+from PIL import Image
 from pycoral.adapters import common
 from pycoral.adapters import classify
 from pycoral.utils.edgetpu import make_interpreter
