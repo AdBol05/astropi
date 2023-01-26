@@ -135,7 +135,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
             
             if d != (sequence-1):  # Classify images
                 print(f"Classifying image {counter}")    
-                try:
+                try:  #! Will fail becuase there is no model or label file available yet!
                     image_file =  f'{temporary_folder}/img_{counter}.jpg'  # set image directory
                     image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)  # open image
                     common.set_input(interpreter, image)  # set input
