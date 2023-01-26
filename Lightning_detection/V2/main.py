@@ -126,7 +126,6 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         for k in range(sequence):
             capture(camera, counter)
             counter += 1  # add one to image counter
-            #TODO: save images to output and add size to storage counter
             print(f"Took image: {counter}, used image storage: {storage}")
 
         for d in range(sequence):  # run a couple times (save the only last image)
