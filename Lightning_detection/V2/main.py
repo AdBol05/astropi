@@ -1,6 +1,5 @@
 
 #* importing necessary libraries
-# from PIL import Image
 import csv
 from sense_hat import SenseHat
 from pathlib import Path
