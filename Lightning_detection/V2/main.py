@@ -119,9 +119,9 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         interpreter.allocate_tensors()  # set up TPU
         size = common.input_size(interpreter)  # resize image
     except:
-        e = sys.exc_info()#[0]
-        print('Failed to initialize coral TPU')
-        print('  Error: {}'.format( e))
+        e = sys.exc_info()  # get error message
+        print("Failed to initialize coral TPU")  # print error
+        print("  Error: {}".format( e))  # print error details
     
     while (currentTime < endTime and storage < storage_limit):
         for k in range(sequence):
@@ -130,24 +130,36 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
             #TODO: save images to output and add size to storage counter
             print(f"Took image: {counter}, used image storage: {storage}")
 
-        if spike == 0:  # if spike is not detected
-            print(f"#removing images: {counter - sequence + 1} - {counter - 1}")
-            for d in range(sequence):  # run a couple times (save the only last image)
-                delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
-                if d != (sequence-1):  # delete all images except for the last one
-                    os.remove(f"{temporary_folder}/img_{delete_counter}.jpg")  # remove unnecessary images
-                else:  # save last image
-                    print(f"#saving image: {delete_counter}") # debug
-                    move("img", delete_counter)
-                    storage += os.path.getsize(f"{output_folder}/img_{delete_counter}.jpg")  # add image size to used storage space
-
-        if spike == 1:  # if spike is detected
-            print("#saving all images")  # debug
-            for d in range(sequence):  # save all images
-                move_counter = (counter - d) - 1  # resovle number of images selected to be dmoved
-                move("spike", move_counter)
-                storage += os.path.getsize(f"{output_folder}/spike_{move_counter}.jpg")  # add image size to used storage space
-        
+        for d in range(sequence):  # run a couple times (save the only last image)
+            delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
+            
+            if d != (sequence-1):  # Classify images
+                print(f"Classifying image {counter}")    
+                try:
+                    image_file =  f'{temporary_folder}/img_{counter}.jpg'  # set image directory
+                    image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)  # open image
+                    common.set_input(interpreter, image)  # set input
+                    interpreter.invoke()  # invoke interpreter
+                    classes = classify.get_classes(interpreter, top_k=1)  # get classes
+                    labels = read_label_file(label_file)  # get labels from label.txt
+                    
+                    for c in classes:
+                        if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):
+                            move_counter = (counter - d) - 1  # resovle number of images selected to be dmoved
+                            move("spike", move_counter)  #move images classified as lightning to output folder
+                            storage += os.path.getsize(f"{output_folder}/spike_{move_counter}.jpg")  # add image size to used storage space
+                        else:
+                            os.remove(f"{temporary_folder}/img_{delete_counter}.jpg")  # remove unnecessary images
+                except:
+                    e = sys.exc_info()  # get error message
+                    print(f"Failed to classify image {delete_counter}")  # print error
+                    print("  Error: {}".format( e))  # print error details
+            
+            else:  # save first image
+                print(f"#saving image: {delete_counter}") # debug
+                move("img", delete_counter)
+                storage += os.path.getsize(f"{output_folder}/img_{delete_counter}.jpg")  # add image size to used storage space
+       
         currentTime = datetime.now()  # update time
     
     print("#------------------------------------------------------------------------------------------------------#")
