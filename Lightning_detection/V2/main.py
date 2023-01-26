@@ -104,7 +104,7 @@ def get_data(startTime, endTime, storage_limit, data_file):
         sleep(1)
 
     print("#------------------------------------------------------------------------------------------------------#")
-    print(f"Data collection thread exited, storage used: {round(storage/(1024*1024), 3)}/{round(storage_limit/(1024*1024), 3)}MB, time elapsed: {datetime.now() - startTime}")
+    print(f"Data collection thread exited, storage used: {round(storage/(1024*1024), 2)}/{round(storage_limit/(1024*1024), 2)}MB, time elapsed: {datetime.now() - startTime}")
     print("#------------------------------------------------------------------------------------------------------#")
 
 def get_images(startTime, endTime, storage_limit, camera, counter, sequence, output_folder, temporary_folder, model_file, label_file):
@@ -163,7 +163,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         currentTime = datetime.now()  # update time
     
     print("#------------------------------------------------------------------------------------------------------#")
-    print(f"Image thread exited, storage used: {round(storage/(1024*1024), 3)}/{round(storage_limit/(1024*1024), 3)}MB, time elapsed: {datetime.now() - startTime}")
+    print(f"Image thread exited, storage used: {round(storage/(1024*1024), 2)}/{round(storage_limit/(1024*1024), 2)}MB, time elapsed: {datetime.now() - startTime}")
     print("#------------------------------------------------------------------------------------------------------#")
 
 #* initialization
@@ -182,5 +182,5 @@ t1.join()
 t2.join()
 
 print("#------------------------------------------------------------------------------------------------------#")
-print(f"Program ended. All output files are located in {output_folder}")  # debug, used storage space: {storage_used/(1024*1024)}/3072MB")
+print(f"Program ended. All output files are located in {output_folder}")  # debug
 print("#------------------------------------------------------------------------------------------------------#")
