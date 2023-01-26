@@ -110,7 +110,7 @@ def get_data(startTime, endTime, storage_limit, data_file):
 
 def get_images(startTime, endTime, storage_limit, camera, counter, sequence, output_folder, temporary_folder, model_file, label_file):
     storage = 0
-    spike = 0
+    #spike = 0  #? Probably useless (spike will most likely not be detected from magnetometer readings)
     currentTime = datetime.now()  # get current time before loop start
     
     #* attempt to initialize coral TPU
@@ -147,8 +147,8 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                         if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):
                             print(f"Image {counter} classified as lightning, moving to output folder")
                             move_counter = (counter - d) - 1  # resovle number of images selected to be dmoved
-                            move("spike", move_counter)  #move images classified as lightning to output folder
-                            storage += os.path.getsize(f"{output_folder}/spike_{move_counter}.jpg")  # add image size to used storage space
+                            move("lightning", move_counter)  #move images classified as lightning to output folder
+                            storage += os.path.getsize(f"{output_folder}/lightning_{move_counter}.jpg")  # add image size to used storage space
                         else:
                             print(f"Image {counter} classified as empty, deleting")
                             os.remove(f"{temporary_folder}/img_{delete_counter}.jpg")  # remove unnecessary images
