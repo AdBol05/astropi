@@ -145,14 +145,16 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                     
                     for c in classes:
                         if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):
+                            print(f"Image {counter} classified as lightning, moving to output folder")
                             move_counter = (counter - d) - 1  # resovle number of images selected to be dmoved
                             move("spike", move_counter)  #move images classified as lightning to output folder
                             storage += os.path.getsize(f"{output_folder}/spike_{move_counter}.jpg")  # add image size to used storage space
                         else:
+                            print(f"Image {counter} classified as empty, deleting")
                             os.remove(f"{temporary_folder}/img_{delete_counter}.jpg")  # remove unnecessary images
                 except:
                     e = sys.exc_info()  # get error message
-                    print(f"Failed to classify image {delete_counter}")  # print error
+                    print(f"Failed to classify image {delete_counter} Leaving image in temp")  # print error
                     print("  Error: {}".format( e))  # print error details
             
             else:  # save first image
