@@ -85,7 +85,7 @@ sense.set_imu_config(True, False, False)
 #* camera setup (set iamge resolution and zoom)
 camera = PiCamera()
 camera.resolution = (1296, 972)
-#TODO: fix image crop camera.zoom = (0.20, 0.155, 0.80, 0.845) 
+#TODO: fix image crop camera.zoom = (0.20, 0.155, 0.80, 0.845)
 
 #* define thread functions
 def get_data(startTime, endTime, storage_limit, data_file):
@@ -95,7 +95,7 @@ def get_data(startTime, endTime, storage_limit, data_file):
     while (currentTime < endTime and storage < storage_limit):
         if counter != 0:  # ignore first iteration
             storage -= os.path.getsize(data_file)  # subtract old data.csv file size from storage counter
-    
+
         read_data(data_file, counter)  # get data from all sensors and write to output file
         storage += os.path.getsize(data_file)  # add new data.csv file size to storage counter
         currentTime = datetime.now()  # update time
@@ -111,7 +111,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
     storage = 0
     #spike = 0  #? Probably useless (spike will most likely not be detected from magnetometer readings)
     currentTime = datetime.now()  # get current time before loop start
-    
+
     #* attempt to initialize coral TPU
     try:
         interpreter = make_interpreter(f"{model_file}")  # assign model to interpreter
@@ -121,7 +121,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         e = sys.exc_info()  # get error message
         print("Failed to initialize coral TPU")  # print error
         print("  Error: {}".format( e))  # print error details
-    
+
     while (currentTime < endTime and storage < storage_limit):
         for k in range(sequence):
             capture(camera, counter)
@@ -130,9 +130,9 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
 
         for d in range(sequence):  # run a couple times (save the only last image)
             delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
-            
+
             if d != (sequence-1):  # Classify images
-                print(f"Classifying image {counter}")    
+                print(f"Classifying image {counter}")
                 try:  #! Will fail becuase there is no model or label file available yet!
                     image_file =  f'{temporary_folder}/img_{counter}.jpg'  # set image directory
                     image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)  # open image
@@ -140,7 +140,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                     interpreter.invoke()  # invoke interpreter
                     classes = classify.get_classes(interpreter, top_k=1)  # get classes
                     labels = read_label_file(label_file)  # get labels from label.txt
-                    
+
                     for c in classes:
                         if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):
                             print(f"Image {counter} classified as lightning, moving to output folder")
@@ -155,14 +155,14 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                     storage += os.path.getsize(f"{temporary_folder}/img_{delete_counter}.jpg")
                     print(f"Failed to classify image {delete_counter} Leaving image in temp and adding it to storage counter")  # print error
                     print("  Error: {}".format( e))  # print error details
-            
+
             else:  # save first image
                 print(f"#saving image: {delete_counter}") # debug
                 move("img", delete_counter)
                 storage += os.path.getsize(f"{output_folder}/img_{delete_counter}.jpg")  # add image size to used storage space
-       
+
         currentTime = datetime.now()  # update time
-    
+
     print("#------------------------------------------------------------------------------------------------------#")
     print(f"Image thread exited, storage used: {round(storage/(1024*1024), 2)}/{round(storage_limit/(1024*1024), 2)}MB, time elapsed: {datetime.now() - startTime}")
     print("#------------------------------------------------------------------------------------------------------#")
