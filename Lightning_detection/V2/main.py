@@ -152,7 +152,8 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                             os.remove(f"{temporary_folder}/img_{delete_counter}.jpg")  # remove unnecessary images
                 except:
                     e = sys.exc_info()  # get error message
-                    print(f"Failed to classify image {delete_counter} Leaving image in temp")  # print error
+                    storage += os.path.getsize(f"{temporary_folder}/img_{delete_counter}.jpg")
+                    print(f"Failed to classify image {delete_counter} Leaving image in temp and adding it to storage counter")  # print error
                     print("  Error: {}".format( e))  # print error details
             
             else:  # save first image
