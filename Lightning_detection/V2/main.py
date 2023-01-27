@@ -184,4 +184,5 @@ t2.join()
 
 print("#------------------------------------------------------------------------------------------------------#")
 print(f"Program ended. All output files are located in {output_folder}")  # debug
+print("If temp folder is not empty, image classification probably failed")
 print("#------------------------------------------------------------------------------------------------------#")
