@@ -24,8 +24,8 @@ image_storage_limit = 2990000000  # Max combined image size is 2.99GB
 
 #* set up paths (resolve all paths and create file structure)
 base_folder = Path(__file__).parent.resolve()  # determine working directory
-output_folder = base_folder/'output';
-temporary_folder = base_folder/'temp';
+output_folder = base_folder/'output'  # set output folder path
+temporary_folder = base_folder/'temp'  # set tempoprary folder path
 data_file = output_folder/'data.csv'  # set data.csv path
 model_file = ''  #? base_folder/'model.tflite' # set model directory
 label_file = base_folder/'labels.txt' # set label file directory
@@ -140,7 +140,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                     labels = read_label_file(label_file)  # get labels from label.txt
 
                     for c in classes:
-                        if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):
+                        if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
                             print(f"Image {counter} classified as lightning, moving to output folder")
                             move_counter = (counter - d) - 1  # resovle number of images selected to be dmoved
                             move("lightning", move_counter)  #move images classified as lightning to output folder
@@ -150,13 +150,13 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                             os.remove(f"{temporary_folder}/img_{delete_counter}.jpg")  # remove unnecessary images
                 except:
                     e = sys.exc_info()  # get error message
-                    storage += os.path.getsize(f"{temporary_folder}/img_{delete_counter}.jpg")
+                    storage += os.path.getsize(f"{temporary_folder}/img_{delete_counter}.jpg")  # add image size to storage counter
                     print(f"Failed to classify image {delete_counter} Leaving image in temp and adding it to storage counter")  # print error
                     print("  Error: {}".format( e))  # print error details
 
             else:  # save first image
                 print(f"#saving image: {delete_counter}") # debug
-                move("img", delete_counter)
+                move("img", delete_counter)  # move image to output folder
                 storage += os.path.getsize(f"{output_folder}/img_{delete_counter}.jpg")  # add image size to used storage space
 
         currentTime = datetime.now()  # update time
