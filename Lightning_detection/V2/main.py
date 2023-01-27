@@ -28,7 +28,7 @@ output_folder = base_folder/'output';
 temporary_folder = base_folder/'temp';
 data_file = output_folder/'data.csv'  # set data.csv path
 model_file = ''  #? base_folder/'model.tflite' # set model directory
-label_file = ''  #? base_folder/'label.txt' # set label file directory
+label_file = base_folder/'labels.txt' # set label file directory
 
 #* create output and temporary directories if they don't exist
 if not os.path.exists(temporary_folder):
