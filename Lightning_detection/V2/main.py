@@ -82,7 +82,7 @@ sense.set_imu_config(True, False, False)
 
 #* camera setup (set iamge resolution and zoom)
 camera = PiCamera()
-camera.resolution = (1296, 972)
+camera.resolution = (1296, 972)  # max 4056*3040
 #TODO: fix image crop camera.zoom = (0.20, 0.155, 0.80, 0.845)
 
 #* define thread functions
