@@ -45,7 +45,6 @@ def create_csv(data_file):  # creating csv file
         header = ("index", "date", "coords", "magnetometer_X", "magnetometer_Y", "magnetometer_Z")  # write first line (data type)
         csv.writer(f).writerow(header)  # write header to csv file
 
-
 def read_data(data_file, count):  # data collection
     coords = ISS.coordinates()  # get position from timescale
     mag = sense.get_compass_raw()  # get magnetometer data
