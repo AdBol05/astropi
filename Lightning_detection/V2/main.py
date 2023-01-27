@@ -72,7 +72,6 @@ def capture(cam, count):  # take a picture and add metadata to it (cam -> camera
     cam.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
 
     cam.capture(f"{temporary_folder}/img_{count}.jpg")  # capture camera and save the image
-    #print(f"took a picture: {count}")  # debug
 
 def move(name, cnt):
     os.replace(f"{temporary_folder}/img_{cnt}.jpg", f"{output_folder}/{name}_{cnt}.jpg")  # move image to output folder
