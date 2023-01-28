@@ -112,7 +112,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
 
     #* attempt to initialize coral TPU
     try:
-        interpreter = make_interpreter(f"{model_file}")  # load model to TPU
+        interpreter = make_interpreter(f"{model_file}")  # create an interpreter instance
         interpreter.allocate_tensors()  # set up TPU
         size = common.input_size(interpreter)  # get preffered input image size
     except:
@@ -132,9 +132,9 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
             if d != (sequence-1):  # Classify all images except the last one
                 print(f"Classifying image {counter}")  # debug
                 try:  # attempt to calssify image  #! Will fail becuase there is no tflite model file available yet!
-                    image_file =  f'{temporary_folder}/img_{counter}.jpg'  # set image directory
+                    image_file =  f'{temporary_folder}/img_{counter}.jpg'  # set image path
                     image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)  # open and resize image to match TPU model settings
-                    common.set_input(interpreter, image)  # set input
+                    common.set_input(interpreter, image)  # load model and image to TPU
                     interpreter.invoke()  # invoke interpreter
                     classes = classify.get_classes(interpreter, top_k=1)  # get classes
                     labels = read_label_file(label_file)  # get labels from label.txt
