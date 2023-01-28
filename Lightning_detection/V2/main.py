@@ -87,7 +87,7 @@ camera.resolution = (1296, 972)  # max 4056*3040
 
 #* define thread functions
 def get_data(startTime, endTime, storage_limit, data_file):
-    storage = 0
+    storage = 0  # data.csv file size counter
     counter = 0
     currentTime = datetime.now()  # get current time before loop start
     while (currentTime < endTime and storage < storage_limit):
@@ -97,58 +97,58 @@ def get_data(startTime, endTime, storage_limit, data_file):
         read_data(data_file, counter)  # get data from all sensors and write to output file
         storage += os.path.getsize(data_file)  # add new data.csv file size to storage counter
         currentTime = datetime.now()  # update time
-        counter += 1
-        print(f"Read data from sensors, used data storage: {storage}")
-        sleep(1)
+        counter += 1  # increase counter by one
+        print(f"Read data from sensors, used data storage: {storage}")  # debug
+        sleep(1)  # wait one second
 
+    # debug at the end of thread
     print("#------------------------------------------------------------------------------------------------------#")
     print(f"Data collection thread exited, storage used: {round(storage/(1024*1024), 2)}/{round(storage_limit/(1024*1024), 2)}MB, time elapsed: {datetime.now() - startTime}")
     print("#------------------------------------------------------------------------------------------------------#")
 
 def get_images(startTime, endTime, storage_limit, camera, counter, sequence, output_folder, temporary_folder, model_file, label_file):
-    storage = 0
-    #spike = 0  #? Probably useless (spike will most likely not be detected from magnetometer readings)
+    storage = 0  # image storage counter (size added after image is moved to output folder or if classification fails and images are left in temp folder instead of being deleted)
     currentTime = datetime.now()  # get current time before loop start
 
     #* attempt to initialize coral TPU
     try:
-        interpreter = make_interpreter(f"{model_file}")  # assign model to interpreter
+        interpreter = make_interpreter(f"{model_file}")  # load model to TPU
         interpreter.allocate_tensors()  # set up TPU
-        size = common.input_size(interpreter)  # resize image
+        size = common.input_size(interpreter)  # get preffered input image size
     except:
         e = sys.exc_info()  # get error message
         print("Failed to initialize coral TPU")  # print error
         print("  Error: {}".format( e))  # print error details
 
     while (currentTime < endTime and storage < storage_limit):
-        for k in range(sequence):
-            capture(camera, counter)
+        for k in range(sequence):  # run predefined number of times
+            capture(camera, counter)  # capture image with a given number
             counter += 1  # add one to image counter
             print(f"Took image: {counter}, used image storage: {storage}")
 
         for d in range(sequence):  # run a couple times (save the only last image)
             delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
 
-            if d != (sequence-1):  # Classify images
-                print(f"Classifying image {counter}")
-                try:  #! Will fail becuase there is no model or label file available yet!
+            if d != (sequence-1):  # Classify all images except the last one
+                print(f"Classifying image {counter}")  # debug
+                try:  # attempt to calssify image  #! Will fail becuase there is no tflite model file available yet!
                     image_file =  f'{temporary_folder}/img_{counter}.jpg'  # set image directory
-                    image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)  # open image
+                    image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)  # open and resize image to match TPU model settings
                     common.set_input(interpreter, image)  # set input
                     interpreter.invoke()  # invoke interpreter
                     classes = classify.get_classes(interpreter, top_k=1)  # get classes
                     labels = read_label_file(label_file)  # get labels from label.txt
 
-                    for c in classes:
+                    for c in classes:  # get score of all classes
                         if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
-                            print(f"Image {counter} classified as lightning, moving to output folder")
+                            print(f"Image {counter} classified as lightning, moving to output folder")  # debug
                             move_counter = (counter - d) - 1  # resovle number of images selected to be dmoved
                             move("lightning", move_counter)  #move images classified as lightning to output folder
                             storage += os.path.getsize(f"{output_folder}/lightning_{move_counter}.jpg")  # add image size to used storage space
                         else:
-                            print(f"Image {counter} classified as empty, deleting")
+                            print(f"Image {counter} classified as empty, deleting")  # debug
                             os.remove(f"{temporary_folder}/img_{delete_counter}.jpg")  # remove unnecessary images
-                except:
+                except:  # if something goes wrong, print error message, leave images in temp directory and add their size to storage counter
                     e = sys.exc_info()  # get error message
                     storage += os.path.getsize(f"{temporary_folder}/img_{delete_counter}.jpg")  # add image size to storage counter
                     print(f"Failed to classify image {delete_counter} Leaving image in temp and adding it to storage counter")  # print error
@@ -161,13 +161,14 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
 
         currentTime = datetime.now()  # update time
 
+    # debug at the end of thread
     print("#------------------------------------------------------------------------------------------------------#")
     print(f"Image thread exited, storage used: {round(storage/(1024*1024), 2)}/{round(storage_limit/(1024*1024), 2)}MB, time elapsed: {datetime.now() - startTime}")
     print("#------------------------------------------------------------------------------------------------------#")
 
 #* initialization
 create_csv(data_file)  # create data.csv file
-print("starting threads")
+print("starting threads")  # debug
 # define two threads (one for image collection, and one for sensor reading)
 t1 = threading.Thread(target = get_data, args = [startTime, endTime, data_storage_limit, data_file])
 t2 = threading.Thread(target = get_images, args = [startTime, endTime, image_storage_limit , camera, 10000, 10, output_folder, temporary_folder, model_file, label_file])
@@ -180,6 +181,7 @@ t2.start()
 t1.join()
 t2.join()
 
+# final message
 print("#------------------------------------------------------------------------------------------------------#")
 print(f"Program ended. All output files are located in {output_folder}")  # debug
 print("If temp folder is not empty, image classification probably failed. Check program output for error messages.")
