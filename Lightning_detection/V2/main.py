@@ -52,7 +52,7 @@ def read_data(data_file, count):  # data collection
 
     with open(data_file, 'a', buffering=1) as f:  # open csv file
         csv.writer(f).writerow(data)  # write data row to scv file
-        print("Written data to .csv file")  # 175debug
+        #? print("Written data to .csv file")  # debug
 
 def angle2exif(angle):  # convert raw coords angle to EXIF friendly format
     sign, degrees, minutes, seconds = angle.signed_dms()
