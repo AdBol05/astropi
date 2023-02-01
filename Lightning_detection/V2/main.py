@@ -143,7 +143,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                         if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
                             print(f"Image {counter} classified as lightning, moving to output folder")  # debug
                             move_counter = (counter - d) - 1  # resovle number of images selected to be dmoved
-                            move("lightning", move_counter)  #move images classified as lightning to output folder
+                            move("lightning", move_counter)  # move images classified as lightning to output folder
                             storage += os.path.getsize(f"{output_folder}/lightning_{move_counter}.jpg")  # add image size to used storage space
                         else:
                             print(f"Image {counter} classified as empty, deleting")  # debug
