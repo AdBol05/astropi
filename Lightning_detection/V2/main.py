@@ -34,6 +34,7 @@ label_file = base_folder/'labels.txt' # set label file directory
 if not os.path.exists(temporary_folder):
     print(f"Creating temporary directory in: {temporary_folder}")
     os.mkdir(temporary_folder)
+
 if not os.path.exists(output_folder):
     os.mkdir(output_folder)
     print(f"Creating output directory in: {output_folder}")
@@ -181,7 +182,7 @@ t2.start()
 t1.join()
 t2.join()
 
-# final message
+#* final output message
 print("#------------------------------------------------------------------------------------------------------#")
 print(f"Program ended. All output files are located in {output_folder}")  # debug
 print("If temp folder is not empty, image classification probably failed. Check program output for error messages.")
