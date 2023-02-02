@@ -140,6 +140,8 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                     classes = classify.get_classes(interpreter, top_k=1)  # get classes
                     labels = read_label_file(label_file)  # get labels from label.txt
 
+                    #? Maybe save all images from sequence if at least one is classified as "lightning"
+
                     for c in classes:  # get score of all classes
                         if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
                             print(f"Image {counter} classified as lightning, moving to output folder")  # debug
