@@ -14,7 +14,7 @@ from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.dataset import read_label_file
 import os
 import sys
-import threading, queue
+import threading
 
 #* define variables
 startTime = datetime.now()  # get program start time
