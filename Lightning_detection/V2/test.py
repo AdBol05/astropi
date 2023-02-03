@@ -167,7 +167,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
             print(f"Calssifying frames from video: {counter}")
             for i in frames:
                 image_file =  frames[i]  # set image path
-                image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)  # open and resize image to match TPU model settings
+                image = Image.open(image_file).resize(size, Image.ANTIALIAS)  # open and resize image to match TPU model settings
                 common.set_input(interpreter, image)  # load model and image to TPU
                 interpreter.invoke()  # invoke interpreter
                 classes = classify.get_classes(interpreter, top_k=1)  # get classes
