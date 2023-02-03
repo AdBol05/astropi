@@ -13,6 +13,7 @@ from pycoral.adapters import classify
 from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.dataset import read_label_file
 import cv2
+import numpy as np
 import os
 import sys
 import threading
@@ -169,6 +170,10 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                 image = cv2.resize(frames[i], size)
                 image = image[:, :, ::-1]
                 image = image / 255.0
+                image = image.astype(np.float32)
+
+                input_tensor_shape = interpreter.get_input_details()[0]['shape']
+                image = np.reshape(image, input_tensor_shape)
 
                 common.set_input(interpreter, image)  # load model and image to TPU
                 interpreter.invoke()  # invoke interpreter
