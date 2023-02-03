@@ -84,6 +84,7 @@ sense.set_imu_config(True, False, False)
 #* camera setup (set iamge resolution and zoom)
 camera = PiCamera()
 camera.resolution = (1296, 972)  # max 4056*3040
+camera.framerate = 30
 #TODO: fix image crop camera.zoom = (0.20, 0.155, 0.80, 0.845)
 
 #* define thread functions
@@ -124,9 +125,10 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
     while (currentTime < endTime and storage < storage_limit):
         
         print(f"Started recording video {counter}")
-        vid_path = f"{temporary_folder}/vid_{counter}.h264"
+        vid_path = f"{temporary_folder}/vid_{counter}.mp4"
         camera.start_recording(vid_path)
-        sleep(60)
+        camera.wait_recording(60)
+        #sleep(60)
         camera.stop_recording()
 
         storage += os.path.getsize(vid_path)
