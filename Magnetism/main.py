@@ -28,7 +28,7 @@ def csvWriter(file, id):
             i = 0
             while datetime.now() < endTime:
                 task = csvWrite.get()
-                writer.writerow([i, task[0], task[1], task[2].get("x"), task[2].get("y"), task[2].get("z"), task[3].latitude, task[3].longitude, task[3].elevation])
+                writer.writerow([i, task[0], task[1], task[2].get("x"), task[2].get("y"), task[2].get("z"), task[3].latitude.degrees, task[3].longitude.degrees, task[3].elevation.m])
     except:
         e = sys.exc_info()#[0]
         print('Writer thread closed due to exception')
