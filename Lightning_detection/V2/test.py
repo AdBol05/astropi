@@ -123,12 +123,14 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
 
     while (currentTime < endTime and storage < storage_limit):
         
+        print(f"Started recording video {counter}")
         vid_path = f"{temporary_folder}/vid_{counter}.h264"
         camera.start_recording(vid_path)
         sleep(60)
         camera.stop_recording()
 
         storage += os.path.getsize(vid_path)
+        print(f"Finished recording video {counter}, used storage: {storage}")
         currentTime = datetime.now()  # update time
 
     # debug at the end of thread
