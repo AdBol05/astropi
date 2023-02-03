@@ -123,7 +123,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
 
     while (currentTime < endTime and storage < storage_limit):
         
-        vid_path = f"{temporary_folder}/vid_{counter}.jpg"
+        vid_path = f"{temporary_folder}/vid_{counter}.mp4"
         camera.start_recording(vid_path)
         sleep(60)
         camera.stop_recording()
