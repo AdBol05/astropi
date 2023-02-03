@@ -145,10 +145,13 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
 
         # Create an empty list to store the frames
         frames = []
+        frame_num = 0
 
         # Read the frames from the video
         while True:
         # Read the next frame from the video
+            
+            frame_num += 1
             success, frame = video.read()
 
             # Check if the video has ended
@@ -156,6 +159,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                 break
 
             # Add the frame to the list
+            print(f"added frame {frame_num} to array")
             frames.append(frame)
         #?----------------------------------------------------------------
 
