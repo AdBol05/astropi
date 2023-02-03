@@ -135,36 +135,35 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         print(f"Finished recording video {counter}, used storage: {storage}")
 
         #?----------------------------------------------------------------
-        #! Runs out of memory
-        video = cv2.VideoCapture(vid_path)
+        try:  # attempt to create array of individual frames form video
+            video = cv2.VideoCapture(vid_path)
+            # check if the video was successfully opened
+            if not video.isOpened():
+                print("Error: Could not open the video.")
+                exit()
 
-        # Check if the video was successfully opened
-        if not video.isOpened():
-            print("Error: Could not open the video.")
-            exit()
+            frames = []  # array of frames
+            frame_num = 0
+            
+            while True:
+            # read frame from the video
+                frame_num += 1
+                success, frame = video.read()
+                # check if the video has ended
+                if not success:
+                    break
+            
+                # Add frames to array
+                print(f"added frame {frame_num} to array")
+                frames.append(frame)
 
-        # Create an empty list to store the frames
-        frames = []
-        frame_num = 0
-
-        # Read the frames from the video
-        while True:
-        # Read the next frame from the video
-            frame_num += 1
-            success, frame = video.read()
-            # Check if the video has ended
-            if not success:
-                break
-
-            # Add the frame to the list
-            print(f"added frame {frame_num} to array")
-            frames.append(frame)
+        except:
+            print(f"Failed to create frame array")  # print error
+            print("  Error: {}".format( e))  # print error details
+            frames = []  # reset frame array
         #?----------------------------------------------------------------
 
-        print("frame array successfully loaded")
-        # print(frames)
-
-        frames = []
+        frames = []  # reset frame array
         currentTime = datetime.now()  # update time
         counter += 1
 
