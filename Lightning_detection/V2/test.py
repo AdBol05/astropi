@@ -12,6 +12,7 @@ from pycoral.adapters import common
 from pycoral.adapters import classify
 from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.dataset import read_label_file
+import cv2
 import os
 import sys
 import threading
@@ -132,6 +133,31 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
 
         storage += os.path.getsize(vid_path)
         print(f"Finished recording video {counter}, used storage: {storage}")
+
+        #?----------------------------------------------------------------
+        video = cv2.VideoCapture("video.h264")
+
+        # Check if the video was successfully opened
+        if not video.isOpened():
+            print("Error: Could not open the video.")
+            exit()
+
+        # Create an empty list to store the frames
+        frames = []
+
+        # Read the frames from the video
+        while True:
+        # Read the next frame from the video
+            success, frame = video.read()
+
+            # Check if the video has ended
+            if not success:
+                break
+
+            # Add the frame to the list
+            frames.append(frame)
+        #?----------------------------------------------------------------
+
         currentTime = datetime.now()  # update time
         counter += 1
 
