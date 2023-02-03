@@ -135,6 +135,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         print(f"Finished recording video {counter}, used storage: {storage}")
 
         #?----------------------------------------------------------------
+        #! Runs out of memory
         video = cv2.VideoCapture(vid_path)
 
         # Check if the video was successfully opened
