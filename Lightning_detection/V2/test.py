@@ -159,6 +159,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
             frames.append(frame)
         #?----------------------------------------------------------------
 
+        print("frame array successfully loaded")
         print(frames)
 
         frames = []
