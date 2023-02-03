@@ -75,7 +75,7 @@ def capture(cam, count):  # take a picture and add metadata to it (cam -> camera
     cam.capture(f"{temporary_folder}/img_{count}.jpg")  # capture camera and save the image
 
 def move(name, cnt):
-    os.replace(f"{temporary_folder}/img_{cnt}.jpg", f"{output_folder}/{name}_{cnt}.jpg")  # move image to output folder
+    os.replace(f"{temporary_folder}/vid_{cnt}.h264", f"{output_folder}/{name}_{cnt}.h264")  # move image to output folder
 
 
 #* sense hat setup (enable magnetometer)
@@ -131,7 +131,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         sleep(10)
         camera.stop_recording()
 
-        storage += os.path.getsize(vid_path)
+        #storage += os.path.getsize(vid_path)
         print(f"Finished recording video {counter}, used storage: {storage}")
 
         #?----------------------------------------------------------------
@@ -144,7 +144,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
 
             frames = []  # array of frames
             frame_num = 0  #  just for debugging
-            
+
             while True:
             # read frame from the video
                 frame_num += 1
@@ -153,8 +153,8 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                 if not success:
                     break
             
-                # Add frames to array
-                print(f"added frame {frame_num} to array")
+                # add frames to array
+                #print(f"added frame {frame_num} to array")
                 frames.append(frame)
 
         except:
@@ -163,26 +163,33 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         #?----------------------------------------------------------------
 
         try:  # attempt to calssify image  #! Will fail becuase there is no tflite model file available yet!
-            image_file =  f'{temporary_folder}/img_{counter}.jpg'  # set image path
-            image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)  # open and resize image to match TPU model settings
-            common.set_input(interpreter, image)  # load model and image to TPU
-            interpreter.invoke()  # invoke interpreter
-            classes = classify.get_classes(interpreter, top_k=1)  # get classes
-            labels = read_label_file(label_file)  # get labels from label.txt
+            captured = False
+            print(f"Calssifying frames from video: {counter}")
+            for i in frames:
+                image_file =  frames[i]  # set image path
+                image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)  # open and resize image to match TPU model settings
+                common.set_input(interpreter, image)  # load model and image to TPU
+                interpreter.invoke()  # invoke interpreter
+                classes = classify.get_classes(interpreter, top_k=1)  # get classes
+                labels = read_label_file(label_file)  # get labels from label.txt
 
-            for c in classes:  # get score of all classes
-                if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
-                    print(f"Image {counter} classified as lightning, moving to output folder")  # debug
-                    move_counter = (counter - d) - 1  # resovle number of images selected to be dmoved
-                    move("lightning", move_counter)  # move images classified as lightning to output folder
-                    storage += os.path.getsize(f"{output_folder}/lightning_{move_counter}.jpg")  # add image size to used storage space
-                else:
-                    print(f"Image {counter} classified as empty, deleting")  # debug
-                    os.remove(vid_path)  # remove unnecessary images
-        except:  # if something goes wrong, print error message, leave images in temp directory and add their size to storage counter
+                for c in classes:  # get score of all classes
+                    if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
+                        captured = True  # will be set true if at least one of the frames contains lightning
+
+            if captured:
+                print(f"Video {counter} classified as lightning, moving to output directory")
+                move("lightning", counter)
+                storage += os.path.getsize(vid_path)  # add image size to storage counter
+                    
+            else:
+                print(f"Video {counter} classified as empty, deleting")
+                os.remove(vid_path)
+
+        except:  # if something goes wrong, print error message, leave video in temp directory and add its size to storage counter
             e = sys.exc_info()  # get error message
-            storage += os.path.getsize(f"{temporary_folder}/img_{delete_counter}.jpg")  # add image size to storage counter
-            print(f"Failed to classify image {delete_counter} Leaving image in temp and adding it to storage counter")  # print error
+            storage += os.path.getsize(vid_path)  # add image size to storage counter
+            print(f"Failed to classify frames from video {counter} Leaving video in temp and adding it to storage counter")  # print error
             print("  Error: {}".format( e))  # print error details
 
         frames = []  # reset frame array
