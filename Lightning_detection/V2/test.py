@@ -128,7 +128,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         print(f"Started recording video {counter}")
         vid_path = f"{temporary_folder}/vid_{counter}.h264"  #! Will need to be converted to mp4 using ffmpeg after we receive the data
         camera.start_recording(vid_path, format="h264")
-        sleep(60)
+        sleep(30)
         camera.stop_recording()
 
         storage += os.path.getsize(vid_path)
