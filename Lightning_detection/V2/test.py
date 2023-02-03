@@ -159,6 +159,9 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
             frames.append(frame)
         #?----------------------------------------------------------------
 
+        print(frames)
+
+        frames = []
         currentTime = datetime.now()  # update time
         counter += 1
 
