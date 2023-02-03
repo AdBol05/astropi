@@ -139,11 +139,11 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
             video = cv2.VideoCapture(vid_path)
             # check if the video was successfully opened
             if not video.isOpened():
-                print("Error: Could not open the video.")
+                print(f"Error: Could not open file {vid_path}")
                 exit()
 
             frames = []  # array of frames
-            frame_num = 0
+            frame_num = 0  #  just for debugging
             
             while True:
             # read frame from the video
@@ -160,8 +160,30 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         except:
             print(f"Failed to create frame array")  # print error
             print("  Error: {}".format( e))  # print error details
-            frames = []  # reset frame array
         #?----------------------------------------------------------------
+
+        try:  # attempt to calssify image  #! Will fail becuase there is no tflite model file available yet!
+            image_file =  f'{temporary_folder}/img_{counter}.jpg'  # set image path
+            image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)  # open and resize image to match TPU model settings
+            common.set_input(interpreter, image)  # load model and image to TPU
+            interpreter.invoke()  # invoke interpreter
+            classes = classify.get_classes(interpreter, top_k=1)  # get classes
+            labels = read_label_file(label_file)  # get labels from label.txt
+
+            for c in classes:  # get score of all classes
+                if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
+                    print(f"Image {counter} classified as lightning, moving to output folder")  # debug
+                    move_counter = (counter - d) - 1  # resovle number of images selected to be dmoved
+                    move("lightning", move_counter)  # move images classified as lightning to output folder
+                    storage += os.path.getsize(f"{output_folder}/lightning_{move_counter}.jpg")  # add image size to used storage space
+                else:
+                    print(f"Image {counter} classified as empty, deleting")  # debug
+                    os.remove(vid_path)  # remove unnecessary images
+        except:  # if something goes wrong, print error message, leave images in temp directory and add their size to storage counter
+            e = sys.exc_info()  # get error message
+            storage += os.path.getsize(f"{temporary_folder}/img_{delete_counter}.jpg")  # add image size to storage counter
+            print(f"Failed to classify image {delete_counter} Leaving image in temp and adding it to storage counter")  # print error
+            print("  Error: {}".format( e))  # print error details
 
         frames = []  # reset frame array
         currentTime = datetime.now()  # update time
