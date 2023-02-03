@@ -125,9 +125,8 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
     while (currentTime < endTime and storage < storage_limit):
         
         print(f"Started recording video {counter}")
-        vid_path = f"{temporary_folder}/vid_{counter}.mp4"
-        camera.start_recording(vid_path)
-        camera.wait_recording(60)
+        vid_path = f"{temporary_folder}/vid_{counter}.h264"  #! Will need to be converted to mp4 using ffmpeg after we receive the data
+        camera.start_recording(vid_path, format="h264")
         #sleep(60)
         camera.stop_recording()
 
