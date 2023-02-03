@@ -150,10 +150,8 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         # Read the frames from the video
         while True:
         # Read the next frame from the video
-            
             frame_num += 1
             success, frame = video.read()
-
             # Check if the video has ended
             if not success:
                 break
@@ -164,7 +162,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         #?----------------------------------------------------------------
 
         print("frame array successfully loaded")
-        print(frames)
+        # print(frames)
 
         frames = []
         currentTime = datetime.now()  # update time
