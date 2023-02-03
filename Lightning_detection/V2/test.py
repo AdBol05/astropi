@@ -135,7 +135,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         print(f"Finished recording video {counter}, used storage: {storage}")
 
         #?----------------------------------------------------------------
-        video = cv2.VideoCapture("video.h264")
+        video = cv2.VideoCapture(vid_path)
 
         # Check if the video was successfully opened
         if not video.isOpened():
