@@ -172,7 +172,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                 image = image / 255.0
                 image = image.astype(np.float32)
 
-                input_tensor_shape = interpreter.get_input_details()[0]['shape']
+                input_tensor_shape = interpreter.get_input_details()[0].get('shape')
                 image = np.reshape(image, input_tensor_shape)
 
                 common.set_input(interpreter, image)  # load model and image to TPU
