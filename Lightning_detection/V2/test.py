@@ -166,7 +166,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
             captured = False
             print(f"Calssifying frames from video: {counter}")
             for i in frames:
-                image = frames[i].resize(size, Image.ANTIALIAS)  # open and resize image to match TPU model settings
+                image = cv2.resize(image, size)
                 image = image[:, :, ::-1]
                 image = image / 255.0
 
