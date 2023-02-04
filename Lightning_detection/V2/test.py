@@ -146,13 +146,6 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
 
                 #! This just does not work
                 #! How the hell should I do this?
-                """image = cv2.resize(frames[i], size)
-                image = image[:, :, ::-1]
-                image = image.astype("float32") / 255.0
-
-                input_tensor_shape = interpreter.get_input_details()[0].get('shape')
-                image = np.reshape(image, input_tensor_shape)"""
-
                 image = frames[i].convert('RGB').resize(size, Image.ANTIALIAS)
 
                 common.set_input(interpreter, image)  # load model and image to TPU
