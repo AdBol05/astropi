@@ -117,7 +117,6 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         #storage += os.path.getsize(vid_path)
         print(f"Finished recording video {counter}, used storage: {storage}")
 
-        #?----------------------------------------------------------------
         try:  # attempt to create array of individual frames form video
             video = cv2.VideoCapture(vid_path)
             # check if the video was successfully opened
@@ -137,12 +136,13 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         except:
             print(f"Failed to create frame array")  # print error
             print("  Error: {}".format( e))  # print error details
-        #?----------------------------------------------------------------
 
         try:  # attempt to calssify image  #! Will fail because there is no tflite model file available yet!
             captured = False
             print(f"Calssifying frames from video: {counter}")
             for i in frames:
+            
+            #?----------------------------------------------------------------
 
                 #! This just does not work
                 #! How the hell should I do this?
@@ -152,6 +152,8 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                 interpreter.invoke()  # invoke interpreter
                 classes = classify.get_classes(interpreter, top_k=1)  # get classes
                 labels = read_label_file(label_file)  # get labels from label.txt
+            
+            #?----------------------------------------------------------------
 
                 for c in classes:  # get score of all classes
                     if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
