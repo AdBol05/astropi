@@ -143,6 +143,9 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
             captured = False
             print(f"Calssifying frames from video: {counter}")
             for i in frames:
+
+                #! This just does not work
+                #! How the hell should I do this?
                 image = cv2.resize(frames[i], size)
                 image = image[:, :, ::-1]
                 image = image / 255.0
