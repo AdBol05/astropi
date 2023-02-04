@@ -132,7 +132,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                 # check if the video has ended
                 if not success:
                     break
-                frames.append(frame)  #! very memory intensive
+                frames.append(frame)  #! very memory intensive (will most likely overflow)
 
         except:
             print(f"Failed to create frame array")  # print error
@@ -177,6 +177,8 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
             storage += os.path.getsize(vid_path)  # add image size to storage counter
             print(f"Failed to classify frames from video {counter} Leaving video in temp and adding it to storage counter")  # print error
             print("  Error: {}".format( e))  # print error details
+        #! Fails with "TypeError('only integer scalar arrays can be converted to a scalar index')"
+        #! What does that even mean?
 
         frames = []  # reset frame array
         currentTime = datetime.now()  # update time
