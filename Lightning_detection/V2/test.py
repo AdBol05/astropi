@@ -174,6 +174,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         #! Fails with "TypeError('only integer scalar arrays can be converted to a scalar index')"
         #! What does that even mean?
 
+        captured = False
         frames = []  # reset frame array
         currentTime = datetime.now()  # update time
         counter += 1
