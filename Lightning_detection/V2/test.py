@@ -57,24 +57,6 @@ def read_data(data_file, count):  # data collection
         csv.writer(f).writerow(data)  # write data row to scv file
         #? print("Written data to .csv file")  # debug
 
-def angle2exif(angle):  # convert raw coords angle to EXIF friendly format
-    sign, degrees, minutes, seconds = angle.signed_dms()
-    exif_angle = f'{degrees:.0f}/1,{minutes:.0f}/1,{seconds*10:.0f}/10'
-    return sign < 0, exif_angle
-
-def capture(cam, count):  # take a picture and add metadata to it (cam -> camera, cnt -> image counter)
-    coords = ISS.coordinates()  # get current ISS coordinates
-    south, exif_lat = angle2exif(coords.latitude)  # convert coordinates to exif friendly format
-    west, exif_long = angle2exif(coords.longitude)
-
-    # add coordinates to image metadata
-    cam.exif_tags['GPS.GPSLatitude'] = exif_lat
-    cam.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
-    cam.exif_tags['GPS.GPSLongitude'] = exif_long
-    cam.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
-
-    cam.capture(f"{temporary_folder}/img_{count}.jpg")  # capture camera and save the image
-
 def move(name, cnt):
     os.replace(f"{temporary_folder}/vid_{cnt}.h264", f"{output_folder}/{name}_{cnt}.h264")  # move image to output folder
 
@@ -144,19 +126,13 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                 exit()
 
             frames = []  # array of frames
-            frame_num = 0  #  just for debugging
-
             while True:
             # read frame from the video
-                frame_num += 1
                 success, frame = video.read()
                 # check if the video has ended
                 if not success:
                     break
-            
-                # add frames to array
-                #print(f"added frame {frame_num} to array")
-                frames.append(frame)
+                frames.append(frame)  #! very memory intensive
 
         except:
             print(f"Failed to create frame array")  # print error
