@@ -137,18 +137,18 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         try:  # attempt to calssify image  #! Will fail because there is no tflite model file available yet!
             captured = False
             print(f"Calssifying frames from video: {counter}")
-            i = 0  # frame counter ("f" variable from for loop below returns an unusable array)
+            i = 0  # frame counter (variable from for loop below returns an unusable array)
             for f in frames:
             
                 #?----------------------------------------------------------------
-                print(f"Frame number: {i}")
+                print(f"Frame number: {i}")  # debug
                 frame = frames[i]
-                print(frame)
+                print(frame)  # debug
 
-                #?image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)
+                image = Image.open(frame).convert('RGB').resize(size, Image.ANTIALIAS)
 
                 print("Attempting to convert frame to coral-friendly format")  # debug
-                image = frame.convert('RGB').resize(size, Image.ANTIALIAS)
+                #?image = frame.convert('RGB').resize(size, Image.ANTIALIAS)
                 print("Converted frame to coral-friendly format")  # debug
                 print(image)  # debug
 
