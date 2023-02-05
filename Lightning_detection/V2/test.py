@@ -145,6 +145,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                 #! How the hell should I do this?
                 #?image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)
 
+                print("Attempting to convert frame to coral-friendly format")
                 print(frames[i])  # debug
                 image = frames[i].convert('RGB').resize(size, Image.ANTIALIAS)
                 print(image)  # debug
