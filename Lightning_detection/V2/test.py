@@ -152,19 +152,19 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                 print(frame)  # debug
                 #image = frame.convert('RGB').resize(size, Image.ANTIALIAS)
                 print("Converted frame to coral-friendly format")  # debug
-                print(image)  # debug
+                #print(image)  # debug
 
                 #common.set_input(interpreter, image)  # load model and image to TPU
                 #interpreter.invoke()  # invoke interpreter
                 
-                classes = classify.get_classes(interpreter, top_k=1)  # get classes
-                labels = read_label_file(label_file)  # get labels from label.txt
+                #classes = classify.get_classes(interpreter, top_k=1)  # get classes
+                #labels = read_label_file(label_file)  # get labels from label.txt
             
                 #?----------------------------------------------------------------
 
-                for c in classes:  # get score of all classes
-                    if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
-                        captured = True  # will be set true if at least one of the frames contains lightning
+                #for c in classes:  # get score of all classes
+                    #if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
+                        #captured = True  # will be set true if at least one of the frames contains lightning
 
             if captured:
                 print(f"Video {counter} classified as lightning, moving to output directory")
