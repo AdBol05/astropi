@@ -147,7 +147,9 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                 #?image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)
 
                 print("Attempting to convert frame to coral-friendly format")  # debug
+                print(frames[i])  # debug
                 image = frames[i].convert('RGB').resize(size, Image.ANTIALIAS)
+                print("Converted frame to coral-friendly format")  # debug
                 print(image)  # debug
 
                 common.set_input(interpreter, image)  # load model and image to TPU
