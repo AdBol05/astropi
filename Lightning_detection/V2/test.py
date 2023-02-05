@@ -140,6 +140,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
             for i in frames:
             
                 #?----------------------------------------------------------------
+                print(i)
                 print(frames[i])
                 frame = frames[i]
 
