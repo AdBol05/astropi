@@ -137,7 +137,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         try:  # attempt to calssify image  #! Will fail because there is no tflite model file available yet!
             captured = False
             print(f"Calssifying frames from video: {counter}")
-            print(frames[0][0])
+            print(frames[0])
             for i in frames:
             
                 #?----------------------------------------------------------------
