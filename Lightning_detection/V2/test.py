@@ -137,7 +137,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         try:  # attempt to calssify image  #! Will fail because there is no tflite model file available yet!
             captured = False
             print(f"Calssifying frames from video: {counter}")
-            i = 0
+            i = 0  # frame counter ("f" variable from for loop below returns an unusable array)
             for f in frames:
             
                 #?----------------------------------------------------------------
@@ -145,8 +145,6 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                 frame = frames[i]
                 print(frame)
 
-                #! This just does not work
-                #! How the hell should I do this?
                 #?image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)
 
                 print("Attempting to convert frame to coral-friendly format")  # debug
@@ -159,14 +157,13 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                 
                 classes = classify.get_classes(interpreter, top_k=1)  # get classes
                 labels = read_label_file(label_file)  # get labels from label.txt
-            
                 #?----------------------------------------------------------------
 
                 for c in classes:  # get score of all classes
                     if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
                         captured = True  # will be set true if at least one of the frames contains lightning
                 
-                i += 1
+                i += 1  # increment frame counter
 
             if captured:
                 print(f"Video {counter} classified as lightning, moving to output directory")
@@ -182,8 +179,6 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
             storage += os.path.getsize(vid_path)  # add image size to storage counter
             print(f"Failed to classify frames from video {counter} Leaving video in temp and adding it to storage counter")  # print error
             print("  Error: {}".format( e))  # print error details
-        #! Fails with "TypeError('only integer scalar arrays can be converted to a scalar index')"
-        #! What does that even mean?
 
         captured = False
         frames = []  # reset frame array
