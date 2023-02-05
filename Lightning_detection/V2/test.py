@@ -118,18 +118,15 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         print(f"Finished recording video {counter}, used storage: {storage}")
 
         try:  # attempt to create array of individual frames form video
-            video = cv2.VideoCapture(vid_path)
-            # check if the video was successfully opened
-            if not video.isOpened():
+            video = cv2.VideoCapture(vid_path)  # read video from file
+            if not video.isOpened():  # check if the video was successfully opened
                 print(f"Error: Could not open file {vid_path}")
                 exit()
 
-            frames = []  # array of frames
+            frames = []  # create array of frames
             while True:
-            # read frame from the video
-                success, frame = video.read()
-                # check if the video has ended
-                if not success:
+                success, frame = video.read()  # read frame from the video
+                if not success:  # check if the video has ended
                     break
                 frames.append(frame)  #! very memory intensive (will most likely overflow)
 
