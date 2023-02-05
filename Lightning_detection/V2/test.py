@@ -141,6 +141,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
             for f in frames:
             
                 #?----------------------------------------------------------------
+                #TODO: convert frame to coral-frendly format (RGB, resize etc.)
                 print(f"Frame number: {i}")  # debug
                 print(frames[i])  # debug
 
