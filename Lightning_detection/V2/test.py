@@ -141,15 +141,14 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
             
                 #?----------------------------------------------------------------
                 print(f"Frame number: {f}")
-                frame = frames[f]
-                print(frame)
+                #frame = frames[f]
+                #print(frame)
 
                 #! This just does not work
                 #! How the hell should I do this?
                 #?image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)
 
                 print("Attempting to convert frame to coral-friendly format")  # debug
-                print(frame)  # debug
                 #image = frame.convert('RGB').resize(size, Image.ANTIALIAS)
                 print("Converted frame to coral-friendly format")  # debug
                 #print(image)  # debug
