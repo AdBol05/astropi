@@ -129,11 +129,10 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                 if not success:  # check if the video has ended
                     break
                 frames.append(frame)  #! very memory intensive (will most likely overflow)
-            # close the video
-            video.release()
-            cv2.destroyAllWindows()
+            video.release()  # close the video
 
         except:
+            e = sys.exc_info()  # get error message
             print(f"Failed to create frame array")  # print error
             print("  Error: {}".format( e))  # print error details
 
