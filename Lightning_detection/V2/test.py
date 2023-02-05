@@ -129,6 +129,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                 if not success:  # check if the video has ended
                     break
                 frames.append(frame)  #! very memory intensive (will most likely overflow)
+            video.release()
 
         except:
             print(f"Failed to create frame array")  # print error
@@ -148,11 +149,11 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                 #?image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)
 
                 print("Attempting to convert frame to coral-friendly format")  # debug
-                #?image = frames[i].convert('RGB').resize(size, Image.ANTIALIAS)
+                image = frames[i].convert('RGB').resize(size, Image.ANTIALIAS)
                 print("Converted frame to coral-friendly format")  # debug
-                #?print(image)  # debug
+                print(image)  # debug
 
-                common.set_input(interpreter, frames[i])  # load model and image to TPU
+                common.set_input(interpreter, image)  # load model and image to TPU
                 interpreter.invoke()  # invoke interpreter
                 
                 classes = classify.get_classes(interpreter, top_k=1)  # get classes
