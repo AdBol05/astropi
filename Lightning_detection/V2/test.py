@@ -129,6 +129,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
                 if not success:  # check if the video has ended
                     break
                 frames.append(frame)  #! very memory intensive (will most likely overflow)
+            
             video.release()  # close the video
 
         except:
