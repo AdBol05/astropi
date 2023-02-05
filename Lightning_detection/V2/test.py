@@ -148,6 +148,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
 
                 common.set_input(interpreter, image)  # load model and image to TPU
                 interpreter.invoke()  # invoke interpreter
+                
                 classes = classify.get_classes(interpreter, top_k=1)  # get classes
                 labels = read_label_file(label_file)  # get labels from label.txt
             
