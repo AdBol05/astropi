@@ -137,33 +137,36 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         try:  # attempt to calssify image  #! Will fail because there is no tflite model file available yet!
             captured = False
             print(f"Calssifying frames from video: {counter}")
+            i = 0
             for f in frames:
             
                 #?----------------------------------------------------------------
-                print(f"Frame number: {f}")
-                #frame = frames[f]
-                #print(frame)
+                print(f"Frame number: {i}")
+                frame = frames[i]
+                print(frame)
 
                 #! This just does not work
                 #! How the hell should I do this?
                 #?image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)
 
                 print("Attempting to convert frame to coral-friendly format")  # debug
-                #image = frame.convert('RGB').resize(size, Image.ANTIALIAS)
+                image = frame.convert('RGB').resize(size, Image.ANTIALIAS)
                 print("Converted frame to coral-friendly format")  # debug
-                #print(image)  # debug
+                print(image)  # debug
 
-                #common.set_input(interpreter, image)  # load model and image to TPU
-                #interpreter.invoke()  # invoke interpreter
+                common.set_input(interpreter, image)  # load model and image to TPU
+                interpreter.invoke()  # invoke interpreter
                 
-                #classes = classify.get_classes(interpreter, top_k=1)  # get classes
-                #labels = read_label_file(label_file)  # get labels from label.txt
+                classes = classify.get_classes(interpreter, top_k=1)  # get classes
+                labels = read_label_file(label_file)  # get labels from label.txt
             
                 #?----------------------------------------------------------------
 
-                #for c in classes:  # get score of all classes
-                    #if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
-                        #captured = True  # will be set true if at least one of the frames contains lightning
+                for c in classes:  # get score of all classes
+                    if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
+                        captured = True  # will be set true if at least one of the frames contains lightning
+                
+                i += 1
 
             if captured:
                 print(f"Video {counter} classified as lightning, moving to output directory")
