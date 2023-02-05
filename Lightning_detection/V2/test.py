@@ -142,18 +142,19 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
             print(f"Calssifying frames from video: {counter}")
             for i in frames:
             
-            #?----------------------------------------------------------------
+                #?----------------------------------------------------------------
 
                 #! This just does not work
                 #! How the hell should I do this?
                 #?image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)
+                image = frames[i].convert('RGB').resize(size, Image.ANTIALIAS)
 
-                common.set_input(interpreter, frames[i])  # load model and image to TPU
+                common.set_input(interpreter, image)  # load model and image to TPU
                 interpreter.invoke()  # invoke interpreter
                 classes = classify.get_classes(interpreter, top_k=1)  # get classes
                 labels = read_label_file(label_file)  # get labels from label.txt
             
-            #?----------------------------------------------------------------
+                #?----------------------------------------------------------------
 
                 for c in classes:  # get score of all classes
                     if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
