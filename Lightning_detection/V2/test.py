@@ -60,6 +60,13 @@ def read_data(data_file, count):  # data collection
 def move(name, cnt):
     os.replace(f"{temporary_folder}/vid_{cnt}.h264", f"{output_folder}/{name}_{cnt}.h264")  # move image to output folder
 
+def capture(vid_path, delay, format, storage, count):
+    print(f"Started recording video {count}")
+    camera.start_recording(vid_path, format=format)  #! ffmpeg -framerate 30 -i vid_10000.h264 -c copy vid_1000.mp4 
+    sleep(delay)
+    camera.stop_recording()
+    print(f"Finished recording video {count}, used storage: {storage}")
+
 
 #* sense hat setup (enable magnetometer)
 sense = SenseHat()
@@ -92,7 +99,7 @@ def get_data(startTime, endTime, storage_limit, data_file):
     print(f"Data collection thread exited, storage used: {round(storage/(1024*1024), 2)}/{round(storage_limit/(1024*1024), 2)}MB, time elapsed: {datetime.now() - startTime}")
     print("#------------------------------------------------------------------------------------------------------#")
 
-def get_images(startTime, endTime, storage_limit, camera, counter, sequence, output_folder, temporary_folder, model_file, label_file):
+def get_images(startTime, endTime, storage_limit, camera, counter, output_folder, temporary_folder, model_file, label_file):
     storage = 0  # image storage counter (size added after image is moved to output folder or if classification fails and images are left in temp folder instead of being deleted)
     currentTime = datetime.now()  # get current time before loop start
 
@@ -109,23 +116,13 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
     while (currentTime < endTime and storage < storage_limit):
         #TODO: create video capture function so it deosnt look stupid
         if counter % 10 == 0:
-            print(f"Started recording video {counter}")
             vid_path = f"{output_folder}/vid_{counter}.h264"  #! Will need to be converted to mp4 using ffmpeg after we receive the data
-            camera.start_recording(vid_path, format="h264")  #! ffmpeg -framerate 30 -i vid_10000.h264 -c copy vid_1000.mp4 
-            sleep(30)
-            camera.stop_recording()
+            capture(vid_path, 30, "h264", storage, counter)
             storage += os.path.getsize(vid_path)
-            print(f"Finished recording video {counter}, used storage: {storage}")
 
         else:
-            print(f"Started recording video {counter}")
             vid_path = f"{temporary_folder}/vid_{counter}.h264"  #! Will need to be converted to mp4 using ffmpeg after we receive the data
-            camera.start_recording(vid_path, format="h264")  #! ffmpeg -framerate 30 -i vid_10000.h264 -c copy vid_1000.mp4 
-            sleep(10)
-            camera.stop_recording()
-
-            #storage += os.path.getsize(vid_path)
-            print(f"Finished recording video {counter}, used storage: {storage}")
+            capture(vid_path, 30, "h264", storage, counter)
 
             try:  # attempt to create array of individual frames form video
                 video = cv2.VideoCapture(vid_path)  # read video from file
@@ -209,7 +206,7 @@ create_csv(data_file)  # create data.csv file
 print("starting threads")  # debug
 # define two threads (one for image collection, and one for sensor reading)
 t1 = threading.Thread(target = get_data, args = [startTime, endTime, data_storage_limit, data_file])
-t2 = threading.Thread(target = get_images, args = [startTime, endTime, image_storage_limit , camera, 10000, 10, output_folder, temporary_folder, model_file, label_file])
+t2 = threading.Thread(target = get_images, args = [startTime, endTime, image_storage_limit , camera, 10000, output_folder, temporary_folder, model_file, label_file])
 
 #* start threads
 t1.start()
