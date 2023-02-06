@@ -107,6 +107,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         print("  Error: {}".format( e))  # print error details
 
     while (currentTime < endTime and storage < storage_limit):
+        #TODO: create video capture function so it deosnt look stupid
         if counter % 10 == 0:
             print(f"Started recording video {counter}")
             vid_path = f"{output_folder}/vid_{counter}.h264"  #! Will need to be converted to mp4 using ffmpeg after we receive the data
