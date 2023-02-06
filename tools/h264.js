@@ -4,17 +4,11 @@ const fs = require('fs');
 let args = process.argv.slice(2);
 if (!fs.existsSync(args[0]) || args[0] === undefined) { console.log('\x1b[31m%s\x1b[0m', "ERROR: Input file path does not exist."); process.exit(9); }
 
-let files = fs.readdirSync(args[0], (err, files_) => {
-    if (err) {
-        console.error(err);
-        return;
-    }
-
-    const out = files_.filter(file => file.endsWith('.h264'));
-    return out;
-});
+let files = fs.readdirSync(args[0]);
+files = files.filter(file => file.endsWith('.h264'));
 
 console.log(files);
+//console.log(files);
 
 /*ffmpeg()
     .input(args[0])
