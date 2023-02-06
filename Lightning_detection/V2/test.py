@@ -159,7 +159,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
                     #?----------------------------------------------------------------
                     #TODO: convert frame to coral-frendly format (RGB, resize etc.)
                     print(f"Frame number: {i}")  # debug
-                    print(frames[i])  # debug
+                    #?print(frames[i])  # debug
 
                     #?image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)
 
