@@ -7,8 +7,11 @@ if (!fs.existsSync(args[0]) || args[0] === undefined) { console.log('\x1b[31m%s\
 let files = fs.readdirSync(args[0]);
 files = files.filter(file => file.endsWith('.h264'));
 
-console.log(files);
-//console.log(files);
+for (i in files){
+    let path = "";
+    if (args[0].endsWith('/')) {path = args[0] + files[i];}
+    else {path = args[0] + "/" + files[i];}
+}
 
 /*ffmpeg()
     .input(args[0])
