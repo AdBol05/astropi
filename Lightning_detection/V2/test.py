@@ -184,6 +184,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
                 if captured:
                     print(f"Video {counter} classified as lightning, moving to output directory")
                     move("lightning", counter)
+                    #TODO: fix output video path
                     storage += os.path.getsize(vid_path)  # add image size to storage counter
                     
                 else:
