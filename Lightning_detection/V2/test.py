@@ -156,24 +156,16 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
                 i = 0  # frame counter (variable from for loop below returns an unusable array)
                 for f in frames:
             
-                    #?----------------------------------------------------------------
-                    #TODO: convert frame to coral-frendly format (RGB, resize etc.)
                     print(f"Frame number: {i}")  # debug
-                    #?print(frames[i])  # debug
-
-                    #?image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)
 
                     print("Attempting to convert frame to coral-friendly format")  # debug
-                    #?image = frames[i].convert('RGB').resize(size, Image.ANTIALIAS)
                     print("Converted frame to coral-friendly format")  # debug
-                    #?print(image)  # debug
 
                     common.set_input(interpreter, frames[i])  # load model and image to TPU
                     interpreter.invoke()  # invoke interpreter
                 
                     classes = classify.get_classes(interpreter, top_k=1)  # get classes
                     labels = read_label_file(label_file)  # get labels from label.txt
-                    #?----------------------------------------------------------------
 
                     for c in classes:  # get score of all classes
                         if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
