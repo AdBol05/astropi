@@ -180,6 +180,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
                             captured = True  # will be set true if at least one of the frames contains lightning
                 
                     i += 1  # increment frame counter
+                    print(f"Captured: {captured}")
 
                 if captured:
                     print(f"Video {counter} classified as lightning, moving to output directory")
