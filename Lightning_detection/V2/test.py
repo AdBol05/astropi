@@ -172,9 +172,9 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
                     print(f"Captured: {captured}")  # debug
 
                 if captured:
-                    print(f"Video {counter} classified as lightning, moving to output directory")  # debug
                     out_path = move("lightning", counter)  # move video to output directory and get its path
                     storage += os.path.getsize(out_path)  # add image size to storage counter
+                    print(f"Video {counter} classified as lightning, moved to output directory, used storage: {storage}")  # debug
                     
                 else:
                     print(f"Video {counter} classified as empty, deleting")  # debug
