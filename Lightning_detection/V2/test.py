@@ -74,7 +74,6 @@ sense.set_imu_config(True, False, False)
 camera = PiCamera()
 camera.resolution = (1296, 972)  # max 4056*3040
 camera.framerate = 30
-#TODO: fix image crop camera.zoom = (0.20, 0.155, 0.80, 0.845)
 
 #* define thread functions
 def get_data(startTime, endTime, storage_limit, data_file):
