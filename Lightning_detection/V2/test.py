@@ -141,8 +141,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
 
                     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # comnvert to RGB
                     frame = cv2.resize(frame, size)  # resize to match the input size of coral model
-                    frame = frame.astype('float32') / 255.0  
-                    print(frame)
+                    frame = frame.astype('float32') / 255.0  # convert to float in range from 0.0 - 1.0
                     frames.append(frame)  #! very memory intensive (will most likely overflow)
             
                 video.release()  # close the video
