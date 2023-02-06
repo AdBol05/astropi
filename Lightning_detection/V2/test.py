@@ -132,10 +132,15 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
                     exit()
 
                 frames = []  # create array of frames
+                print("Processing video...")
                 while True:
                     success, frame = video.read()  # read frame from the video
                     if not success:  # check if the video has ended
                         break
+
+                    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                    frame = cv2.resize(frame, size)
+                    frame = frame.astype('float32') / 255.0
                     frames.append(frame)  #! very memory intensive (will most likely overflow)
             
                 video.release()  # close the video
@@ -159,11 +164,11 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
                     #?image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)
 
                     print("Attempting to convert frame to coral-friendly format")  # debug
-                    image = frames[i].convert('RGB').resize(size, Image.ANTIALIAS)
+                    #?image = frames[i].convert('RGB').resize(size, Image.ANTIALIAS)
                     print("Converted frame to coral-friendly format")  # debug
-                    print(image)  # debug
+                    #?print(image)  # debug
 
-                    common.set_input(interpreter, image)  # load model and image to TPU
+                    common.set_input(interpreter, frames[i])  # load model and image to TPU
                     interpreter.invoke()  # invoke interpreter
                 
                     classes = classify.get_classes(interpreter, top_k=1)  # get classes
