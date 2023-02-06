@@ -158,13 +158,11 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
                 for f in frames:
             
                     print(f"Frame number: {i}")  # debug
-
                     print("Attempting to convert frame to coral-friendly format")  # debug
                     print("Converted frame to coral-friendly format")  # debug
 
                     common.set_input(interpreter, frames[i])  # load model and image to TPU
                     interpreter.invoke()  # invoke interpreter
-                
                     classes = classify.get_classes(interpreter, top_k=1)  # get classes
                     labels = read_label_file(label_file)  # get labels from label.txt
 
