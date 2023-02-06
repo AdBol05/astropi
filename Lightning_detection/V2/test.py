@@ -157,9 +157,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
                 i = 0  # frame counter (variable from for loop below returns an unusable array)
                 for f in frames:
             
-                    print(f"Frame number: {i}")  # debug
-                    print("Attempting to convert frame to coral-friendly format")  # debug
-                    print("Converted frame to coral-friendly format")  # debug
+                    print(f"Converting frame {i} to coral-friendly format")  # debug
 
                     common.set_input(interpreter, frames[i])  # load model and image to TPU
                     interpreter.invoke()  # invoke interpreter
