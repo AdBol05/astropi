@@ -58,9 +58,9 @@ def read_data(data_file, count):  # data collection
         #? print("Written data to .csv file")  # debug
 
 def move(name, cnt):
-    outpath = f"{output_folder}/{name}_{cnt}.h264"
+    outpath = f"{output_folder}/{name}_{cnt}.h264"  # resolve output path
     os.replace(f"{temporary_folder}/vid_{cnt}.h264", outpath)  # move image to output folder
-    return outpath
+    return outpath  # return output path so it can be used for size determination
 
 def capture(vid_path, delay):  #! Will need to be converted to mp4 using ffmpeg after we receive the data
     camera.start_recording(vid_path)  #! ffmpeg -framerate 30 -i vid_10000.h264 -c copy vid_1000.mp4 
