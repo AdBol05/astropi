@@ -107,84 +107,93 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         print("  Error: {}".format( e))  # print error details
 
     while (currentTime < endTime and storage < storage_limit):
+        if counter % 10 == 0:
+            print(f"Started recording video {counter}")
+            vid_path = f"{output_folder}/vid_{counter}.h264"  #! Will need to be converted to mp4 using ffmpeg after we receive the data
+            camera.start_recording(vid_path, format="h264")  #! ffmpeg -framerate 30 -i vid_10000.h264 -c copy vid_1000.mp4 
+            sleep(30)
+            camera.stop_recording()
+            storage += os.path.getsize(vid_path)
         
-        print(f"Started recording video {counter}")
-        vid_path = f"{temporary_folder}/vid_{counter}.h264"  #! Will need to be converted to mp4 using ffmpeg after we receive the data
-        camera.start_recording(vid_path, format="h264")  #! ffmpeg -framerate 30 -i vid_10000.h264 -c copy vid_1000.mp4 
-        sleep(10)
-        camera.stop_recording()
+        else:
+            print(f"Started recording video {counter}")
+            vid_path = f"{temporary_folder}/vid_{counter}.h264"  #! Will need to be converted to mp4 using ffmpeg after we receive the data
+            camera.start_recording(vid_path, format="h264")  #! ffmpeg -framerate 30 -i vid_10000.h264 -c copy vid_1000.mp4 
+            sleep(10)
+            camera.stop_recording()
 
-        #storage += os.path.getsize(vid_path)
-        print(f"Finished recording video {counter}, used storage: {storage}")
+            #storage += os.path.getsize(vid_path)
+            print(f"Finished recording video {counter}, used storage: {storage}")
 
-        try:  # attempt to create array of individual frames form video
-            video = cv2.VideoCapture(vid_path)  # read video from file
-            if not video.isOpened():  # check if the video was successfully opened
-                print(f"Error: Could not open file {vid_path}")
-                exit()
+            try:  # attempt to create array of individual frames form video
+                video = cv2.VideoCapture(vid_path)  # read video from file
+                if not video.isOpened():  # check if the video was successfully opened
+                    print(f"Error: Could not open file {vid_path}")
+                    exit()
 
-            frames = []  # create array of frames
-            while True:
-                success, frame = video.read()  # read frame from the video
-                if not success:  # check if the video has ended
-                    break
-                frames.append(frame)  #! very memory intensive (will most likely overflow)
+                frames = []  # create array of frames
+                while True:
+                    success, frame = video.read()  # read frame from the video
+                    if not success:  # check if the video has ended
+                        break
+                    frames.append(frame)  #! very memory intensive (will most likely overflow)
             
-            video.release()  # close the video
+                video.release()  # close the video
 
-        except:
-            e = sys.exc_info()  # get error message
-            print(f"Failed to create frame array")  # print error
-            print("  Error: {}".format( e))  # print error details
+            except:
+                e = sys.exc_info()  # get error message
+                print(f"Failed to create frame array")  # print error
+                print("  Error: {}".format( e))  # print error details
 
-        try:  # attempt to calssify image  #! Will fail because there is no tflite model file available yet!
-            captured = False
-            print(f"Calssifying frames from video: {counter}")
-            i = 0  # frame counter (variable from for loop below returns an unusable array)
-            for f in frames:
+            try:  # attempt to calssify image  #! Will fail because there is no tflite model file available yet!
+                captured = False
+                print(f"Calssifying frames from video: {counter}")
+                i = 0  # frame counter (variable from for loop below returns an unusable array)
+                for f in frames:
             
-                #?----------------------------------------------------------------
-                #TODO: convert frame to coral-frendly format (RGB, resize etc.)
-                print(f"Frame number: {i}")  # debug
-                print(frames[i])  # debug
+                    #?----------------------------------------------------------------
+                    #TODO: convert frame to coral-frendly format (RGB, resize etc.)
+                    print(f"Frame number: {i}")  # debug
+                    print(frames[i])  # debug
 
-                #?image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)
+                    #?image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)
 
-                print("Attempting to convert frame to coral-friendly format")  # debug
-                image = frames[i].convert('RGB').resize(size, Image.ANTIALIAS)
-                print("Converted frame to coral-friendly format")  # debug
-                print(image)  # debug
+                    print("Attempting to convert frame to coral-friendly format")  # debug
+                    image = frames[i].convert('RGB').resize(size, Image.ANTIALIAS)
+                    print("Converted frame to coral-friendly format")  # debug
+                    print(image)  # debug
 
-                common.set_input(interpreter, image)  # load model and image to TPU
-                interpreter.invoke()  # invoke interpreter
+                    common.set_input(interpreter, image)  # load model and image to TPU
+                    interpreter.invoke()  # invoke interpreter
                 
-                classes = classify.get_classes(interpreter, top_k=1)  # get classes
-                labels = read_label_file(label_file)  # get labels from label.txt
-                #?----------------------------------------------------------------
+                    classes = classify.get_classes(interpreter, top_k=1)  # get classes
+                    labels = read_label_file(label_file)  # get labels from label.txt
+                    #?----------------------------------------------------------------
 
-                for c in classes:  # get score of all classes
-                    if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
-                        captured = True  # will be set true if at least one of the frames contains lightning
+                    for c in classes:  # get score of all classes
+                        if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
+                            captured = True  # will be set true if at least one of the frames contains lightning
                 
-                i += 1  # increment frame counter
+                    i += 1  # increment frame counter
 
-            if captured:
-                print(f"Video {counter} classified as lightning, moving to output directory")
-                move("lightning", counter)
-                storage += os.path.getsize(vid_path)  # add image size to storage counter
+                if captured:
+                    print(f"Video {counter} classified as lightning, moving to output directory")
+                    move("lightning", counter)
+                    storage += os.path.getsize(vid_path)  # add image size to storage counter
                     
-            else:
-                print(f"Video {counter} classified as empty, deleting")
-                os.remove(vid_path)
+                else:
+                    print(f"Video {counter} classified as empty, deleting")
+                    os.remove(vid_path)
 
-        except:  # if something goes wrong, print error message, leave video in temp directory and add its size to storage counter
-            e = sys.exc_info()  # get error message
-            storage += os.path.getsize(vid_path)  # add image size to storage counter
-            print(f"Failed to classify frames from video {counter} Leaving video in temp and adding it to storage counter")  # print error
-            print("  Error: {}".format( e))  # print error details
+            except:  # if something goes wrong, print error message, leave video in temp directory and add its size to storage counter
+                e = sys.exc_info()  # get error message
+                storage += os.path.getsize(vid_path)  # add image size to storage counter
+                print(f"Failed to classify frames from video {counter} Leaving video in temp and adding it to storage counter")  # print error
+                print("  Error: {}".format( e))  # print error details
 
-        captured = False
-        frames = []  # reset frame array
+            captured = False
+            frames = []  # reset frame array
+        
         currentTime = datetime.now()  # update time
         counter += 1
 
