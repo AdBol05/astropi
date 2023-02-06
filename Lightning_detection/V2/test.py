@@ -72,7 +72,7 @@ def capture(vid_path, delay):  #! Will need to be converted to mp4 using ffmpeg 
 sense = SenseHat()
 sense.set_imu_config(True, False, False)
 
-#* camera setup (set iamge resolution and zoom)
+#* camera setup (set iamge resolution and frequency)
 camera = PiCamera()
 camera.resolution = (1296, 972)  # max 4056*3040
 camera.framerate = 30
