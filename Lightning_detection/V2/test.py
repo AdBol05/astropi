@@ -123,7 +123,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
         else:
             print(f"Started recording video: {counter}")
             vid_path = f"{temporary_folder}/vid_{counter}.h264"  #! Will need to be converted to mp4 using ffmpeg after we receive the data
-            capture(vid_path, 30)
+            capture(vid_path, 10)
             print(f"Finished recording video {counter}")
 
             try:  # attempt to create array of individual frames form video
