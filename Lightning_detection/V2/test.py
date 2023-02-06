@@ -139,9 +139,10 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
                     if not success:  # check if the video has ended
                         break
 
-                    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                    frame = cv2.resize(frame, size)
-                    frame = frame.astype('float32') / 255.0
+                    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # comnvert to RGB
+                    frame = cv2.resize(frame, size)  # resize to match the input size of coral model
+                    frame = frame.astype('float32') / 255.0  
+                    print(frame)
                     frames.append(frame)  #! very memory intensive (will most likely overflow)
             
                 video.release()  # close the video

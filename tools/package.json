@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "fluent-ffmpeg": "^2.1.2",
     "jpeg-js": "^0.4.4",
     "netcdfjs": "^2.0.2"
   }
