@@ -155,7 +155,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
                 captured = False  # set default capture indicator to false
                 print(f"Calssifying frames from video: {counter}")  # debug
                 i = 0  # frame counter (variable from for loop below returns an unusable array)
-                for f in frames:  # run fooooooooor every frame in the video
+                for f in frames:  # run for every frame in the video
             
                     print(f"Converting frame {i} to coral-friendly format")  # debug
 
