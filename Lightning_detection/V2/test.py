@@ -60,12 +60,10 @@ def read_data(data_file, count):  # data collection
 def move(name, cnt):
     os.replace(f"{temporary_folder}/vid_{cnt}.h264", f"{output_folder}/{name}_{cnt}.h264")  # move image to output folder
 
-def capture(vid_path, delay, format, storage, count):
-    print(f"Started recording video {count}")
-    camera.start_recording(vid_path, format=format)  #! ffmpeg -framerate 30 -i vid_10000.h264 -c copy vid_1000.mp4 
+def capture(vid_path, delay):  #! Will need to be converted to mp4 using ffmpeg after we receive the data
+    camera.start_recording(vid_path)  #! ffmpeg -framerate 30 -i vid_10000.h264 -c copy vid_1000.mp4 
     sleep(delay)
     camera.stop_recording()
-    print(f"Finished recording video {count}, used storage: {storage}")
 
 
 #* sense hat setup (enable magnetometer)
@@ -116,13 +114,17 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
     while (currentTime < endTime and storage < storage_limit):
         #TODO: create video capture function so it deosnt look stupid
         if counter % 10 == 0:
-            vid_path = f"{output_folder}/vid_{counter}.h264"  #! Will need to be converted to mp4 using ffmpeg after we receive the data
-            capture(vid_path, 30, "h264", storage, counter)
+            print(f"Started recording video: {counter}")
+            vid_path = f"{output_folder}/vid_{counter}.h264"
+            capture(vid_path, 30)
             storage += os.path.getsize(vid_path)
+            print(f"Finished recording video {counter}, used storage: {storage}")
 
         else:
+            print(f"Started recording video: {counter}")
             vid_path = f"{temporary_folder}/vid_{counter}.h264"  #! Will need to be converted to mp4 using ffmpeg after we receive the data
-            capture(vid_path, 30, "h264", storage, counter)
+            capture(vid_path, 30)
+            print(f"Finished recording video {counter}")
 
             try:  # attempt to create array of individual frames form video
                 video = cv2.VideoCapture(vid_path)  # read video from file
