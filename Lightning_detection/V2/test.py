@@ -124,40 +124,25 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
             capture(vid_path, 10)  # capture 10 second video
             print(f"Finished recording video {counter}")  # debug
 
-            try:  # attempt to create array of individual frames form video
+            try:  # attempt to create array of individual frames form video and classify them
                 video = cv2.VideoCapture(vid_path)  # read video from file
                 if not video.isOpened():  # check if the video was successfully opened
                     print(f"Error: Could not open file {vid_path}")  # debug
                     exit()
 
-                frames = []  # create array of frames
+                captured = False  # set default capture indicator to false
                 print("Processing video...")  # debug
                 while True:  # run until the end of the video
                     success, frame = video.read()  # read frame from the video
                     if not success:  # check if the video has ended
                         break  # end loop
 
+                    print("converting frame to coral-usable format")
                     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # comnvert to RGB
                     frame = cv2.resize(frame, size)  # resize to match the input size of coral model
                     frame = frame.astype('float32') / 255.0  # convert to float in range from 0.0 - 1.0
-                    frames.append(frame)  #! very memory intensive (likely to overflow)
 
-                video.release()  # close the video
-
-            except:
-                e = sys.exc_info()  # get error message
-                print(f"Failed to create frame array")  # print error
-                print("  Error: {}".format( e))  # print error details
-
-            try:  # attempt to calssify image  #! Will fail because there is no tflite model file available yet!
-                captured = False  # set default capture indicator to false
-                print(f"Calssifying frames from video: {counter}")  # debug
-                i = 0  # frame counter (variable from for loop below returns an unusable array)
-                for f in frames:  # run for every frame in the video
-
-                    print(f"Converting frame {i} to coral-friendly format")  # debug
-
-                    common.set_input(interpreter, frames[i])  # load model and image to TPU
+                    common.set_input(interpreter, frame)  # load model and image to TPU
                     interpreter.invoke()  # invoke interpreter
                     classes = classify.get_classes(interpreter, top_k=1)  # get classes
                     labels = read_label_file(label_file)  # get labels from label.txt
@@ -166,8 +151,9 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
                         if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
                             captured = True  # will be set true if at least one of the frames contains lightning
 
-                    i += 1  # increment frame counter
                     print(f"Captured: {captured}")  # debug
+
+                video.release()  # close the video
 
                 if captured:
                     out_path = move("lightning", counter)  # move video to output directory and get its path
@@ -178,13 +164,10 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
                     print(f"Video {counter} classified as empty, deleting")  # debug
                     os.remove(vid_path)  # delete video
 
-            except:  # if something goes wrong, print error message, leave video in temp directory and add its size to storage counter
+            except:
                 e = sys.exc_info()  # get error message
-                storage += os.path.getsize(vid_path)  # add image size to storage counter
-                print(f"Failed to classify frames from video {counter} Leaving video in temp and adding it to storage counter")  # print error
+                print(f"Failed to create frame array")  # print error
                 print("  Error: {}".format( e))  # print error details
-
-            frames = []  # reset frame array
 
         currentTime = datetime.now()  # update time
         counter += 1  # increment counter
