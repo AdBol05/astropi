@@ -8,6 +8,7 @@ let files = fs.readdirSync(args[0]);
 files = files.filter(file => file.endsWith('.h264'));
 
 console.log("Processing " + files.length + " files from " + args[0] + "\Please wait...");
+console.log(files);
 
 for (i in files){
     let path = "";
