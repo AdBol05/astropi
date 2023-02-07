@@ -155,7 +155,7 @@ def get_images(startTime, endTime, storage_limit, counter, output_folder, tempor
                             print("Lightning detected")  # debug
                     
                     if captured:  # if at least one of the frames contains lightning its not necessary to classify other frames
-                        break
+                        break  # end loop
 
                 video.release()  # close the video
 
