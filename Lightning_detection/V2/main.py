@@ -150,6 +150,7 @@ def get_images(startTime, endTime, storage_limit, counter, output_folder, tempor
                     labels = read_label_file(label_file)  # get labels from label.txt
 
                     if(f'{labels.get(0, 0)}'  == 'lightning' and float(f'{classes[0].score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
+                        print(f"{labels.get(0, 0)} | {classes[0].score:.5f}")
                         captured = True  # will be set true if at least one of the frames contains lightning
                         print("Lightning detected")  # debug
                     
