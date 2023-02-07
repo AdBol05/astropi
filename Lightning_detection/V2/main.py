@@ -143,6 +143,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
                     frame = frame.astype('float32') / 255.0  # convert to float in range from 0.0 - 1.0
 
                     #* Classify frame
+                    print("classifing frame")
                     common.set_input(interpreter, frame)  # load model and image to TPU
                     interpreter.invoke()  # invoke interpreter
                     classes = classify.get_classes(interpreter, top_k=1)  # get classes
