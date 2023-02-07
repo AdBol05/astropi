@@ -7,11 +7,11 @@ from datetime import datetime, timedelta
 from time import sleep
 from picamera import PiCamera
 from orbit import ISS
-from PIL import Image
 from pycoral.adapters import common
 from pycoral.adapters import classify
 from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.dataset import read_label_file
+import cv2
 import os
 import sys
 import threading
@@ -27,7 +27,7 @@ base_folder = Path(__file__).parent.resolve()  # determine working directory
 output_folder = base_folder/'output'  # set output folder path
 temporary_folder = base_folder/'temp'  # set tempoprary folder path
 data_file = output_folder/'data.csv'  # set data.csv path
-model_file = ''  #? base_folder/'model.tflite' # set model directory
+model_file = base_folder/'particle.tflite' # set model directory #! particle.tflite is just for testing
 label_file = base_folder/'labels.txt' # set label file directory
 
 #* create output and temporary directories if they don't exist
@@ -55,43 +55,32 @@ def read_data(data_file, count):  # data collection
         csv.writer(f).writerow(data)  # write data row to scv file
         #? print("Written data to .csv file")  # debug
 
-def angle2exif(angle):  # convert raw coords angle to EXIF friendly format
-    sign, degrees, minutes, seconds = angle.signed_dms()
-    exif_angle = f'{degrees:.0f}/1,{minutes:.0f}/1,{seconds*10:.0f}/10'
-    return sign < 0, exif_angle
-
-def capture(cam, count):  # take a picture and add metadata to it (cam -> camera, cnt -> image counter)
-    coords = ISS.coordinates()  # get current ISS coordinates
-    south, exif_lat = angle2exif(coords.latitude)  # convert coordinates to exif friendly format
-    west, exif_long = angle2exif(coords.longitude)
-
-    # add coordinates to image metadata
-    cam.exif_tags['GPS.GPSLatitude'] = exif_lat
-    cam.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
-    cam.exif_tags['GPS.GPSLongitude'] = exif_long
-    cam.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
-
-    cam.capture(f"{temporary_folder}/img_{count}.jpg")  # capture camera and save the image
-
 def move(name, cnt):
-    os.replace(f"{temporary_folder}/img_{cnt}.jpg", f"{output_folder}/{name}_{cnt}.jpg")  # move image to output folder
+    outpath = f"{output_folder}/{name}_{cnt}.h264"  # resolve output path
+    os.replace(f"{temporary_folder}/vid_{cnt}.h264", outpath)  # move image to output folder
+    return outpath  # return output path so it can be used for size determination
+
+def capture(vid_path, delay):  #! Will need to be converted to mp4 using ffmpeg after we receive the data
+    camera.start_recording(vid_path)  #! ffmpeg -framerate 30 -i vid_10000.h264 -c copy vid_1000.mp4
+    sleep(delay)
+    camera.stop_recording()
 
 
 #* sense hat setup (enable magnetometer)
 sense = SenseHat()
 sense.set_imu_config(True, False, False)
 
-#* camera setup (set iamge resolution and zoom)
+#* camera setup (set iamge resolution and frequency)
 camera = PiCamera()
 camera.resolution = (1296, 972)  # max 4056*3040
-#TODO: fix image crop camera.zoom = (0.20, 0.155, 0.80, 0.845)
+camera.framerate = 30
 
 #* define thread functions
 def get_data(startTime, endTime, storage_limit, data_file):
     storage = 0  # data.csv file size counter
     counter = 0
     currentTime = datetime.now()  # get current time before loop start
-    while (currentTime < endTime and storage < storage_limit):
+    while (currentTime < endTime and storage < storage_limit):  # run until storage or time runs out
         if counter != 0:  # ignore first iteration
             storage -= os.path.getsize(data_file)  # subtract old data.csv file size from storage counter
 
@@ -107,7 +96,7 @@ def get_data(startTime, endTime, storage_limit, data_file):
     print(f"Data collection thread exited, storage used: {round(storage/(1024*1024), 2)}/{round(storage_limit/(1024*1024), 2)}MB, time elapsed: {datetime.now() - startTime}")
     print("#------------------------------------------------------------------------------------------------------#")
 
-def get_images(startTime, endTime, storage_limit, camera, counter, sequence, output_folder, temporary_folder, model_file, label_file):
+def get_images(startTime, endTime, storage_limit, camera, counter, output_folder, temporary_folder, model_file, label_file):
     storage = 0  # image storage counter (size added after image is moved to output folder or if classification fails and images are left in temp folder instead of being deleted)
     currentTime = datetime.now()  # get current time before loop start
 
@@ -121,48 +110,84 @@ def get_images(startTime, endTime, storage_limit, camera, counter, sequence, out
         print("Failed to initialize coral TPU")  # print error
         print("  Error: {}".format( e))  # print error details
 
-    while (currentTime < endTime and storage < storage_limit):
-        for k in range(sequence):  # run predefined number of times
-            capture(camera, counter)  # capture image with a given number
-            counter += 1  # add one to image counter
-            print(f"Took image: {counter}, used image storage: {storage}")
+    while (currentTime < endTime and storage < storage_limit):  # run until storage or time runs out
+        if counter % 10 == 0:  # save every 10th video regardless the classification
+            print(f"Started recording video: {counter}")  # debug
+            vid_path = f"{output_folder}/vid_{counter}.h264"  # set video path to output folder
+            capture(vid_path, 30)  # capture 30 second video
+            storage += os.path.getsize(vid_path)  # add video size to storage counter
+            print(f"Finished recording video {counter}, used storage: {storage}")  # debug
 
-        for d in range(sequence):  # run a couple times (save the only last image)
-            delete_counter = (counter - d) - 1  # resovle number of images selected to be deleted
+        else:
+            print(f"Started recording video: {counter}")  # debug
+            vid_path = f"{temporary_folder}/vid_{counter}.h264"  # set video path to temporary folder
+            capture(vid_path, 10)  # capture 10 second video
+            print(f"Finished recording video {counter}")  # debug
 
-            if d != (sequence-1):  # Classify all images except the last one
-                print(f"Classifying image {counter}")  # debug
-                try:  # attempt to calssify image  #! Will fail becuase there is no tflite model file available yet!
-                    image_file =  f'{temporary_folder}/img_{counter}.jpg'  # set image path
-                    image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)  # open and resize image to match TPU model settings
-                    common.set_input(interpreter, image)  # load model and image to TPU
+            try:  # attempt to create array of individual frames form video
+                video = cv2.VideoCapture(vid_path)  # read video from file
+                if not video.isOpened():  # check if the video was successfully opened
+                    print(f"Error: Could not open file {vid_path}")  # debug
+                    exit()
+
+                frames = []  # create array of frames
+                print("Processing video...")  # debug
+                while True:  # run until the end of the video
+                    success, frame = video.read()  # read frame from the video
+                    if not success:  # check if the video has ended
+                        break  # end loop
+
+                    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # comnvert to RGB
+                    frame = cv2.resize(frame, size)  # resize to match the input size of coral model
+                    frame = frame.astype('float32') / 255.0  # convert to float in range from 0.0 - 1.0
+                    frames.append(frame)  #! very memory intensive (likely to overflow)
+
+                video.release()  # close the video
+
+            except:
+                e = sys.exc_info()  # get error message
+                print(f"Failed to create frame array")  # print error
+                print("  Error: {}".format( e))  # print error details
+
+            try:  # attempt to calssify image  #! Will fail because there is no tflite model file available yet!
+                captured = False  # set default capture indicator to false
+                print(f"Calssifying frames from video: {counter}")  # debug
+                i = 0  # frame counter (variable from for loop below returns an unusable array)
+                for f in frames:  # run for every frame in the video
+
+                    print(f"Converting frame {i} to coral-friendly format")  # debug
+
+                    common.set_input(interpreter, frames[i])  # load model and image to TPU
                     interpreter.invoke()  # invoke interpreter
                     classes = classify.get_classes(interpreter, top_k=1)  # get classes
                     labels = read_label_file(label_file)  # get labels from label.txt
 
-                    #? Maybe save all images from sequence if at least one is classified as "lightning"
-
                     for c in classes:  # get score of all classes
                         if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
-                            print(f"Image {counter} classified as lightning, moving to output folder")  # debug
-                            move_counter = (counter - d) - 1  # resovle number of images selected to be dmoved
-                            move("lightning", move_counter)  # move images classified as lightning to output folder
-                            storage += os.path.getsize(f"{output_folder}/lightning_{move_counter}.jpg")  # add image size to used storage space
-                        else:
-                            print(f"Image {counter} classified as empty, deleting")  # debug
-                            os.remove(f"{temporary_folder}/img_{delete_counter}.jpg")  # remove unnecessary images
-                except:  # if something goes wrong, print error message, leave images in temp directory and add their size to storage counter
-                    e = sys.exc_info()  # get error message
-                    storage += os.path.getsize(f"{temporary_folder}/img_{delete_counter}.jpg")  # add image size to storage counter
-                    print(f"Failed to classify image {delete_counter} Leaving image in temp and adding it to storage counter")  # print error
-                    print("  Error: {}".format( e))  # print error details
+                            captured = True  # will be set true if at least one of the frames contains lightning
 
-            else:  # save first image
-                print(f"#saving image: {delete_counter}") # debug
-                move("img", delete_counter)  # move image to output folder
-                storage += os.path.getsize(f"{output_folder}/img_{delete_counter}.jpg")  # add image size to used storage space
+                    i += 1  # increment frame counter
+                    print(f"Captured: {captured}")  # debug
+
+                if captured:
+                    out_path = move("lightning", counter)  # move video to output directory and get its path
+                    storage += os.path.getsize(out_path)  # add image size to storage counter
+                    print(f"Video {counter} classified as lightning, moved to output directory, used storage: {storage}")  # debug
+
+                else:
+                    print(f"Video {counter} classified as empty, deleting")  # debug
+                    os.remove(vid_path)  # delete video
+
+            except:  # if something goes wrong, print error message, leave video in temp directory and add its size to storage counter
+                e = sys.exc_info()  # get error message
+                storage += os.path.getsize(vid_path)  # add image size to storage counter
+                print(f"Failed to classify frames from video {counter} Leaving video in temp and adding it to storage counter")  # print error
+                print("  Error: {}".format( e))  # print error details
+
+            frames = []  # reset frame array
 
         currentTime = datetime.now()  # update time
+        counter += 1  # increment counter
 
     # debug at the end of thread
     print("#------------------------------------------------------------------------------------------------------#")
@@ -174,7 +199,7 @@ create_csv(data_file)  # create data.csv file
 print("starting threads")  # debug
 # define two threads (one for image collection, and one for sensor reading)
 t1 = threading.Thread(target = get_data, args = [startTime, endTime, data_storage_limit, data_file])
-t2 = threading.Thread(target = get_images, args = [startTime, endTime, image_storage_limit , camera, 10000, 10, output_folder, temporary_folder, model_file, label_file])
+t2 = threading.Thread(target = get_images, args = [startTime, endTime, image_storage_limit , camera, 10000, output_folder, temporary_folder, model_file, label_file])
 
 #* start threads
 t1.start()
