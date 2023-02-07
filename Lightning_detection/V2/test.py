@@ -7,13 +7,11 @@ from datetime import datetime, timedelta
 from time import sleep
 from picamera import PiCamera
 from orbit import ISS
-from PIL import Image
 from pycoral.adapters import common
 from pycoral.adapters import classify
 from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.dataset import read_label_file
 import cv2
-import numpy as np
 import os
 import sys
 import threading
