@@ -53,7 +53,6 @@ def read_data(data_file, count):  # data collection
 
     with open(data_file, 'a', buffering=1) as f:  # open csv file
         csv.writer(f).writerow(data)  # write data row to scv file
-        #? print("Written data to .csv file")  # debug
 
 def move(name, cnt):
     outpath = f"{output_folder}/{name}_{cnt}.h264"  # resolve output path
@@ -78,7 +77,7 @@ camera.framerate = 30
 #* define thread functions
 def get_data(startTime, endTime, storage_limit, data_file):
     storage = 0  # data.csv file size counter
-    counter = 0
+    counter = 0  # readings counter
     currentTime = datetime.now()  # get current time before loop start
     while (currentTime < endTime and storage < storage_limit):  # run until storage or time runs out
         if counter != 0:  # ignore first iteration
@@ -137,11 +136,13 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
                     if not success:  # check if the video has ended
                         break  # end loop
 
+                    #* Convert frame to coral-friendly format
                     print("converting frame to coral-usable format")
                     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # comnvert to RGB
                     frame = cv2.resize(frame, size)  # resize to match the input size of coral model
                     frame = frame.astype('float32') / 255.0  # convert to float in range from 0.0 - 1.0
 
+                    #* Classify frame
                     common.set_input(interpreter, frame)  # load model and image to TPU
                     interpreter.invoke()  # invoke interpreter
                     classes = classify.get_classes(interpreter, top_k=1)  # get classes
@@ -155,12 +156,12 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
 
                 video.release()  # close the video
 
-                if captured:
+                if captured:  # move video to output directory if at least one of frames classified as lightning
                     out_path = move("lightning", counter)  # move video to output directory and get its path
                     storage += os.path.getsize(out_path)  # add image size to storage counter
                     print(f"Video {counter} classified as lightning, moved to output directory, used storage: {storage}")  # debug
 
-                else:
+                else:  # delete video if classified as empty
                     print(f"Video {counter} classified as empty, deleting")  # debug
                     os.remove(vid_path)  # delete video
 
