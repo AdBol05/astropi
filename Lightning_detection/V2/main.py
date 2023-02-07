@@ -53,7 +53,6 @@ def read_data(data_file, count):  # data collection
 
     with open(data_file, 'a', buffering=1) as f:  # open csv file
         csv.writer(f).writerow(data)  # write data row to scv file
-        #? print("Written data to .csv file")  # debug
 
 def move(name, cnt):
     outpath = f"{output_folder}/{name}_{cnt}.h264"  # resolve output path
@@ -78,7 +77,7 @@ camera.framerate = 30
 #* define thread functions
 def get_data(startTime, endTime, storage_limit, data_file):
     storage = 0  # data.csv file size counter
-    counter = 0
+    counter = 0  # readings counter
     currentTime = datetime.now()  # get current time before loop start
     while (currentTime < endTime and storage < storage_limit):  # run until storage or time runs out
         if counter != 0:  # ignore first iteration
@@ -124,41 +123,27 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
             capture(vid_path, 10)  # capture 10 second video
             print(f"Finished recording video {counter}")  # debug
 
-            try:  # attempt to create array of individual frames form video
-                frames = []  # create array of frames
-                
+            try:  # attempt to create array of individual frames form video and classify them
                 video = cv2.VideoCapture(vid_path)  # read video from file
                 if not video.isOpened():  # check if the video was successfully opened
                     print(f"Error: Could not open file {vid_path}")  # debug
                     exit()
 
+                captured = False  # set default capture indicator to false
                 print("Processing video...")  # debug
                 while True:  # run until the end of the video
                     success, frame = video.read()  # read frame from the video
                     if not success:  # check if the video has ended
                         break  # end loop
 
+                    #* Convert frame to coral-friendly format
+                    print("converting frame to coral-usable format")
                     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # comnvert to RGB
                     frame = cv2.resize(frame, size)  # resize to match the input size of coral model
                     frame = frame.astype('float32') / 255.0  # convert to float in range from 0.0 - 1.0
-                    frames.append(frame)  #! very memory intensive (likely to overflow)
 
-                video.release()  # close the video
-
-            except:
-                e = sys.exc_info()  # get error message
-                print(f"Failed to create frame array")  # print error
-                print("  Error: {}".format( e))  # print error details
-
-            try:  # attempt to calssify image  #! Will fail because there is no tflite model file available yet!
-                captured = False  # set default capture indicator to false
-                print(f"Calssifying frames from video: {counter}")  # debug
-                i = 0  # frame counter (variable from for loop below returns an unusable array)
-                for f in frames:  # run for every frame in the video
-
-                    print(f"Converting frame {i} to coral-friendly format")  # debug
-
-                    common.set_input(interpreter, frames[i])  # load model and image to TPU
+                    #* Classify frame
+                    common.set_input(interpreter, frame)  # load model and image to TPU
                     interpreter.invoke()  # invoke interpreter
                     classes = classify.get_classes(interpreter, top_k=1)  # get classes
                     labels = read_label_file(label_file)  # get labels from label.txt
@@ -167,23 +152,22 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
                         if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
                             captured = True  # will be set true if at least one of the frames contains lightning
 
-                    i += 1  # increment frame counter
-                    frames.remove(i)  # delete frame from array after classification to save memory
                     print(f"Captured: {captured}")  # debug
 
-                if captured:
+                video.release()  # close the video
+
+                if captured:  # move video to output directory if at least one of frames classified as lightning
                     out_path = move("lightning", counter)  # move video to output directory and get its path
                     storage += os.path.getsize(out_path)  # add image size to storage counter
                     print(f"Video {counter} classified as lightning, moved to output directory, used storage: {storage}")  # debug
 
-                else:
+                else:  # delete video if classified as empty
                     print(f"Video {counter} classified as empty, deleting")  # debug
                     os.remove(vid_path)  # delete video
 
-            except:  # if something goes wrong, print error message, leave video in temp directory and add its size to storage counter
+            except:
                 e = sys.exc_info()  # get error message
-                storage += os.path.getsize(vid_path)  # add image size to storage counter
-                print(f"Failed to classify frames from video {counter} Leaving video in temp and adding it to storage counter")  # print error
+                print(f"Failed to create frame array")  # print error
                 print("  Error: {}".format( e))  # print error details
 
         currentTime = datetime.now()  # update time
