@@ -168,7 +168,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
                             captured = True  # will be set true if at least one of the frames contains lightning
 
                     i += 1  # increment frame counter
-                    frame[i] = None
+                    frame[i] = None  # delete frame from array after classification to save memory
                     print(f"Captured: {captured}")  # debug
 
                 if captured:
