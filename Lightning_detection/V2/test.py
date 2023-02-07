@@ -82,7 +82,7 @@ def get_data(startTime, endTime, storage_limit, data_file):
     storage = 0  # data.csv file size counter
     counter = 0
     currentTime = datetime.now()  # get current time before loop start
-    while (currentTime < endTime and storage < storage_limit):
+    while (currentTime < endTime and storage < storage_limit):  # run until storage or time runs out
         if counter != 0:  # ignore first iteration
             storage -= os.path.getsize(data_file)  # subtract old data.csv file size from storage counter
 
@@ -112,7 +112,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
         print("Failed to initialize coral TPU")  # print error
         print("  Error: {}".format( e))  # print error details
 
-    while (currentTime < endTime and storage < storage_limit):
+    while (currentTime < endTime and storage < storage_limit):  # run until storage or time runs out
         if counter % 10 == 0:  # save every 10th video regardless the classification
             print(f"Started recording video: {counter}")  # debug
             vid_path = f"{output_folder}/vid_{counter}.h264"  # set video path to output folder
