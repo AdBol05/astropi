@@ -61,7 +61,7 @@ def move(name, cnt):
     return outpath  # return output path so it can be used for size determination
 
 def capture(vid_path, delay):  #! Will need to be converted to mp4 using ffmpeg after we receive the data
-    camera.start_recording(vid_path)  #! ffmpeg -framerate 30 -i vid_10000.h264 -c copy vid_1000.mp4 
+    camera.start_recording(vid_path)  #! ffmpeg -framerate 30 -i vid_10000.h264 -c copy vid_1000.mp4
     sleep(delay)
     camera.stop_recording()
 
@@ -141,7 +141,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
                     frame = cv2.resize(frame, size)  # resize to match the input size of coral model
                     frame = frame.astype('float32') / 255.0  # convert to float in range from 0.0 - 1.0
                     frames.append(frame)  #! very memory intensive (likely to overflow)
-            
+
                 video.release()  # close the video
 
             except:
@@ -154,7 +154,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
                 print(f"Calssifying frames from video: {counter}")  # debug
                 i = 0  # frame counter (variable from for loop below returns an unusable array)
                 for f in frames:  # run for every frame in the video
-            
+
                     print(f"Converting frame {i} to coral-friendly format")  # debug
 
                     common.set_input(interpreter, frames[i])  # load model and image to TPU
@@ -165,7 +165,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
                     for c in classes:  # get score of all classes
                         if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
                             captured = True  # will be set true if at least one of the frames contains lightning
-                
+
                     i += 1  # increment frame counter
                     print(f"Captured: {captured}")  # debug
 
@@ -173,7 +173,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
                     out_path = move("lightning", counter)  # move video to output directory and get its path
                     storage += os.path.getsize(out_path)  # add image size to storage counter
                     print(f"Video {counter} classified as lightning, moved to output directory, used storage: {storage}")  # debug
-                    
+
                 else:
                     print(f"Video {counter} classified as empty, deleting")  # debug
                     os.remove(vid_path)  # delete video
@@ -185,7 +185,7 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
                 print("  Error: {}".format( e))  # print error details
 
             frames = []  # reset frame array
-        
+
         currentTime = datetime.now()  # update time
         counter += 1  # increment counter
 
