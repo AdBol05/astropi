@@ -125,12 +125,13 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
             print(f"Finished recording video {counter}")  # debug
 
             try:  # attempt to create array of individual frames form video
+                frames = []  # create array of frames
+                
                 video = cv2.VideoCapture(vid_path)  # read video from file
                 if not video.isOpened():  # check if the video was successfully opened
                     print(f"Error: Could not open file {vid_path}")  # debug
                     exit()
 
-                frames = []  # create array of frames
                 print("Processing video...")  # debug
                 while True:  # run until the end of the video
                     success, frame = video.read()  # read frame from the video
@@ -183,8 +184,6 @@ def get_images(startTime, endTime, storage_limit, camera, counter, output_folder
                 storage += os.path.getsize(vid_path)  # add image size to storage counter
                 print(f"Failed to classify frames from video {counter} Leaving video in temp and adding it to storage counter")  # print error
                 print("  Error: {}".format( e))  # print error details
-
-            frames = []  # reset frame array
 
         currentTime = datetime.now()  # update time
         counter += 1  # increment counter
