@@ -153,7 +153,7 @@ def get_images(startTime, endTime, storage_limit, counter, output_folder, tempor
                         if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
                             captured = True  # will be set true if at least one of the frames contains lightning
                             print("Lightning detected")  # debug
-                            exit()  # if at least one of the frames contains lightning its not necessary to classify other frames
+                            pass  # if at least one of the frames contains lightning its not necessary to classify other frames
                     #?print(f"Captured: {captured}")  # debug
 
                 video.release()  # close the video
@@ -169,7 +169,7 @@ def get_images(startTime, endTime, storage_limit, counter, output_folder, tempor
 
             except:
                 e = sys.exc_info()  # get error message
-                print(f"Failed to create frame array")  # print error
+                print(f"Failed Classify video {counter}")  # print error
                 print("  Error: {}".format( e))  # print error details
 
         currentTime = datetime.now()  # update time
