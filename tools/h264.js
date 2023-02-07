@@ -7,7 +7,7 @@ if (!fs.existsSync(args[0]) || args[0] === undefined) { console.log('\x1b[31m%s\
 let files = fs.readdirSync(args[0]);
 files = files.filter(file => file.endsWith('.h264'));
 
-console.log("Processing " + files.length + " files from " + args[0] + "\Please wait...");
+console.log("Processing " + files.length + " files from " + args[0] + "\nPlease wait...");
 console.log(files);
 
 for (i in files){
