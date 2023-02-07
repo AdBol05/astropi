@@ -95,7 +95,7 @@ def get_data(startTime, endTime, storage_limit, data_file):
     print(f"Data collection thread exited, storage used: {round(storage/(1024*1024), 2)}/{round(storage_limit/(1024*1024), 2)}MB, time elapsed: {datetime.now() - startTime}")
     print("#------------------------------------------------------------------------------------------------------#")
 
-def get_images(startTime, endTime, storage_limit, camera, counter, output_folder, temporary_folder, model_file, label_file):
+def get_images(startTime, endTime, storage_limit, counter, output_folder, temporary_folder, model_file, label_file):
     storage = 0  # image storage counter (size added after image is moved to output folder or if classification fails and images are left in temp folder instead of being deleted)
     currentTime = datetime.now()  # get current time before loop start
 
@@ -184,7 +184,7 @@ create_csv(data_file)  # create data.csv file
 print("starting threads")  # debug
 # define two threads (one for image collection, and one for sensor reading)
 t1 = threading.Thread(target = get_data, args = [startTime, endTime, data_storage_limit, data_file])
-t2 = threading.Thread(target = get_images, args = [startTime, endTime, image_storage_limit , camera, 10000, output_folder, temporary_folder, model_file, label_file])
+t2 = threading.Thread(target = get_images, args = [startTime, endTime, image_storage_limit, 10000, output_folder, temporary_folder, model_file, label_file])
 
 #* start threads
 t1.start()
