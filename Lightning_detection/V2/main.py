@@ -150,13 +150,13 @@ def get_images(startTime, endTime, storage_limit, counter, output_folder, tempor
                     labels = read_label_file(label_file)  # get labels from label.txt
 
                     for c in classes:  # get score of all classes
+                        print(c)
                         if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
                             captured = True  # will be set true if at least one of the frames contains lightning
                             print("Lightning detected")  # debug
                     
                     if captured:  # if at least one of the frames contains lightning its not necessary to classify other frames
                         break
-                    #?print(f"Captured: {captured}")  # debug
 
                 video.release()  # close the video
 
