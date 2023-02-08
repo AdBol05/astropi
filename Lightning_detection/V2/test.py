@@ -14,20 +14,20 @@ dark_image = base_folder/'empty.jpg'
 lightning_image = base_folder/'lightning.jpg'
 
 
-def classify(model_file, label_file, input):
+#?def classify(model_file, label_file, input):
 
-    interpreter = make_interpreter(f"{model_file}")  # create an interpreter instance
-    interpreter.allocate_tensors()  # set up TPU
-    size = common.input_size(interpreter)  # get preffered input image size
-    labels = read_label_file(label_file)  # get labels from label.txt
+interpreter = make_interpreter(f"{model_file}")  # create an interpreter instance
+interpreter.allocate_tensors()  # set up TPU
+size = common.input_size(interpreter)  # get preffered input image size
+labels = read_label_file(label_file)  # get labels from label.txt
 
-    image = Image.open(input).convert('RGB').resize(size, Image.ANTIALIAS)  # open image
-    common.set_input(interpreter, image)  # load model and image to TPU
-    interpreter.invoke()  # invoke interpreter
-    classes = classify.get_classes(interpreter, top_k=1)  # get classes
+image = Image.open(dark_image).convert('RGB').resize(size, Image.ANTIALIAS)  # open image
+common.set_input(interpreter, image)  # load model and image to TPU
+interpreter.invoke()  # invoke interpreter
+classes = classify.get_classes(interpreter, top_k=1)  # get classes
 
-    for c in classes:  # get score of all classes
-        print(f'{labels.get(c.id, c.id)} | {c.score:.5f}')
+for c in classes:  # get score of all classes
+    print(f'{labels.get(c.id, c.id)} | {c.score:.5f}')
 
-classify(model_file, label_file, dark_image)
-classify(model_file, label_file, lightning_image)
+#?classify(model_file, label_file, dark_image)
+#?classify(model_file, label_file, lightning_image)
