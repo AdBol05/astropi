@@ -17,7 +17,7 @@ lightning_image = base_folder/'lightning.jpg'
 #?def classify(model_file, label_file, input):
 
 
-def classify(model_file, label_file, input_file):
+def coral(model_file, label_file, input_file):
     interpreter = make_interpreter(f"{model_file}")  # create an interpreter instance
     interpreter.allocate_tensors()  # set up TPU
     size = common.input_size(interpreter)  # get preffered input image size
@@ -31,5 +31,5 @@ def classify(model_file, label_file, input_file):
     for c in classes:  # get score of all classes
         print(f'{labels.get(c.id, c.id)} | {c.score:.5f}')
 
-classify(model_file, label_file, dark_image)
-classify(model_file, label_file, lightning_image)
+coral(model_file, label_file, dark_image)
+coral(model_file, label_file, lightning_image)
