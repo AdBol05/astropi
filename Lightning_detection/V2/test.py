@@ -44,7 +44,7 @@ labels = read_label_file(label_file)  # get labels from label.txt
 #?print("converting frame to coral-usable format")  # debug
 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # comnvert to RGB
 frame = cv2.resize(frame, size)  # resize to match the input size of coral model
-frame = frame.astype('float32') / 255.0  # convert to float in range from 0.0 - 1.0
+#?frame = frame.astype('float32') / 255.0  # convert to float in range from 0.0 - 1.0
 
 common.set_input(interpreter, frame)  # load model and image to TPU
 interpreter.invoke()  # invoke interpreter
