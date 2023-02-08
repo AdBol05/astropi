@@ -13,7 +13,7 @@ model_file = base_folder/'lightning.tflite' # set model directory
 label_file = base_folder/'labels.txt' # set label file directory
 dark_image = base_folder/'empty.jpg'
 lightning_image = base_folder/'lightning.jpg'
-vid_path = base_folder/'lightning.h264'
+input_file = base_folder/'lightning.h264'
 
 """
 interpreter = make_interpreter(f"{model_file}")  # create an interpreter instance
