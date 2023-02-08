@@ -88,7 +88,7 @@ def get_data(startTime, endTime, storage_limit, data_file):
         currentTime = datetime.now()  # update time
         counter += 1  # increase counter by one
         print(f"Read data from sensors, used data storage: {storage}")  # debug
-        sleep(0.03)  # wait 0.03 second
+        sleep(0.03)  # wait 0.03 second (approximately 30Hz -> same as camera)
 
     # debug at the end of thread
     print("#------------------------------------------------------------------------------------------------------#")
