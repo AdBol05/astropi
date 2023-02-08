@@ -8,9 +8,6 @@ from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.dataset import read_label_file
 import cv2
 
-
-
-
 base_folder = Path(__file__).parent.resolve()  # determine working directory
 model_file = base_folder/'lightning.tflite' # set model directory
 label_file = base_folder/'labels.txt' # set label file directory
@@ -37,17 +34,21 @@ for c in classes:  # get score of all classes
 #?coral(model_file, label_file, lightning_image)
 """
 
-video = cv2.VideoCapture(vid_path)  # read video from file
-if not video.isOpened():  # check if the video was successfully opened
-    exit()
+video1 = cv2.VideoCapture(input_file)
+    # Check if video was opened successfully
+if not video1.isOpened():
+    raise Exception("Could not open video")
 
-captured = False  # set default capture indicator to false
-print("Processing video...")  # debug
-while True:  # run until the end of the video
-    success, frame = video.read()  # read frame from the video
-    if not success:  # check if the video has ended
-        break  # end loop
+# Read the video frame-by-frame
+i = 10000
+while video1.isOpened():
+    success, frame = video1.read()
+    if not success:
+        break
 
+    i += 1
+    # Release the video
+    video1.release()
     interpreter = make_interpreter(f"{model_file}")  # create an interpreter instance
     interpreter.allocate_tensors()  # set up TPU
     size = common.input_size(interpreter)  # get preffered input image size
@@ -73,4 +74,4 @@ while True:  # run until the end of the video
             print("Lightning detected")  # debug
                     
 
-video.release()  # close the video
+video1.release()  # close the video
