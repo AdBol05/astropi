@@ -60,7 +60,7 @@ video1.release()
 print("================================================")
 
 image_file = './data/lightning/frame_10000.jpg'  # set image directory
-image = Image.fromarray(frame, 'RGB').convert('RGB').resize(size, Image.ANTIALIAS)  # open image
+image = Image.fromarray(image_file).convert('RGB').resize(size, Image.ANTIALIAS)  # open image
 
 common.set_input(interpreter, image)  # load model and image to TPU
 interpreter.invoke()  # invoke interpreter
