@@ -39,7 +39,6 @@ for c in classes:  # get score of all classes
 
 video = cv2.VideoCapture(vid_path)  # read video from file
 if not video.isOpened():  # check if the video was successfully opened
-    print(f"Error: Could not open file {vid_path}")  # debug
     exit()
 
 captured = False  # set default capture indicator to false
