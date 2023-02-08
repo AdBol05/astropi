@@ -27,7 +27,7 @@ base_folder = Path(__file__).parent.resolve()  # determine working directory
 output_folder = base_folder/'output'  # set output folder path
 temporary_folder = base_folder/'temp'  # set tempoprary folder path
 data_file = output_folder/'data.csv'  # set data.csv path
-model_file = base_folder/'particle.tflite' # set model directory #! particle.tflite is just for testing
+model_file = base_folder/'lightning.tflite' # set model directory #! particle.tflite is just for testing
 label_file = base_folder/'labels.txt' # set label file directory
 
 #* create output and temporary directories if they don't exist
