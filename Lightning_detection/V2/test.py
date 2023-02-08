@@ -22,8 +22,8 @@ size = common.input_size(interpreter)  # get preffered input image size
 labels = read_label_file(label_file)  # get labels from label.txt
 classes = classify.get_classes(interpreter, top_k=1)  # get classes
 
-def classify(interpreter, size, labels, classes, input):
-    image = Image.open(input).convert('RGB').resize(size, Image.ANTIALIAS)  # open image
+def classify(interpreter, size, labels, classes, input_file):
+    image = Image.open(input_file).convert('RGB').resize(size, Image.ANTIALIAS)  # open image
     common.set_input(interpreter, image)  # load model and image to TPU
     interpreter.invoke()  # invoke interpreter
 
