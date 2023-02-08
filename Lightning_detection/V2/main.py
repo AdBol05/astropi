@@ -144,10 +144,11 @@ def get_images(startTime, endTime, storage_limit, counter, output_folder, tempor
 
                     #* Classify frame
                     #?print("classifing frame")  # debug
+                    labels = read_label_file(label_file)  # get labels from label.txt
                     common.set_input(interpreter, frame)  # load model and image to TPU
                     interpreter.invoke()  # invoke interpreter
+                    
                     classes = classify.get_classes(interpreter, top_k=1)  # get classes
-                    labels = read_label_file(label_file)  # get labels from label.txt
 
                     for c in classes:  # get score of all classes
                         if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
