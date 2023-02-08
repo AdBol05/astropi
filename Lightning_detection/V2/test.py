@@ -9,6 +9,8 @@ dark_file = "./dark.h264"
 lightning_file = "./lightning.h264"
 dark_folder = "./dark"
 lightning_folder = "./lightning"
+model_file = './lightning.tflite' # set model directory
+label_file = './labels.txt' # set label file directory
 
 #* create output and temporary directories if they don't exist
 if not os.path.exists(lightning_folder):
@@ -33,7 +35,7 @@ while video1.isOpened():
     success, frame = video1.read()
     if not success:
         break
-    print(frame)
+    #print(frame)
     #cv2.imwrite(f"{output_folder}/frame_{i}.jpg", frame)
 
     interpreter = make_interpreter(f"{model_file}")  # create an interpreter instance
