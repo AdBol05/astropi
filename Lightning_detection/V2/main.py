@@ -15,6 +15,7 @@ import cv2
 import os
 import sys
 import threading
+from PIL import Image
 
 #* define variables
 startTime = datetime.now()  # get program start time
@@ -137,9 +138,11 @@ def get_images(startTime, endTime, storage_limit, counter, output_folder, tempor
                     frame = cv2.resize(frame, size)  # resize to match the input size of coral model
                     frame = frame.astype('float32') / 255.0  # convert to float in range from 0.0 - 1.0
 
+                    image = Image.fromarray(frame, 'RGB').convert('RGB').resize(size, Image.ANTIALIAS)
+
                     #* Classify frame
                     #?print("classifing frame")  # debug
-                    common.set_input(interpreter, frame)  # load model and image to TPU
+                    common.set_input(interpreter, image)  # load model and image to TPU
                     interpreter.invoke()  # invoke interpreter
                     
                     classes = classify.get_classes(interpreter, top_k=1)  # get classes
