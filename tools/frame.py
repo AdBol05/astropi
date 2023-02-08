@@ -32,4 +32,4 @@ def parse(input_file, output_folder):
     video1.release()
 
 parse(dark_file, dark_folder)
-parse(lightning_file, lightning_folder)
+parse(lightning_file, lightning_folder)a
