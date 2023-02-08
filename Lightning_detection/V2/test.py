@@ -54,5 +54,5 @@ print(frame)
 print("================================================")
 
 image_file = './data/lightning/frame_10000.jpg'  # set image directory
-image = Image.open(image_file).convert('RGB').resize(size, Image.ANTIALIAS)  # open image
+image = Image.fromarray(frame, 'RGB').convert('RGB').resize(size, Image.ANTIALIAS)  # open image
 print(image)
