@@ -20,8 +20,8 @@ from PIL import Image
 #* define variables
 startTime = datetime.now()  # get program start time
 endTime = startTime + timedelta(minutes=175)  # run program for 175 minutes (5min headroom from the 3hr limit)
-data_storage_limit = 2000000   # Max data.csv file size is 3MB
-image_storage_limit = 2990000000  # Max combined image size is 2.99GB
+data_storage_limit = 12000000   # Max data.csv file size is 3MB
+image_storage_limit = 2980000000  # Max combined image size is 2.99GB
 
 #* set up paths (resolve all paths and create file structure)
 base_folder = Path(__file__).parent.resolve()  # determine working directory
@@ -89,7 +89,7 @@ def get_data(startTime, endTime, storage_limit, data_file):
         currentTime = datetime.now()  # update time
         counter += 1  # increase counter by one
         print(f"Read data from sensors, used data storage: {storage}")  # debug
-        sleep(1)  # wait one second
+        sleep(0.3)  # wait one second
 
     # debug at the end of thread
     print("#------------------------------------------------------------------------------------------------------#")
