@@ -15,7 +15,6 @@ import cv2
 import os
 import sys
 import threading
-from PIL import Image
 
 #* define variables
 startTime = datetime.now()  # get program start time
