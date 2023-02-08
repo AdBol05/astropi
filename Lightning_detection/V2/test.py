@@ -29,7 +29,8 @@ while video1.isOpened():
     success, frame = video1.read()
     if not success:
         break
-    cv2.imwrite(f"{output_folder}/frame_{i}.jpg", frame)
+    print(frame)
+    #cv2.imwrite(f"{output_folder}/frame_{i}.jpg", frame)
     i += 1
     # Release the video
 video1.release()
