@@ -127,16 +127,16 @@ def get_images(startTime, endTime, storage_limit, counter, output_folder, tempor
                     if not success:  # check if the video has ended
                         break  # end loop
 
+                    interpreter = make_interpreter(f"{model_file}")  # create an interpreter instance
+                    interpreter.allocate_tensors()  # set up TPU
+                    size = common.input_size(interpreter)  # get preffered input image size
+                    labels = read_label_file(label_file)  # get labels from label.txt
+
                     #* Convert frame to coral-friendly format
                     #?print("converting frame to coral-usable format")  # debug
                     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # comnvert to RGB
                     #?frame = frame.astype('float32') / 255.0  # convert to float in range from 0.0 - 1.0
                     image = Image.fromarray(frame).resize(size, Image.ANTIALIAS)
-
-                    interpreter = make_interpreter(f"{model_file}")  # create an interpreter instance
-                    interpreter.allocate_tensors()  # set up TPU
-                    size = common.input_size(interpreter)  # get preffered input image size
-                    labels = read_label_file(label_file)  # get labels from label.txt
 
                     #* Classify frame
                     #?print("classifing frame")  # debug
