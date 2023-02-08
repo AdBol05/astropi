@@ -129,6 +129,7 @@ def get_images(startTime, endTime, storage_limit, counter, output_folder, tempor
                     interpreter = make_interpreter(f"{model_file}")  # create an interpreter instance
                     interpreter.allocate_tensors()  # set up TPU
                     size = common.input_size(interpreter)  # get preffered input image size
+                    labels = read_label_file(label_file)  # get labels from label.txt
 
                     #* Convert frame to coral-friendly format
                     #?print("converting frame to coral-usable format")  # debug
@@ -138,7 +139,6 @@ def get_images(startTime, endTime, storage_limit, counter, output_folder, tempor
 
                     #* Classify frame
                     #?print("classifing frame")  # debug
-                    labels = read_label_file(label_file)  # get labels from label.txt
                     common.set_input(interpreter, frame)  # load model and image to TPU
                     interpreter.invoke()  # invoke interpreter
                     
