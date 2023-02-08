@@ -46,13 +46,25 @@ frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # comnvert to RGB
 frame = cv2.resize(frame, size)  # resize to match the input size of coral model
 frame = frame.astype('float32') / 255.0  # convert to float in range from 0.0 - 1.0
 
+common.set_input(interpreter, frame)  # load model and image to TPU
+interpreter.invoke()  # invoke interpreter
+                    
+classes = classify.get_classes(interpreter, top_k=1)  # get classes
+
+for c in classes:  # get score of all classes
+    print(f'{labels.get(c.id, c.id)} | {c.score:.5f}')
 
 # Release the video
 video1.release()
-print(frame)
 
 print("================================================")
 
 image_file = './data/lightning/frame_10000.jpg'  # set image directory
 image = Image.fromarray(frame, 'RGB').convert('RGB').resize(size, Image.ANTIALIAS)  # open image
-print(image)
+
+common.set_input(interpreter, image)  # load model and image to TPU
+interpreter.invoke()  # invoke interpreter
+                    
+classes = classify.get_classes(interpreter, top_k=1)  # get classes
+for c in classes:  # get score of all classes
+    print(f'{labels.get(c.id, c.id)} | {c.score:.5f}')
