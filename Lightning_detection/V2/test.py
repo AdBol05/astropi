@@ -18,7 +18,7 @@ if not os.path.exists(dark_folder):
 print("Processing please wait...")
 
 #* parse videos to extract frames
-video1 = cv2.VideoCapture(input_file)
+video1 = cv2.VideoCapture(lightning_file)
     # Check if video was opened successfully
 if not video1.isOpened():
     raise Exception("Could not open video")
