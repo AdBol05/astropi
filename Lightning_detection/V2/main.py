@@ -134,11 +134,9 @@ def get_images(startTime, endTime, storage_limit, counter, output_folder, tempor
 
                     #* Convert frame to coral-friendly format
                     #?print("converting frame to coral-usable format")  # debug
-                    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # comnvert to RGB
-                    frame = cv2.resize(frame, size)  # resize to match the input size of coral model
                     frame = frame.astype('float32') / 255.0  # convert to float in range from 0.0 - 1.0
 
-                    image = Image.fromarray(frame, 'RGB').convert('RGB').resize(size, Image.ANTIALIAS)
+                    image = Image.fromarray(frame, 'BGR').convert('RGB').resize(size, Image.ANTIALIAS)
 
                     #* Classify frame
                     #?print("classifing frame")  # debug
