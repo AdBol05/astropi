@@ -133,14 +133,12 @@ def get_images(startTime, endTime, storage_limit, counter, output_folder, tempor
                     labels = read_label_file(label_file)  # get labels from label.txt
 
                     #* Convert frame to coral-friendly format
-                    #?print("converting frame to coral-usable format")  # debug
                     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # comnvert to RGB
-                    #?frame = frame.astype('float32') / 255.0  # convert to float in range from 0.0 - 1.0
-                    image = Image.fromarray(frame).resize(size, Image.ANTIALIAS)
+                    frame = cv2.resize(frame, size)  # resize to match the input size of coral model
 
                     #* Classify frame
                     #?print("classifing frame")  # debug
-                    common.set_input(interpreter, image)  # load model and image to TPU
+                    common.set_input(interpreter, frame)  # load model and image to TPU
                     interpreter.invoke()  # invoke interpreter
                     
                     classes = classify.get_classes(interpreter, top_k=1)  # get classes
