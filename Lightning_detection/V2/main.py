@@ -131,7 +131,6 @@ def get_images(startTime, endTime, storage_limit, counter, output_folder, tempor
                     print(f"Error: Could not open file {vid_path}")  # debug
                     exit()
 
-
                 captured = False  # set default capture indicator to false
                 print("Processing video...")  # debug
                 while True:  # run until the end of the video
