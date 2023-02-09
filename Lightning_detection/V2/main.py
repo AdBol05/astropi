@@ -104,7 +104,7 @@ def get_images(startTime, endTime, storage_limit, counter, output_folder, tempor
         interpreter = make_interpreter(f"{model_file}")  # create an interpreter instance
         interpreter.allocate_tensors()  # set up TPU
         size = common.input_size(interpreter)  # get preffered input image size
-        labels = read_label_file(label_file)  # get labels from label.txt
+        labels = read_label_file(label_file)  # get labels from labels.txt
 
     except:
         e = sys.exc_info()  # get error message
