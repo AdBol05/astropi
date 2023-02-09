@@ -99,6 +99,18 @@ def get_images(startTime, endTime, storage_limit, counter, output_folder, tempor
     storage = 0  # image storage counter (size added after image is moved to output folder or if classification fails and images are left in temp folder instead of being deleted)
     currentTime = datetime.now()  # get current time before loop start
 
+    try:  # attempt to to initialize coral TPU
+        print("Initializing coral TPU")  # debug
+        interpreter = make_interpreter(f"{model_file}")  # create an interpreter instance
+        interpreter.allocate_tensors()  # set up TPU
+        size = common.input_size(interpreter)  # get preffered input image size
+        labels = read_label_file(label_file)  # get labels from label.txt
+
+    except:
+        e = sys.exc_info()  # get error message
+        print(f"Failed initialize coral TPU")  # print error
+        print("  Error: {}".format( e))  # print error details
+
     while (currentTime < endTime and storage < storage_limit):  # run until storage or time runs out
         if counter % 10 == 0:  # save every 10th video regardless the classification
             print(f"Started recording video: {counter}")  # debug
@@ -119,10 +131,6 @@ def get_images(startTime, endTime, storage_limit, counter, output_folder, tempor
                     print(f"Error: Could not open file {vid_path}")  # debug
                     exit()
 
-                interpreter = make_interpreter(f"{model_file}")  # create an interpreter instance
-                interpreter.allocate_tensors()  # set up TPU
-                size = common.input_size(interpreter)  # get preffered input image size
-                labels = read_label_file(label_file)  # get labels from label.txt
 
                 captured = False  # set default capture indicator to false
                 print("Processing video...")  # debug
