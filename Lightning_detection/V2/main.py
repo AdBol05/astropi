@@ -154,7 +154,7 @@ def get_images(startTime, endTime, storage_limit, counter, output_folder, tempor
                         if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
                             captured = True  # will be set true if at least one of the frames contains lightning
                             print("Lightning detected")  # debug
-                    
+
                     if captured:  # if at least one of the frames contains lightning its not necessary to classify other frames
                         break  # end loop
 
