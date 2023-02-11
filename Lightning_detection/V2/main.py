@@ -32,12 +32,12 @@ label_file = base_folder/'labels.txt' # set label file directory
 
 #* create output and temporary directories if they don't exist
 if not os.path.exists(temporary_folder):
-    print(f"Creating temporary directory in: {temporary_folder}")
+    print(f"Creating temporary directory in: {temporary_folder}")  # debug
     os.mkdir(temporary_folder)
 
 if not os.path.exists(output_folder):
     os.mkdir(output_folder)
-    print(f"Creating output directory in: {output_folder}")
+    print(f"Creating output directory in: {output_folder}")  # debug
 
 #* define functions
 def create_csv(data_file):  # creating csv file
@@ -143,17 +143,15 @@ def get_images(startTime, endTime, storage_limit, counter, output_folder, tempor
                     frame = cv2.resize(frame, size)  # resize to match the input size of coral model
 
                     #* Classify frame
-                    #?print("classifing frame")  # debug
                     common.set_input(interpreter, frame)  # load interpreter and image to TPU
                     interpreter.invoke()  # invoke interpreter
-                    
+
                     classes = classify.get_classes(interpreter, top_k=1)  # get classes
 
                     for c in classes:  # get score of all classes
-                        print(f'{labels.get(c.id, c.id)} | {c.score:.5f}')
+                        print(f'{labels.get(c.id, c.id)} | {c.score:.5f}')  # debug
                         if(f'{labels.get(c.id, c.i)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
                             captured = True  # will be set true if at least one of the frames contains lightning
-                            print("Lightning detected")  # debug
 
                     if captured:  # if at least one of the frames contains lightning its not necessary to classify other frames
                         break  # end loop
