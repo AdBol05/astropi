@@ -29,7 +29,7 @@ script_dir = Path(__file__).parent.resolve()
 model_path = script_dir/'mobilenet_v1_1.0_224_l2norm_quant_edgetpu.tflite'
 out_model_path = script_dir/'lightning2.tflite'
 #  specify where the labels and labelled training data are
-data_dir = /'home'/'pi'/'Documents'/'astropi'/'secret'/'train'
+data_dir = '/home/pi/Documents/astropi/secret/train'
 labels_path = script_dir/'labels.txt'
 
 '''
