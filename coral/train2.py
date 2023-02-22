@@ -67,7 +67,7 @@ for class_id, class_name in labels.items():
     print(f"Class {class_id}: {class_name}")
     # for each training image for the current class
     for image_path in contents(data_dir/class_name):
-        image = Image.open(image_path).convert('RGB').resize(size, Image.NEAREST)
+        image = Image.open(image_path).convert('L').resize(size, Image.NEAREST)
         # run an inference with the `Interpreter`
         common.set_input(extractor_interpreter, image)
         extractor_interpreter.invoke()
