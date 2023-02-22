@@ -140,6 +140,7 @@ def get_images(startTime, endTime, storage_limit, counter, output_folder, tempor
 
                     #* Convert frame to coral-friendly format
                     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # comnvert to RGB
+                    frame = cv2.cvtColor(frame, cv2.COLOR_GRAY2RGB)  # comnvert to RGB
                     frame = cv2.resize(frame, size)  # resize to match the input size of coral model
 
                     #* Classify frame
