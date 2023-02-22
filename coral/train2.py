@@ -1,6 +1,5 @@
 """
 Retrain a classification model on-device with weight imprinting
-
 Resources:
 - https://coral.ai/docs/edgetpu/retrain-classification-ondevice/#overview
 - https://github.com/google-coral/pycoral/blob/master/examples/imprinting_learning.py
@@ -26,11 +25,11 @@ def contents(folder):
 # the absolute path for the directory where this Python script is stored
 script_dir = Path(__file__).parent.resolve()
 # specify the input and output (retrained) model
-model_path = script_dir/'mobilenet_v1_1.0_224_l2norm_quant_edgetpu.tflite'
-out_model_path = script_dir/'lightning2.tflite'
+model_path = script_dir/'models'/'mobilenet_v1_1.0_224_l2norm_quant_edgetpu.tflite'
+out_model_path = 'Documents'/'Program-Detekce_castic'/'coral'/'model'/'particle.tflite'
 #  specify where the labels and labelled training data are
-data_dir = '/home/pi/Documents/astropi/secret/train'
-labels_path = script_dir/'labels.txt'
+data_dir = 'Documents'/'Program-Detekce_castic'/'train'
+labels_path = 'Documents'/'Program-Detekce_castic'/'coral'/'label.txt'
 
 '''
 Create an instance of `ImprintingEngine` by specifying a compatible
@@ -66,8 +65,8 @@ and a label ID.
 for class_id, class_name in labels.items():
     print(f"Class {class_id}: {class_name}")
     # for each training image for the current class
-    for image_path in contents(f'{data_dir}/{class_name}'):
-        image = Image.open(image_path).convert('L').resize(size, Image.NEAREST)
+    for image_path in contents(data_dir/class_name):
+        image = Image.open(image_path).convert('RGB').resize(size, Image.NEAREST)
         # run an inference with the `Interpreter`
         common.set_input(extractor_interpreter, image)
         extractor_interpreter.invoke()
