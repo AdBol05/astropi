@@ -26,11 +26,11 @@ def contents(folder):
 # the absolute path for the directory where this Python script is stored
 script_dir = Path(__file__).parent.resolve()
 # specify the input and output (retrained) model
-model_path = 'Documents'/'astropi'/'secret'/'train'/'model.tflite'
-out_model_path = 'Documents'/'astropi'/'secret'/'train'/'lightning2.tflite'
+model_path = 'Documents/astropi/secret/train/model.tflite'
+out_model_path = 'Documents/astropi/secret/train/lightning2.tflite'
 #  specify where the labels and labelled training data are
-data_dir = 'Documents'/'astropi'/'secret'/'train'
-labels_path = 'Documents'/'astropi'/'secret'/'train'/'labels.txt'
+data_dir = 'Documents/astropi/secret/train'
+labels_path = 'Documents/astropi/secret/train/labels.txt'
 
 '''
 Create an instance of `ImprintingEngine` by specifying a compatible
