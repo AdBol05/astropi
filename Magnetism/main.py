@@ -9,7 +9,8 @@ import threading, queue
 import sys
 
 startTime = datetime.now() #time at which script starts
-endTime = startTime + timedelta(minutes=175) #time at which script should end
+print(startTime) #print time of start
+endTime = startTime + timedelta(minutes=177) #time at which script should end (3 minutes of headroom)
 sense = SenseHat() #create instance of sensehat 
 
 path = os.path.dirname(os.path.realpath(__file__)) #get path to script
@@ -60,12 +61,16 @@ threading.Thread(target = positionWriter, args = [positionFile]).start() #create
 
 currentTime = datetime.now() #get time of main loop start
 i = 0 #main loop counter
-while currentTime<endTime: #run main loop until endTime
-    compass = sense.get_compass() #get data from magnetometer
-    compassRaw = sense.get_compass_raw() #get data from magnetometer
-    currentTime = datetime.now() #get time of data fetch
-    position = ISS.coordinates() #get approximate position of data fetch
-    csvWrite.put([i, currentTime, compass, compassRaw]) #put magnetometer, time and position data in queue for saving in writer therads
-    i += 1 #increment main loop counter
+try:
+    while currentTime<endTime: #run main loop until endTime
+        compass = sense.get_compass() #get data from magnetometer
+        compassRaw = sense.get_compass_raw() #get data from magnetometer
+        currentTime = datetime.now() #get time of data fetch
+        csvWrite.put([i, currentTime, compass, compassRaw]) #put magnetometer, time and position data in queue for saving in writer therads
+        i += 1 #increment main loop counter
+except:
+    e = sys.exc_info() #get exception name
+    print('Main thread closed due to exception') #print out the thread where the exception happened
+    print('  E: {}'.format(e)) #print out exception and let thread exit by finishing code
 print("finished") #script end message
 print(datetime.now()) #print out script end time
