@@ -18,7 +18,7 @@ import threading
 
 #* define variables
 startTime = datetime.now()  # get program start time
-endTime = startTime + timedelta(minutes=178)  # run program for 178 minutes (2min headroom from the 3hr limit)
+endTime = startTime + timedelta(minutes=177)  # run program for 177 minutes (3min headroom from the 3hr limit)
 data_storage_limit =    32000000   # Max data.csv file size is 32MB
 image_storage_limit = 2960000000  # Max combined image size is 2.96GB
 
