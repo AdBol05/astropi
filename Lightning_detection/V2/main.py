@@ -1,4 +1,3 @@
-
 #* importing necessary libraries
 import csv
 from sense_hat import SenseHat
@@ -19,7 +18,7 @@ import threading
 #* define variables
 startTime = datetime.now()  # get program start time
 endTime = startTime + timedelta(minutes=177)  # run program for 177 minutes (3min headroom from the 3hr limit)
-data_storage_limit =    32000000   # Max data.csv file size is 32MB
+data_storage_limit = 32000000   # Max data.csv file size is 32MB
 image_storage_limit = 2960000000  # Max combined image size is 2.96GB
 
 #* set up paths (resolve all paths and create file structure)
