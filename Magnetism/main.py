@@ -42,7 +42,7 @@ def positionWriter(file):
             while currentPositionTime < endTime: #repeat until end time
                 position = ISS.coordinates() #get approximate position of data fetch
                 currentPositionTime = datetime.now() #save time of current loop to variable
-                writer.writerow(currentPositionTime, position.latitude.degrees, position.longitude.degrees, position.altitude.m) #write data to csv file
+                writer.writerow(currentPositionTime, position.latitude.degrees, position.longitude.degrees, position.elevation.m) #write data to csv file
     except:
         e = sys.exc_info() #get exception name
         print('Position thread closed due to exception') #print out the thread where the exception happened
