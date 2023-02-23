@@ -18,7 +18,7 @@ print( 'PATH: {}'.format( dataPath)) #debug, show data path
 if not os.path.exists( dataPath):
     os.mkdir( dataPath) #create folder if not there already
 dataFile = os.path.join(dataPath, "data") #path to generic datafile without index
-
+positionFile = os.path.join(dataPath, "position.csv") #path to positon log file
 
 def csvWriter(file, id):
     try:
@@ -35,7 +35,7 @@ def csvWriter(file, id):
 
 def positionWriter(file):
     try:
-        with open("{}Position.csv".format(str(file))) as f: #create and open position datafile
+        with open("{}".format(str(file)), "w") as f: #create and open position log file
             writer = csv.writer(f) #create csv file writer
             writer.writerow(["time", "latitude", "longitude", "altitude"]) #write header to csv for readability
             currentPositionTime = datetime.now() #create a variable storing current time for position writer
@@ -45,7 +45,7 @@ def positionWriter(file):
                 writer.writerow(currentPositionTime, position.latitude.degrees, position.longitude.degrees, position.altitude.m) #write data to csv file
     except:
         e = sys.exc_info() #get exception name
-        print('Writer thread {} closed due to exception'.format(id)) #print out the thread where the exception happened
+        print('Position thread closed due to exception') #print out the thread where the exception happened
         print('  E: {}'.format(e)) #print out exception and let thread exit by finishing code
 
 
@@ -56,7 +56,7 @@ csvWrite = queue.Queue() #create a queue for giving data writer threeads tasks
 for i in range(0,2):
     threading.Thread(target = csvWriter, args = [dataFile, i]).start() #create 2 data saving threads with ids 0, 1 pointed at dataFile 
 
-threading.Thread(target = positionWriter, args = [dataFile]).start() #create a position loggging thread
+threading.Thread(target = positionWriter, args = [positionFile]).start() #create a position loggging thread
 
 currentTime = datetime.now() #get time of main loop start
 i = 0 #main loop counter
