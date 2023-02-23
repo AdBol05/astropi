@@ -18,7 +18,7 @@ import threading
 
 #* define variables
 startTime = datetime.now()  # get program start time
-endTime = startTime + timedelta(minutes=175)  # run program for 175 minutes (5min headroom from the 3hr limit)
+endTime = startTime + timedelta(minutes=178)  # run program for 178 minutes (2min headroom from the 3hr limit)
 data_storage_limit =    32000000   # Max data.csv file size is 32MB
 image_storage_limit = 2960000000  # Max combined image size is 2.96GB
 
@@ -76,6 +76,7 @@ camera.framerate = 30
 
 #* define thread functions
 def get_data(startTime, endTime, storage_limit, data_file):
+    print("Started data collection")  # debug
     storage = 0  # data.csv file size counter
     counter = 0  # readings counter
     currentTime = datetime.now()  # get current time before loop start
@@ -87,7 +88,6 @@ def get_data(startTime, endTime, storage_limit, data_file):
         storage += os.path.getsize(data_file)  # add new data.csv file size to storage counter
         currentTime = datetime.now()  # update time
         counter += 1  # increase counter by one
-        print(f"Read data from sensors, used data storage: {storage}")  # debug
         sleep(0.03)  # wait 0.03 second (approximately 30Hz -> same as camera)
 
     # debug at the end of thread
@@ -150,7 +150,6 @@ def get_images(startTime, endTime, storage_limit, counter, output_folder, tempor
                     classes = classify.get_classes(interpreter, top_k=1)  # get classes
 
                     for c in classes:  # get score of all classes
-                        print(f'{labels.get(c.id, c.id)} | {c.score:.5f}')  # debug
                         if(f'{labels.get(c.id, c.id)}'  == 'lightning' and float(f'{c.score:.5f}') >= 0.3):  # if classified as lightning with accuracy higher than 0.3
                             captured = True  # will be set true if at least one of the frames contains lightning
 
