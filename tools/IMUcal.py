@@ -46,7 +46,7 @@ def create_csv(data_file):  # creating csv file
 def read_data(data_file, count):  # data collection
     coords = ISS.coordinates()  # get position from timescale
     acc = sense.get_accelerometer_raw()  # get magnetometer data
-    data = (count, acc.get("x"), acc.get("y"), acc.get("z"))  # assign data to row
+    data = (count, acc.get("x").round(10), acc.get("y").round(10), acc.get("z").round(10))  # assign data to row
     print(data)
 
     with open(data_file, 'a', buffering=1) as f:  # open csv file
