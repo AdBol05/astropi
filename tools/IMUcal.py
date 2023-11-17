@@ -60,7 +60,7 @@ while (count < 10000):
     read_data(data_file, count)
     count += 1
 
-    if count % 100 == 0:
+    if count % 10 == 0:
         sense.clear()
         for y in range(8):
             colour = rainbow[y]
