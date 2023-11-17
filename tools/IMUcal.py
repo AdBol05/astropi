@@ -17,6 +17,20 @@ import threading
 base_folder = Path(__file__).parent.resolve()  # determine working directory
 output_folder = base_folder/'output'  # set output folder path
 data_file = output_folder/'data.csv'  # set data.csv path
+sense = SenseHat()  # set up sense hat
+
+r = (255, 0, 0)     # red
+o = (255, 128, 0)   # orange
+y = (255, 255, 0)   # yellow
+g = (0, 255, 0)     # green
+c = (0, 255, 255)   # cyan
+b = (0, 0, 255)     # blue
+p = (255, 0, 255)   # purple
+n = (255, 128, 128) # pink
+w =(255, 255, 255)  # white
+k = (0, 0, 0)       # blank
+
+rainbow = [r, o, y, g, c, b, p, n]
 
 if not os.path.exists(output_folder):
     os.mkdir(output_folder)
@@ -38,9 +52,20 @@ def read_data(data_file, count):  # data collection
     with open(data_file, 'a', buffering=1) as f:  # open csv file
         csv.writer(f).writerow(data)  # write data row to scv file
 
+def rainbow_move(rainbow, count):
+    if count % 100 == 0:
+        for y in range(8):
+            colour = rainbow[y]
+            for x in range(8):
+                sense.set_pixel(x, y, colour)
+        
+        rainbow = [rainbow[-1]] + rainbow[:-1]
+
+#* main
 create_csv(data_file)
 count = 0  # number of iterations
 while (count < 10000):
     read_data(data_file, count)
     count += 1
+    rainbow_move(rainbow, count)
     sleep(0.01)
