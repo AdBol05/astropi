@@ -54,6 +54,7 @@ def read_data(data_file, count):  # data collection
 
 def rainbow_move(rainbow, count):
     if count % 100 == 0:
+        sense.clear()
         for y in range(8):
             colour = rainbow[y]
             for x in range(8):
