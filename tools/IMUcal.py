@@ -52,7 +52,14 @@ def read_data(data_file, count):  # data collection
     with open(data_file, 'a', buffering=1) as f:  # open csv file
         csv.writer(f).writerow(data)  # write data row to scv file
 
-def rainbow_move(rainbow, count):
+
+#* main
+create_csv(data_file)
+count = 0  # number of iterations
+while (count < 10000):
+    read_data(data_file, count)
+    count += 1
+
     if count % 100 == 0:
         sense.clear()
         for y in range(8):
@@ -62,11 +69,5 @@ def rainbow_move(rainbow, count):
         
         rainbow = [rainbow[-1]] + rainbow[:-1]
 
-#* main
-create_csv(data_file)
-count = 0  # number of iterations
-while (count < 10000):
-    read_data(data_file, count)
-    count += 1
-    rainbow_move(rainbow, count)
+
     sleep(0.01)
