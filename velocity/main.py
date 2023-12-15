@@ -32,6 +32,7 @@ def add_csv_data(data_file, data):  # writing data to csv file
 def read_data(data_file):  # data collection
     global i  # readings counter as a global variable
     i = i + 1  # increase readings counter by one
+    
     compass = sense.get_compass()  # get compass data
     compass_raw = sense.get_compass_raw()  # get raw compass data
     accel = sense.get_accelerometer()  # get accelerometer data
@@ -39,7 +40,9 @@ def read_data(data_file):  # data collection
     gyro = sense.get_gyroscope()  # get gyroscope data
     gyro_raw = sense.get_gyroscope_raw()  # get raw gyroscope data
     orientation = sense.get_orientation()  # get orientation
+    
     row = (i, datetime.now(), compass, compass_raw,  accel_raw, gyro, gyro_raw, orientation)  # assign data to row
+    
     print("sensing data...")  # debug
     add_csv_data(data_file, row)  # write row to csv file
 
