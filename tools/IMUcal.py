@@ -27,7 +27,7 @@ c = (0, 255, 255)   # cyan
 b = (0, 0, 255)     # blue
 p = (255, 0, 255)   # purple
 n = (255, 128, 128) # pink
-w =(255, 255, 255)  # white
+w = (255, 255, 255) # white
 k = (0, 0, 0)       # blank
 
 rainbow = [r, o, y, g, c, b, p, n]
