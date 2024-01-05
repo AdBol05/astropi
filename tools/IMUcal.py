@@ -57,9 +57,9 @@ create_csv(data_file)
 count = 0  # number of iterations
 while (count < 10000):
     read_data(data_file, count)
-    '''count += 1
+    count += 1
 
-    if count % 10 == 0:
+    '''if count % 10 == 0:
         sense.clear()
         for y in range(8):
             colour = rainbow[y]
