@@ -34,7 +34,6 @@ rainbow = [r, o, y, g, c, b, p, n]
 
 if not os.path.exists(output_folder):
     os.mkdir(output_folder)
-    print(f"Creating output directory in: {output_folder}")  # debug
 
 #* define functions
 def create_csv(data_file):  # creating csv file
@@ -71,3 +70,6 @@ while (count < 10000):
 
 
     sleep(0.001)
+
+
+    print(f"File located in: {output_folder}")  # debug
