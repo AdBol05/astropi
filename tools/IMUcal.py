@@ -58,7 +58,7 @@ create_csv(data_file)
 count = 0  # number of iterations
 while (count < 10000):
     read_data(data_file, count)
-    count += 1
+    '''count += 1
 
     if count % 10 == 0:
         sense.clear()
@@ -67,7 +67,7 @@ while (count < 10000):
             for x in range(8):
                 sense.set_pixel(x, y, colour)
         
-        rainbow = [rainbow[-1]] + rainbow[:-1]
+        rainbow = [rainbow[-1]] + rainbow[:-1]'''
 
 
-    sleep(0.01)
+    sleep(0.001)
