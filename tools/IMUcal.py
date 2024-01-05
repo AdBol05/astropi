@@ -72,4 +72,4 @@ while (count < 10000):
     sleep(0.001)
 
 
-    print(f"File located in: {output_folder}")  # debug
+print(f"File located in: {output_folder}")  # debug
