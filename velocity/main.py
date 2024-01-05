@@ -41,4 +41,22 @@ def read_data(data_file):  # data collection
     add_csv_data(data_file, row)  # write row to csv file
 
 
-create_csv()
+#* initialization
+create_csv(data_file)  # create data.csv file
+print("starting threads")  # debug
+# define two threads (one for image collection, and one for sensor reading)
+t1 = threading.Thread(target = get_data, args = [startTime, endTime, storage_data, data_file])
+t2 = threading.Thread(target = get_images, args = [startTime, endTime, storage_img, img_counter, output_folder, temporary_folder, model_file, label_file])
+
+#* start threads
+t1.start()
+t2.start()
+
+#* wait for threads to finish
+t1.join()
+t2.join()
+
+#* final output message
+print("#------------------------------------------------------------------------------------------------------#")
+print(f"Program ended. All output files are located in {output_folder}")  # debug
+print("#------------------------------------------------------------------------------------------------------#")
