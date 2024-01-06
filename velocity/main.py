@@ -1,4 +1,4 @@
-# import all required libraries
+#* import all required libraries
 import csv
 import os
 import threading
@@ -8,6 +8,7 @@ from time import sleep
 from picamera import PiCamera
 from sense_hat import SenseHat
 
+#* define variables
 startTime = datetime.now()  # get program start time
 endTime = startTime + timedelta(minutes=177)  # run program for 177 minutes (3min headroom from the 3hr limit)
 base_folder = Path(__file__).parent.resolve()  # determine working directory
@@ -20,6 +21,8 @@ img_counter = 100000  # image counter (start from 10000 for better naming scheme
 storage_data = 32000000  # used storage space (CSV file)
 storage_img = 2960000000 # used storage space (images)
 
+
+#* define functions
 def create_csv(data_file):  # creating csv file
     with open(data_file, 'w') as f:  # create csv file and set up logging
         writer = csv.writer(f)  # set up writer
@@ -42,20 +45,33 @@ def read_data(data_file):  # data collection
     add_csv_data(data_file, row)  # write row to csv file
 
 
+#* sense hat setup (enable magnetometer)
+sense = SenseHat()
+sense.set_imu_config(False, False, True)  # enable accelerometer
+
+
+#* camera setup (set iamge resolution and frequency)
+camera = PiCamera()
+camera.resolution = (1296, 972)  # max 4056*3040
+camera.framerate = 30
+
+
 #* initialization
-create_csv(data_file)  # create data.csv file
 print("starting threads")  # debug
 # define two threads (one for image collection, and one for sensor reading)
 thread1 = threading.Thread(target = get_data, args = [startTime, endTime, storage_data, data_file])
 thread2 = threading.Thread(target = get_images, args = [startTime, endTime, storage_img, img_counter, output_folder, temporary_folder, model_file, label_file])
 
+
 #* start threads
 thread1.start()
 thread2.start()
 
+
 #* wait for threads to finish
 thread1.join()
 thread2.join()
+
 
 #* final output message
 print("#------------------------------------------------------------------------------------------------------#")
