@@ -40,6 +40,10 @@ def read_data(data_file):  # data collection
     row = (datetime.now(), round(acc.get("x"), 10), round(acc.get("y"), 10), round(acc.get("z"), 10))  # assign data to row
     add_csv_data(data_file, row)  # write row to csv file
 
+
+# TODO thread functions
+
+
 #* sense hat setup (enable magnetometer)
 sense = SenseHat()
 sense.set_imu_config(False, False, True)  # enable accelerometer
