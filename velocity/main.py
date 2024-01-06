@@ -1,17 +1,18 @@
 # import all required libraries
 import csv
-from sense_hat import SenseHat
-from pathlib import Path
-from datetime import datetime, timedelta
-from time import sleep
-from picamera import PiCamera
 import os
 import threading
+from datetime import datetime, timedelta
+from pathlib import Path
+from time import sleep
+from picamera import PiCamera
+from sense_hat import SenseHat
 
 startTime = datetime.now()  # get program start time
 endTime = startTime + timedelta(minutes=177)  # run program for 177 minutes (3min headroom from the 3hr limit)
 base_folder = Path(__file__).parent.resolve()  # determine working directory
 output_folder = base_folder/'output'  # set output folder path
+temporary_folder = base_folder/'temp'  # set temporary folder path
 data_file = output_folder/'data.csv'  # set data.csv path
 
 i = 0  # data readings counter
@@ -37,7 +38,7 @@ def read_data(data_file):  # data collection
     global i  # readings counter as a global variable
     i = i + 1  # increase readings counter by one
     acc = sense.get_accelerometer_raw()  # get raw accelerometer data
-    data = (i, datetime.now(), round(acc.get("x"), 10), round(acc.get("y"), 10), round(acc.get("z"), 10))  # assign data to row
+    row = (i, datetime.now(), round(acc.get("x"), 10), round(acc.get("y"), 10), round(acc.get("z"), 10))  # assign data to row
     add_csv_data(data_file, row)  # write row to csv file
 
 
@@ -45,16 +46,16 @@ def read_data(data_file):  # data collection
 create_csv(data_file)  # create data.csv file
 print("starting threads")  # debug
 # define two threads (one for image collection, and one for sensor reading)
-t1 = threading.Thread(target = get_data, args = [startTime, endTime, storage_data, data_file])
-t2 = threading.Thread(target = get_images, args = [startTime, endTime, storage_img, img_counter, output_folder, temporary_folder, model_file, label_file])
+thread1 = threading.Thread(target = get_data, args = [startTime, endTime, storage_data, data_file])
+thread2 = threading.Thread(target = get_images, args = [startTime, endTime, storage_img, img_counter, output_folder, temporary_folder, model_file, label_file])
 
 #* start threads
-t1.start()
-t2.start()
+thread1.start()
+thread2.start()
 
 #* wait for threads to finish
-t1.join()
-t2.join()
+thread1.join()
+thread2.join()
 
 #* final output message
 print("#------------------------------------------------------------------------------------------------------#")
