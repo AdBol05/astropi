@@ -40,9 +40,24 @@ def read_data(data_file):  # data collection
     row = (datetime.now(), round(acc.get("x"), 10), round(acc.get("y"), 10), round(acc.get("z"), 10))  # assign data to row
     add_csv_data(data_file, row)  # write row to csv file
 
+#* define thread functions
+def get_data(startTime, endTime, storage_limit, data_file):
+    print("Started data collection")  # debug
+    storage = 0  # data.csv file size counter
+    currentTime = datetime.now()  # get current time before loop start
+    while (currentTime < endTime and storage < storage_limit):  # run until storage or time runs out
+        if storage != 0:  # ignore first iteration
+            storage -= os.path.getsize(data_file)  # subtract old data.csv file size from storage counter
 
-# TODO thread functions
+        read_data(data_file)  # get data from all sensors and write to output file
+        storage += os.path.getsize(data_file)  # add new data.csv file size to storage counter
+        currentTime = datetime.now()  # update time
+        sleep(1)  # wait one second
 
+    # debug at the end of thread
+    print("#------------------------------------------------------------------------------------------------------#")
+    print(f"Data collection thread exited, storage used: {round(storage/(1024*1024), 2)}/{round(storage_limit/(1024*1024), 2)}MB, time elapsed: {datetime.now() - startTime}")
+    print("#------------------------------------------------------------------------------------------------------#")
 
 #* sense hat setup (enable magnetometer)
 sense = SenseHat()
