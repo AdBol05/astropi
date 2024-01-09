@@ -41,7 +41,7 @@ def read_data(data_file):  # data collection
     add_csv_data(data_file, row)  # write row to csv file
 
 #* define thread functions
-def get_data(startTime, endTime, storage_limit, data_file):
+def get_data(startTime, endTime, storage_limit, data_file):  # data collection thread
     print("Started data collection")  # debug
     storage = 0  # data.csv file size counter
     currentTime = datetime.now()  # get current time before loop start
@@ -59,7 +59,7 @@ def get_data(startTime, endTime, storage_limit, data_file):
     print(f"Data collection thread exited, storage used: {round(storage/(1024*1024), 2)}/{round(storage_limit/(1024*1024), 2)}MB, time elapsed: {datetime.now() - startTime}")
     print("#------------------------------------------------------------------------------------------------------#")
 
-def get_images():
+def get_images():  # image collection thread
         print("Started image collection")
 #TODO: image thread
 
