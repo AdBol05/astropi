@@ -21,7 +21,7 @@ base_folder = Path(__file__).parent.resolve()  # determine working directory
 output_folder = base_folder/'output'  # set output folder path
 temporary_folder = base_folder/'temp'  # set temporary folder path
 data_file = output_folder/'data.csv'  # set data.csv path
-model_file = base_folder/'lightning.tflite' # set model path
+model_file = base_folder/'model.tflite' # set model path
 label_file = base_folder/'labels.txt' # set label file path
 
 img_counter = 100000  # image counter (start from 10000 for better naming scheme)
