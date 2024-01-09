@@ -59,6 +59,8 @@ def get_data(startTime, endTime, storage_limit, data_file):
     print(f"Data collection thread exited, storage used: {round(storage/(1024*1024), 2)}/{round(storage_limit/(1024*1024), 2)}MB, time elapsed: {datetime.now() - startTime}")
     print("#------------------------------------------------------------------------------------------------------#")
 
+#TODO: image thread
+
 #* sense hat setup (enable magnetometer)
 sense = SenseHat()
 sense.set_imu_config(False, False, True)  # enable accelerometer
