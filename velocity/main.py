@@ -48,16 +48,14 @@ def read_data(data_file):  # data collection
 
 #* define thread functions
 def get_data(startTime, endTime, storage_limit, data_file):  # data collection thread
-    currentTime = datetime.now()  # get current time before loop start
     storage = 0  # data.csv file size counter
     print("Started data thread")  # debug
-    while (currentTime < endTime and storage < storage_limit):  # run until storage or time runs out
+    while (datetime.now() < endTime and storage < storage_limit):  # run until storage or time runs out
         if storage != 0:  # ignore first iteration
             storage -= os.path.getsize(data_file)  # subtract old data.csv file size from storage counter
 
         read_data(data_file)  # get data from all sensors and write to output file
         storage += os.path.getsize(data_file)  # add new data.csv file size to storage counter
-        currentTime = datetime.now()  # update time
         sleep(1)  # wait one second
 
     # debug at the end of thread
@@ -66,7 +64,6 @@ def get_data(startTime, endTime, storage_limit, data_file):  # data collection t
     print("#------------------------------------------------------------------------------------------------------#")
 
 def get_images(startTime, endTime, storage_limit, counter, out_dir, temp_dir, model_file, label_file):  # image collection thread
-    currentTime = datetime.now()  # get current time before loop start
     storage = 0;  # used storage
     print("Started image thread")  # debug
 
