@@ -59,6 +59,8 @@ def get_data(startTime, endTime, storage_limit, data_file):
     print(f"Data collection thread exited, storage used: {round(storage/(1024*1024), 2)}/{round(storage_limit/(1024*1024), 2)}MB, time elapsed: {datetime.now() - startTime}")
     print("#------------------------------------------------------------------------------------------------------#")
 
+def get_images():
+        print("Started image collection")
 #TODO: image thread
 
 #* sense hat setup (enable magnetometer)
