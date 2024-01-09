@@ -42,9 +42,9 @@ def read_data(data_file):  # data collection
 
 #* define thread functions
 def get_data(startTime, endTime, storage_limit, data_file):  # data collection thread
-    print("Started data collection")  # debug
-    storage = 0  # data.csv file size counter
     currentTime = datetime.now()  # get current time before loop start
+    storage = 0  # data.csv file size counter
+    print("Started data thread")  # debug
     while (currentTime < endTime and storage < storage_limit):  # run until storage or time runs out
         if storage != 0:  # ignore first iteration
             storage -= os.path.getsize(data_file)  # subtract old data.csv file size from storage counter
@@ -59,9 +59,17 @@ def get_data(startTime, endTime, storage_limit, data_file):  # data collection t
     print(f"Data collection thread exited, storage used: {round(storage/(1024*1024), 2)}/{round(storage_limit/(1024*1024), 2)}MB, time elapsed: {datetime.now() - startTime}")
     print("#------------------------------------------------------------------------------------------------------#")
 
-def get_images():  # image collection thread
-        print("Started image collection")
-#TODO: image thread
+def get_images(startTime, endTime, storage_limit, counter, out_dir, temp_dir, model, labels):  # image collection thread
+    currentTime = datetime.now()  # get current time before loop start
+    storage = 0;
+    print("Started image thread")
+
+    #TODO: image thread
+
+    # debug at the end of thread
+    print("#------------------------------------------------------------------------------------------------------#")
+    print(f"Image collection thread exited, storage used: {round(storage/(1024*1024), 2)}/{round(storage_limit/(1024*1024), 2)}MB, time elapsed: {datetime.now() - startTime}")
+    print("#------------------------------------------------------------------------------------------------------#")
 
 #* sense hat setup (enable magnetometer)
 sense = SenseHat()
