@@ -1,12 +1,18 @@
 #* import all required libraries
 import csv
 import os
+import sys
 import threading
 from datetime import datetime, timedelta
 from pathlib import Path
 from time import sleep
 from picamera import PiCamera
 from sense_hat import SenseHat
+from pycoral.adapters import common
+from pycoral.adapters import classify
+from pycoral.utils.edgetpu import make_interpreter
+from pycoral.utils.dataset import read_label_file
+import cv2
 
 #* define variables
 startTime = datetime.now()  # get program start time
@@ -59,10 +65,22 @@ def get_data(startTime, endTime, storage_limit, data_file):  # data collection t
     print(f"Data collection thread exited, storage used: {round(storage/(1024*1024), 2)}/{round(storage_limit/(1024*1024), 2)}MB, time elapsed: {datetime.now() - startTime}")
     print("#------------------------------------------------------------------------------------------------------#")
 
-def get_images(startTime, endTime, storage_limit, counter, out_dir, temp_dir, model, labels):  # image collection thread
+def get_images(startTime, endTime, storage_limit, counter, out_dir, temp_dir, model_file, label_file):  # image collection thread
     currentTime = datetime.now()  # get current time before loop start
     storage = 0;  # used storage
     print("Started image thread")  # debug
+
+    try:  # attempt to to initialize coral TPU
+        print("Initializing coral TPU")  # debug
+        interpreter = make_interpreter(f"{model_file}")  # create an interpreter instance
+        interpreter.allocate_tensors()  # set up TPU
+        size = common.input_size(interpreter)  # get preffered input image size
+        labels = read_label_file(label_file)  # get labels from label file
+
+    except:
+        e = sys.exc_info()  # get error message
+        print(f"Failed initialize coral TPU")  # print error
+        print("  Error: {}".format( e))  # print error details
 
     #TODO: image thread
 
