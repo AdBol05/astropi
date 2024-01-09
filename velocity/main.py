@@ -19,8 +19,8 @@ model_file = base_folder/'lightning.tflite' # set model path
 label_file = base_folder/'labels.txt' # set label file path
 
 img_counter = 100000  # image counter (start from 10000 for better naming scheme)
-storage_data = 32000000  # used storage space (CSV file)
-storage_img = 2960000000 # used storage space (images)
+storage_data = 32000000  # CSV file storage limit
+storage_img = 2960000000 # image storage limit
 
 #* define functions
 def create_csv(data_file):  # creating csv file
