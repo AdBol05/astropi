@@ -61,8 +61,8 @@ def get_data(startTime, endTime, storage_limit, data_file):  # data collection t
 
 def get_images(startTime, endTime, storage_limit, counter, out_dir, temp_dir, model, labels):  # image collection thread
     currentTime = datetime.now()  # get current time before loop start
-    storage = 0;
-    print("Started image thread")
+    storage = 0;  # used storage
+    print("Started image thread")  # debug
 
     #TODO: image thread
 
