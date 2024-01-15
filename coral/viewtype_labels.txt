@@ -1,0 +1,6 @@
+0 night
+1 desert
+2 water
+3 coast
+4 land
+5 clouds
