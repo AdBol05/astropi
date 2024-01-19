@@ -1,26 +1,37 @@
 import tensorflow as tf
-from tensorflow.keras.applications import MobileNetV2
-from tensorflow.keras.layers import Input, Layer, Activation, GlobalAveragePooling2D, Dense, L2Normalization
-from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Layer
 
-# Load MobileNetV2 model without top layers (include_top=False)
-base_model = MobileNetV2(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
+class L2Normalization(Layer):
+    def __init__(self, epsilon=1e-12, **kwargs):
+        self.epsilon = epsilon
+        super(L2Normalization, self).__init__(**kwargs)
 
-# Add L2 normalization layer
+    def build(self, input_shape):
+        super(L2Normalization, self).build(input_shape)
+
+    def call(self, x):
+        return x / (tf.norm(x, axis=-1, keepdims=True) + self.epsilon)
+
+    def compute_output_shape(self, input_shape):
+        return input_shape
+
+# Example usage
+base_model = tf.keras.applications.MobileNetV2(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
 x = base_model.output
-x = GlobalAveragePooling2D()(x)
-x = Dense(128)(x)  # You can adjust the number of units as needed
-x = L2Normalization()(x)  # Add L2 normalization layer
+x = tf.keras.layers.GlobalAveragePooling2D()(x)
+x = tf.keras.layers.Dense(128)(x)
+x = L2Normalization()(x)
 
 # Add additional layers if needed
-x = Activation('relu')(x)
-x = Dense(6, activation='softmax')(x)  # Replace num_classes with the number of classes in your dataset
+x = tf.keras.layers.Activation('relu')(x)
+output = tf.keras.layers.Dense(6, activation='softmax')(x)
 
-# Create a new model with the modified architecture
-model = Model(inputs=base_model.input, outputs=x)
-
-# Compile the model and specify the optimizer, loss function, and metrics
+model = tf.keras.models.Model(inputs=base_model.input, outputs=output)
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-
-# Print the model summary to verify the architecture
 model.summary()
+
+converter = tf.lite.TFLiteConverter.from_keras_model(model)
+tflite_model = converter.convert()
+
+with open('mobilenet_v2_L2Norm', 'wb') as f:
+    f.write(tflite_model)
