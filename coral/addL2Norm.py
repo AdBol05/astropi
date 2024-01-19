@@ -1,6 +1,9 @@
 import tensorflow as tf
+from tensorflow.keras.models import load_model
 from tensorflow.keras.layers import Layer
+from pathlib import Path
 
+# Custom L2Normalization layer
 class L2Normalization(Layer):
     def __init__(self, epsilon=1e-12, **kwargs):
         self.epsilon = epsilon
@@ -15,23 +18,33 @@ class L2Normalization(Layer):
     def compute_output_shape(self, input_shape):
         return input_shape
 
-# Example usage
-base_model = tf.keras.applications.MobileNetV2(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
-x = base_model.output
-x = tf.keras.layers.GlobalAveragePooling2D()(x)
-x = tf.keras.layers.Dense(128)(x)
-x = L2Normalization()(x)
+def add_l2norm_to_tflite(input_tflite_path, output_tflite_path):
+    # Load existing TFLite model
+    interpreter = tf.lite.Interpreter.from_file(input_tflite_path)
+    interpreter.allocate_tensors()
 
-# Add additional layers if needed
-x = tf.keras.layers.Activation('relu')(x)
-output = tf.keras.layers.Dense(6, activation='softmax')(x)
+    # Convert TFLite model to Keras model
+    keras_model = tf.lite.TFLiteConverter.from_concrete_functions([interpreter.signatures["serving_default"]]).convert()
+    keras_model = tf.lite.Interpreter(model_content=keras_model)
 
-model = tf.keras.models.Model(inputs=base_model.input, outputs=output)
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-model.summary()
+    # Add L2Normalization layer to the Keras model
+    keras_model.add(L2Normalization())
 
-converter = tf.lite.TFLiteConverter.from_keras_model(model)
-tflite_model = converter.convert()
+    # Convert the modified Keras model back to TFLite
+    converter = tf.lite.TFLiteConverter.from_keras_model(keras_model)
+    tflite_model = converter.convert()
 
-with open('mobilenet_v2_L2Norm', 'wb') as f:
-    f.write(tflite_model)
+    # Save the modified TFLite model
+    with open(output_tflite_path, 'wb') as f:
+        f.write(tflite_model)
+
+if __name__ == "__main__":
+    # Specify the paths for the input and output TFLite models
+    script_dir = Path(__file__).parent.resolve()
+    input_tflite_path = script_dir/'base'/'mobilenet_v2.tflite'
+    output_tflite_path = script_dir/'base'/'mobilenet_v2_L2Norm.tflite'
+
+    # Add L2Normalization layer to the existing TFLite model
+    add_l2norm_to_tflite(input_tflite_path, output_tflite_path)
+
+    print(f"Modified TFLite model saved to: {output_tflite_path}")
