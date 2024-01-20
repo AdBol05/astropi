@@ -61,8 +61,8 @@ finally:
     coral = True
     print("Coral TPU initialized successfully")
 
-#* main loop (run until storage is full or time expires)
-while(datetime.now() < endTime and (storage_img + storage_txt) < storage_limit):
+#* main loop
+while(datetime.now() < endTime and (storage_img + storage_txt) < storage_limit):  # run until storage is full or time expires
     print()
 
 
