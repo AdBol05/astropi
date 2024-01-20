@@ -27,8 +27,8 @@ label_file = base_folder/'viewtype_labels.txt' # set label file path
 
 img_counter = 100  # image counter (start from 10000 for better naming scheme)
 img_limit = 40  # max number of images
-storage_data = 32000000  # text file storage limit
-storage_img = 2960000000 # image storage limit
+storage_data = 125000000  # text file storage limit
+storage_img = 125000000 # image storage limit
 
 #* define functions
 def average(list):
@@ -45,6 +45,8 @@ def gps_thread(startTime, endTime, storage_limit, data_file):  # data collection
     while (datetime.now() < endTime and storage < storage_limit):  # run until storage or time runs out
         for i in range():
             print("reading gps...")
+
+            #TODO: gps thread
         
         storage += os.path.getsize(data_file)  # add new data.csv file size to storage counter
         sleep(30)  # wait 30 seconds
@@ -55,7 +57,8 @@ def gps_thread(startTime, endTime, storage_limit, data_file):  # data collection
     print("#------------------------------------------------------------------------------------------------------#")
 
 def img_thread(startTime, endTime, storage_limit, counter, out_dir, temp_dir, model_file, label_file, data_file):  # image collection thread
-    storage = 0;  # used storage
+    storage_img = 0  # used image storage
+    storage_txt = 0  # used text storage
     print("Started image thread")  # debug
 
     try:  # attempt to to initialize coral TPU
@@ -74,7 +77,7 @@ def img_thread(startTime, endTime, storage_limit, counter, out_dir, temp_dir, mo
 
     # debug at the end of thread
     print("#------------------------------------------------------------------------------------------------------#")
-    print(f"Image thread exited, storage used: {round(storage/(1024*1024), 2)}/{round(storage_limit/(1024*1024), 2)}MB, time elapsed: {datetime.now() - startTime}")
+    print(f"Image thread exited, storage used: {round((storage_img + storage_txt)/(1024*1024), 2)}/{round(storage_limit/(1024*1024), 2)}MB, time elapsed: {datetime.now() - startTime}")
     print("#------------------------------------------------------------------------------------------------------#")
 
 #* sense hat setup (enable magnetometer)
