@@ -37,6 +37,7 @@ def average(list):
 def write_to_txt(filename, data):
     with open(filename, 'a') as f:
         f.write(data + '\n')
+        print("Written data to txt file")
 
 #* define thread functions
 def gps_thread(startTime, endTime, storage_limit, data_file):  # data collection thread
