@@ -15,7 +15,7 @@ import math
 
 #* define variables
 startTime = datetime.now()  # get program start time
-endTime = startTime + timedelta(minutes=9, seconds=30)  # run program for 177 minutes (3min headroom from the 3hr limit)
+endTime = startTime + timedelta(minutes=9, seconds=50)  # run program for 177 minutes (3min headroom from the 3hr limit)
 
 base_folder = Path(__file__).parent.resolve()  # determine working directory
 output_folder = base_folder/'output'  # set output folder path
@@ -26,8 +26,9 @@ label_file = base_folder/'viewtype_labels.txt' # set label file path
 
 img_counter = 1000  # image counter (start from 1000 for better naming scheme)
 img_limit = 40  # max number of images
-storage_txt = 125000000  # text file storage limit
-storage_img = 125000000 # image storage limit
+storage_limit = 250000000 # image storage limit
+storage_img = 0  # used image storage
+storage_txt = 0  # used text storage
 
 #* define functions
 def average(list):
@@ -57,7 +58,13 @@ except:
     print("  Error: {}".format( e))  # print error details
 
 finally:
+    coral = True
     print("Coral TPU initialized successfully")
+
+#* main loop (run until storage is full or time expires)
+while(datetime.now() < endTime and (storage_img + storage_txt) < storage_limit):
+    print()
+
 
 #* final output message
 print("#------------------------------------------------------------------------------------------------------#")
