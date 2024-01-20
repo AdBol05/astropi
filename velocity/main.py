@@ -11,7 +11,9 @@ from pycoral.adapters import common
 from pycoral.adapters import classify
 from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.dataset import read_label_file
+from exif import Image
 import cv2
+import math
 
 #* define variables
 startTime = datetime.now()  # get program start time
