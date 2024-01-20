@@ -43,6 +43,7 @@ camera = PiCamera()
 camera.resolution = (4056,3040)  # max 4056*3040
 
 #* attempt to initialize coral TPU
+coral = False
 try:  # attempt to to initialize coral TPU
     print("Initializing coral TPU")  # debug
     interpreter = make_interpreter(f"{model_file}")  # create an interpreter instance
@@ -54,6 +55,9 @@ except:
     e = sys.exc_info()  # get error message
     print(f"Failed initialize coral TPU")  # print error
     print("  Error: {}".format( e))  # print error details
+
+finally:
+    print("Coral TPU initialized successfully")
 
 #* final output message
 print("#------------------------------------------------------------------------------------------------------#")
