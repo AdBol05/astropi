@@ -87,7 +87,7 @@ sense.set_imu_config(False, False, True)  # enable accelerometer
 
 #* camera setup (set iamge resolution and frequency)
 camera = PiCamera()
-camera.resolution = (1296, 972)  # max 4056*3040
+camera.resolution = (4056,3040)  # max 4056*3040
 
 #* initialization
 print("starting threads")  # debug
