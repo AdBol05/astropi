@@ -30,13 +30,24 @@ img_limit = 40  # max number of images
 storage_data = 32000000  # text file storage limit
 storage_img = 2960000000 # image storage limit
 
+#* define functions
+def average(list):
+    return sum(list) / len(list)
+
+def write_to_txt(filename, data):
+    with open(filename, 'a') as f:
+        f.write(data + '\n')
+
 #* define thread functions
 def gps_thread(startTime, endTime, storage_limit, data_file):  # data collection thread
     storage = 0  # data.csv file size counter
     print("Started data thread")  # debug
     while (datetime.now() < endTime and storage < storage_limit):  # run until storage or time runs out
+        for i in range():
+            print("reading gps...")
+        
         storage += os.path.getsize(data_file)  # add new data.csv file size to storage counter
-        sleep(1)  # wait one second
+        sleep(30)  # wait 30 seconds
 
     # debug at the end of thread
     print("#------------------------------------------------------------------------------------------------------#")
