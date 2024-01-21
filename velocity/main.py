@@ -64,6 +64,7 @@ finally:
 #* main loop
 while(datetime.now() < endTime and (storage_img + storage_txt) < storage_limit):  # run until storage is full or time expires
     print()
+    #TODO: classify -> measure distance -> get velocity
 
 
 #* final output message
