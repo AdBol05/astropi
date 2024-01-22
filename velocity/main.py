@@ -39,6 +39,13 @@ def write_to_txt(filename, data):
         f.write(data + '\n')
         print("Written data to txt file")
 
+def img_save(id, temp_dir, out_dir):
+    print("Saving images...")
+
+def img_delete(id):
+    print("Deleting images...")
+
+
 #* camera setup (set iamge resolution and frequency)
 camera = PiCamera()
 camera.resolution = (4056,3040)  # max 4056*3040
@@ -73,13 +80,19 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
     
     if coral:
         print("Classifying images...")
+        usable = False  # save or delete images based on classifications
+
+        if usable:
+            img_save(img_counter, temporary_folder, output_folder) # save images
+        else:
+            img_delete(img_counter)   # delete images
 
     print("Computing distance...")
 
     if (img_counter + 4) < img_limit:
-        print("Saving images...")
+        img_save(img_counter, temporary_folder, output_folder) # save images
     else:
-        print("Deleting images...")
+        img_delete(img_counter)   # delete images
 
 
 #* final output message
