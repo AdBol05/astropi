@@ -59,15 +59,13 @@ try:  # attempt to to initialize coral TPU
     interpreter.allocate_tensors()  # set up TPU
     size = common.input_size(interpreter)  # get preffered input image size
     labels = read_label_file(label_file)  # get labels from label file
+    coral = True
+    print("Coral TPU initialized successfully")
 
 except:
     e = sys.exc_info()  # get error message
     print(f"Failed initialize coral TPU")  # print error
     print("  Error: {}".format( e))  # print error details
-
-finally:
-    coral = True
-    print("Coral TPU initialized successfully")
 
 #* main loop
 while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit):  # run until storage is full or time expires
