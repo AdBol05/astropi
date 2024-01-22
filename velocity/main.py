@@ -62,9 +62,18 @@ finally:
     print("Coral TPU initialized successfully")
 
 #* main loop
-while(datetime.now() < endTime and (storage_img + storage_txt) < storage_limit):  # run until storage is full or time expires
-    print()
-    #TODO: classify -> measure distance -> get velocity
+while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit and img_counter <= img_limit):  # run until storage is full or time expires
+    #TODO: take images -> classify -> measure distance -> get velocity
+
+    print("Capturing images...")
+    for i in range(4):
+        camera.capture(f"{base_folder}/img_{img_counter}.jpg")  # capture camera and save the image
+        img_counter += 1 # increment image counter
+        sleep(10)
+    
+    print("Classifying images...")
+
+    print("Computing distance...")
 
 
 #* final output message
