@@ -26,6 +26,7 @@ label_file = base_folder/'viewtype_labels.txt' # set label file path
 
 img_counter = 1000  # image counter (start from 1000 for better naming scheme)
 img_limit = 40  # max number of images
+img_sequence = 4  # number of images to take in one loop iteration
 storage_limit = 250000000 # image storage limit
 storage_img = 0  # used image storage
 storage_txt = 0  # used text storage
@@ -39,7 +40,7 @@ def write_to_txt(filename, data):
         f.write(data + '\n')
         print("Written data to txt file")
 
-def img_save(id, temp_dir, out_dir):
+def img_save(id):
     print("Saving images...")
 
 def img_delete(id):
@@ -83,14 +84,14 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
         usable = False  # save or delete images based on classifications
 
         if usable:
-            img_save(img_counter, temporary_folder, output_folder) # save images
+            img_save(img_counter) # save images
         else:
             img_delete(img_counter)   # delete images
 
     print("Computing distance...")
 
     if (img_counter + 4) < img_limit:
-        img_save(img_counter, temporary_folder, output_folder) # save images
+        img_save(img_counter) # save images
     else:
         img_delete(img_counter)   # delete images
 
