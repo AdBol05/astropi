@@ -72,21 +72,23 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
     #TODO: take images -> classify -> measure distance -> get velocity
 
     print("Capturing images...")
-    for i in range(4):
+    for i in range(img_sequence):
         camera.capture(f"{base_folder}/img_{img_counter}.jpg")  # capture camera and save the image
         img_counter += 1 # increment image counter
-        sleep(10)
+        sleep(5)
     
     if coral:
         print("Classifying images...")
         classified = False  # save or delete images based on classifications
 
-        #TODO: classify
+        #TODO: classify and compute
 
-    if (coral and classified and (img_counter + 4) < img_limit) or (not coral and (img_counter + 4) < img_limit):
+    if (coral and classified and (img_counter + img_sequence) < img_limit) or (not coral and (img_counter + img_sequence) < img_limit):
         img_save(img_counter)  # save images
     else:
         img_delete(img_counter)  # delete images
+
+    sleep(30)
 
 #* final output message
 print("#------------------------------------------------------------------------------------------------------#")
