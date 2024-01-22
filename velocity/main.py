@@ -79,20 +79,14 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
     
     if coral:
         print("Classifying images...")
-        usable = False  # save or delete images based on classifications
+        classified = False  # save or delete images based on classifications
 
-        if usable:
-            img_save(img_counter) # save images
-        else:
-            img_delete(img_counter)   # delete images
+        #TODO: classify
 
-    print("Computing distance...")
-
-    if (img_counter + 4) < img_limit:
-        img_save(img_counter) # save images
+    if (coral and classified and (img_counter + 4) < img_limit) or (not coral and (img_counter + 4) < img_limit):
+        img_save(img_counter)  # save images
     else:
-        img_delete(img_counter)   # delete images
-
+        img_delete(img_counter)  # delete images
 
 #* final output message
 print("#------------------------------------------------------------------------------------------------------#")
