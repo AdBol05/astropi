@@ -88,6 +88,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
     print("Capturing images...")
     for i in range(img_sequence):
         camera.capture(f"{temporary_folder}/img_{img_counter}.jpg")  # capture camera and save the image
+        #TODO: add EXIF metadata
         print(img_counter)  # debug
         img_counter += 1  # increment image counter
         sleep(5)
