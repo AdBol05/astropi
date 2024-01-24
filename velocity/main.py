@@ -10,6 +10,7 @@ from pycoral.adapters import classify
 from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.dataset import read_label_file
 from exif import Image
+from PIL import Image
 import cv2
 import math
 
@@ -84,20 +85,31 @@ except:
 
 #* main loop
 while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit):  # run until storage is full or time expires
-    #TODO: take images -> classify -> measure distance -> get velocity
-
     print("Capturing images...")
     for i in range(img_sequence):
         camera.capture(f"{temporary_folder}/img_{img_counter}.jpg")  # capture camera and save the image
-        print(img_counter)
-        img_counter += 1 # increment image counter
+        print(img_counter)  # debug
+        img_counter += 1  # increment image counter
         sleep(5)
     
     if coral:
         print("Classifying images...")
         classified = False  # save or delete images based on classifications
 
-        #TODO: classify and compute
+        #* Open image and convert it to coral-friendly format
+        image = Image.open(f"{temporary_folder}/img_{img_counter}.jpg").convert('RGB').resize(size, Image.ANTIALIAS)  # open image
+
+        #* Classify image
+        common.set_input(interpreter, image)  # load interpreter and image to TPU
+        interpreter.invoke()  # invoke interpreter
+
+        classes = classify.get_classes(interpreter, top_k=1)  # get classes
+
+        for c in classes:  # get score of all classes
+            if(f'{labels.get(c.id, c.id)}'  == 'usable' and float(f'{c.score:.5f}') >= 0.8):  # if classified as usable with accuracy higher than 0.8
+                classified = True  # mark image as usable for distance calculation
+
+    #TODO: calculate distance
 
     if (coral and classified and (img_counter + img_sequence) < img_limit) or (not coral and (img_counter + img_sequence) < img_limit):
         storage_img += img_save(img_counter)  # save images
