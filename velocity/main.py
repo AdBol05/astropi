@@ -40,11 +40,19 @@ def write_to_txt(filename, data):
         f.write(data + '\n')
         print("Written data to txt file")
 
-def img_save(id):
+def img_save(counter):
     print("Saving images...")
+    for i in range(img_sequence):
+        id = counter - (id - 1)
+        path = output_folder + '/img_' + id + '.jpg'
+        print(f"saving to: {path}")
 
-def img_delete(id):
+def img_delete(counter):
     print("Deleting images...")
+    for i in range(img_sequence):
+        id = counter - (id - 1)
+        path = temporary_folder + '/img_' + id + '.jpg'
+        print(f"Removing: {path}")
 
 
 #* camera setup (set iamge resolution and frequency)
@@ -73,7 +81,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
 
     print("Capturing images...")
     for i in range(img_sequence):
-        camera.capture(f"{base_folder}/img_{img_counter}.jpg")  # capture camera and save the image
+        camera.capture(f"{temporary_folder}/img_{img_counter}.jpg")  # capture camera and save the image
         img_counter += 1 # increment image counter
         sleep(5)
     
