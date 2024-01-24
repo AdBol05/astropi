@@ -42,10 +42,15 @@ def write_to_txt(filename, data):
 
 def img_save(counter):
     print("Saving images...")
+    size = 0
     for i in range(img_sequence):
         id = counter - (i - 1)
         path = output_folder + '/img_' + counter + '.jpg'
+        os.replace(f"{temporary_folder}/img_{counter}.h264", path)  # move image to output folder
+        size += os.path.getsize(path)
         print(f"saving to: {path}")
+
+    return size  # return size of all moved file so it can be added to used storage
 
 def img_delete(counter):
     print("Deleting images...")
@@ -93,7 +98,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
         #TODO: classify and compute
 
     if (coral and classified and (img_counter + img_sequence) < img_limit) or (not coral and (img_counter + img_sequence) < img_limit):
-        img_save(img_counter)  # save images
+        storage_img += img_save(img_counter)  # save images
     else:
         img_delete(img_counter)  # delete images
 
