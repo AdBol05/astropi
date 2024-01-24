@@ -43,15 +43,16 @@ def write_to_txt(filename, data):
 def img_save(counter):
     print("Saving images...")
     for i in range(img_sequence):
-        id = counter - (id - 1)
-        path = output_folder + '/img_' + id + '.jpg'
+        id = counter - (i - 1)
+        path = output_folder + '/img_' + counter + '.jpg'
         print(f"saving to: {path}")
 
 def img_delete(counter):
     print("Deleting images...")
     for i in range(img_sequence):
-        id = counter - (id - 1)
-        path = temporary_folder + '/img_' + id + '.jpg'
+        id = counter - (i - 1)
+        path = temporary_folder + '/img_' + counter + '.jpg'
+        os.remove(path)
         print(f"Removing: {path}")
 
 
