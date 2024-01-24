@@ -45,8 +45,8 @@ def img_save(counter):
     size = 0
     for i in range(img_sequence):
         id = counter - (i - 1)
-        path = output_folder + '/img_' + counter + '.jpg'
-        os.replace(f"{temporary_folder}/img_{counter}.h264", path)  # move image to output folder
+        path = output_folder + '/img_' + id + '.jpg'
+        os.replace(f"{temporary_folder}/img_{id}.h264", path)  # move image to output folder
         size += os.path.getsize(path)
         print(f"saving to: {path}")
 
@@ -56,7 +56,7 @@ def img_delete(counter):
     print("Deleting images...")
     for i in range(img_sequence):
         id = counter - (i - 1)
-        path = temporary_folder + '/img_' + counter + '.jpg'
+        path = temporary_folder + '/img_' + id + '.jpg'
         os.remove(path)
         print(f"Removing: {path}")
 
