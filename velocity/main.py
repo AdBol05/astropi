@@ -94,8 +94,19 @@ except:
 while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit):  # run until storage is full or time expires
     print("Capturing images...")
     for i in range(img_sequence):
+
+        point = ISS().coordinates()
+        south, exif_latitude = convert(point.latitude)
+        west, exif_longitude = convert(point.longitude)
+
+        # Set the Exif tags specifying the current location
+        camera.exif_tags['GPS.GPSLatitude'] = exif_latitude
+        camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
+        camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
+        camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
+
         camera.capture(f"{temporary_folder}/img_{img_counter}.jpg")  # capture camera and save the image
-        #TODO: add EXIF metadata
+        
         print(img_counter)  # debug
         img_counter += 1  # increment image counter
         sleep(5)
