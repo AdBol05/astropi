@@ -69,7 +69,7 @@ def convert(angle):  # convert coordinates to degrees
     return sign < 0, exif_angle
 
 
-#* camera setup (set iamge resolution and frequency)
+#* camera setup (set iamge resolution)
 camera = PiCamera()
 camera.resolution = (4056,3040)  # max 4056*3040
 
