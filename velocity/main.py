@@ -11,6 +11,8 @@ from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.dataset import read_label_file
 from exif import Image
 from PIL import Image
+from orbit import ISS
+from skyfield.api import load
 import cv2
 import math
 
@@ -60,6 +62,11 @@ def img_delete(counter):
         path = temporary_folder + '/img_' + id + '.jpg'
         os.remove(path)
         print(f"Removing: {path}")
+
+def convert(angle):
+    sign, degrees, minutes, seconds = angle.signed_dms()
+    exif_angle = f'{degrees:.0f}/1,{minutes:.0f}/1,{seconds*10:.0f}/10'
+    return sign < 0, exif_angle
 
 
 #* camera setup (set iamge resolution and frequency)
