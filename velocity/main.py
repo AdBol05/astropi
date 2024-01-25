@@ -124,6 +124,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
         classes = classify.get_classes(interpreter, top_k=1)  # get classes
 
         for c in classes:  # get score of all classes
+            print(f"class ID: {c.id} class label: {labels.get(c.id, c.id)} image score: {float(f'{c.score:.5f}')}")  # debug
             if(f'{labels.get(c.id, c.id)}'  == 'usable' and float(f'{c.score:.5f}') >= 0.8):  # if classified as usable with accuracy higher than 0.8
                 classified = True  # mark image as usable for distance calculation
 
