@@ -63,7 +63,7 @@ def img_delete(counter):
         os.remove(path)  # delete image
         print(f"Removing: {path}")  # debug
 
-def convert(angle):
+def convert(angle):  # convert coordinates to degrees
     sign, degrees, minutes, seconds = angle.signed_dms()
     exif_angle = f'{degrees:.0f}/1,{minutes:.0f}/1,{seconds*10:.0f}/10'
     return sign < 0, exif_angle
