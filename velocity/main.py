@@ -46,22 +46,22 @@ def write_to_txt(filename, data):
 def img_save(counter):
     print("Saving images...")
     size = 0
-    for i in range(img_sequence):
-        id = counter - (i - 1)
-        path = output_folder + '/img_' + id + '.jpg'
+    for i in range(img_sequence):  # loop over last images
+        id = counter - (i - 1)  # resolve image number
+        path = output_folder + '/img_' + id + '.jpg'  # resolve image path
         os.replace(f"{temporary_folder}/img_{id}.h264", path)  # move image to output folder
-        size += os.path.getsize(path)
-        print(f"saving to: {path}")
+        size += os.path.getsize(path)  # add image size to counter
+        print(f"saving to: {path}")  # debug
 
     return size  # return size of all moved file so it can be added to used storage
 
 def img_delete(counter):
     print("Deleting images...")
-    for i in range(img_sequence):
-        id = counter - (i - 1)
-        path = temporary_folder + '/img_' + id + '.jpg'
-        os.remove(path)
-        print(f"Removing: {path}")
+    for i in range(img_sequence):  # loop over last images
+        id = counter - (i - 1)  # resolve image number
+        path = temporary_folder + '/img_' + id + '.jpg'  # resolve image path
+        os.remove(path)  # delete image
+        print(f"Removing: {path}")  # debug
 
 def convert(angle):
     sign, degrees, minutes, seconds = angle.signed_dms()
@@ -95,10 +95,10 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
     print("Capturing images...")
     for i in range(img_sequence):
         point = ISS().coordinates()  # get current coordinates
-        south, exif_latitude = convert(point.latitude)
+        south, exif_latitude = convert(point.latitude)  # convert ccords to EXIF-friendly format
         west, exif_longitude = convert(point.longitude)
 
-        # Set EXIF data to image
+        # Set image EXIF data
         camera.exif_tags['GPS.GPSLatitude'] = exif_latitude
         camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
         camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
