@@ -40,7 +40,7 @@ def average(list):
 
 def write_to_txt(filename, data):
     with open(filename, 'a') as f:
-        f.write(data + '\n')
+        f.write("{:.4f}".format(data) + '\n')
         print("Written data to txt file")
 
 def img_save(counter):
