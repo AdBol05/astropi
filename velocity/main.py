@@ -133,8 +133,7 @@ except:
 while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit):  # run until storage is full or time expires
     print("Capturing images...")
     for i in range(img_sequence):
-        iss_point = ISS()
-        point = iss_point.coordinates()  # get current coordinates
+        point = ISS.coordinates()  # get current coordinates
         south, exif_latitude = convert(point.latitude)  # convert ccords to EXIF-friendly format
         west, exif_longitude = convert(point.longitude)
 
