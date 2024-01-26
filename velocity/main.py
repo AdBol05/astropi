@@ -191,4 +191,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
 #* final output message
 print("#------------------------------------------------------------------------------------------------------#")
 print(f"Program ended. All output files are located in {output_folder}")  # debug
+print(f"Time elapsed: {datetime.now() - startTime}")
+print(f"Storage used: {round((storage_img + storage_txt)/(1024*1024), 2)}/{round(storage_limit/(1024*1024), 2)}MB,")
+print(f"Saved images: {img_saved}")
 print("#------------------------------------------------------------------------------------------------------#")
