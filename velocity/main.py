@@ -161,7 +161,8 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
     
     if coral:
         print("Classifying images...")
-        classified = False  # save or delete images based on classifications
+        classified = True  # save or delete images based on classifications
+        #! change -> True for testing purposes
 
         #* Open image and convert it to coral-friendly format
         image = Image.open(f"{temporary_folder}/img_{img_counter}.jpg").convert('RGB').resize(size, Image.ANTIALIAS)  # open image
@@ -183,6 +184,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
     if (coral and classified and (img_saved + img_sequence) < img_limit) or (not coral and (img_saved + img_sequence) < img_limit):
         storage_img += img_save(img_counter)  # save images
         img_saved += img_sequence
+        print(f"Used storage: {storage_img}")
     else:
         img_delete(img_counter)  # delete images
 
