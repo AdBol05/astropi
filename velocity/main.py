@@ -18,7 +18,7 @@ import math
 
 #* define variables
 startTime = datetime.now()  # get program start time
-endTime = startTime + timedelta(minutes=9, seconds=50)  # run program for 177 minutes (3min headroom from the 3hr limit)
+endTime = startTime + timedelta(minutes=9)  # run program for 177 minutes (3min headroom from the 3hr limit)
 
 base_folder = Path(__file__).parent.resolve()  # determine working directory
 output_folder = base_folder/'output'  # set output folder path
