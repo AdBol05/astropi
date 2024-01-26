@@ -142,6 +142,7 @@ except:
 while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit):  # run until storage is full or time expires
     print("Capturing images...")
     for i in range(img_sequence):
+        img_counter += 1  # increment image counter
         point = ISS.coordinates()  # get current coordinates
         south, exif_latitude = convert(point.latitude)  # convert ccords to EXIF-friendly format
         west, exif_longitude = convert(point.longitude)
@@ -155,7 +156,6 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
         camera.capture(f"{temporary_folder}/img_{img_counter}.jpg")  # capture camera and save the image
 
         print(img_counter)  # debug
-        img_counter += 1  # increment image counter
         sleep(5)
     
     if coral:
@@ -163,7 +163,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
         classified = False  # save or delete images based on classifications
 
         #* Open image and convert it to coral-friendly format
-        image = Image.open(f"{temporary_folder}/img_{img_counter - 1}.jpg").convert('RGB').resize(size, Image.ANTIALIAS)  # open image
+        image = Image.open(f"{temporary_folder}/img_{img_counter}.jpg").convert('RGB').resize(size, Image.ANTIALIAS)  # open image
 
         #* Classify image
         common.set_input(interpreter, image)  # load interpreter and image to TPU
