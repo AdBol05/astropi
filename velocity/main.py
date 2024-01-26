@@ -86,6 +86,27 @@ def calculate_matches(descriptors_1, descriptors_2):  # get matching features
     print(matches)
     return matches
 
+def find_matching_coordinates(keypoints_1, keypoints_2, matches):  # get coordinates from image features
+    coordinates_1 = []
+    coordinates_2 = []
+    for match in matches:
+        image_1_idx = match.queryIdx
+        image_2_idx = match.trainIdx
+        (x1,y1) = keypoints_1[image_1_idx].pt
+        (x2,y2) = keypoints_2[image_2_idx].pt
+        coordinates_1.append((x1,y1))
+        coordinates_2.append((x2,y2))
+    return coordinates_1, coordinates_2
+
+def calculate_mean_distance(coordinates_1, coordinates_2):  # calculate distance between two coordinates
+    all_distances = 0
+    merged_coordinates = list(zip(coordinates_1, coordinates_2))
+    for coordinate in merged_coordinates:
+        x_difference = coordinate[0][0] - coordinate[1][0]
+        y_difference = coordinate[0][1] - coordinate[1][1]
+        distance = math.hypot(x_difference, y_difference)
+        all_distances = all_distances + distance
+    return all_distances / len(merged_coordinates)
 
 #* camera setup (set iamge resolution)
 camera = PiCamera()
