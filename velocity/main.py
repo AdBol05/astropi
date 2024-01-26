@@ -181,7 +181,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
     #TODO: calculate distance
     #? https://projects.raspberrypi.org/en/projects/astropi-iss-speed/3
 
-    if (coral and classified and (img_saved + img_sequence) < img_limit) or (not coral and (img_saved + img_sequence) < img_limit):
+    if (coral and classified and (img_saved + img_sequence) <= img_limit) or (not coral and (img_saved + img_sequence) <= img_limit):
         storage_img += img_save(img_counter)  # save images
         img_saved += img_sequence
         print(f"Used storage: {storage_img}")
