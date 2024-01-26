@@ -34,6 +34,15 @@ storage_limit = 250000000 # image storage limit
 storage_img = 0  # used image storage
 storage_txt = 0  # used text storage
 
+#* create output and temporary directories if they don't exist
+if not os.path.exists(temporary_folder):
+    print(f"Creating temporary directory in: {temporary_folder}")  # debug
+    os.mkdir(temporary_folder)
+
+if not os.path.exists(output_folder):
+    os.mkdir(output_folder)
+    print(f"Creating output directory in: {output_folder}")  # debug
+
 #* define functions
 def average(list):
     return sum(list) / len(list)
