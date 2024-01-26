@@ -28,6 +28,7 @@ model_file = base_folder/'viewtype.tflite' # set model path
 label_file = base_folder/'viewtype_labels.txt' # set label file path
 
 img_counter = 1000  # image counter (start from 1000 for better naming scheme)
+img_saved = 0  # number of saved images
 img_limit = 40  # max number of images
 img_sequence = 4  # number of images to take in one loop iteration
 storage_limit = 250000000 # image storage limit
@@ -155,7 +156,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
 
         camera.capture(f"{temporary_folder}/img_{img_counter}.jpg")  # capture camera and save the image
 
-        print(img_counter)  # debug
+        print(f"{img_counter} / {img_saved}")  # debug
         sleep(5)
     
     if coral:
@@ -179,8 +180,9 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
     #TODO: calculate distance
     #? https://projects.raspberrypi.org/en/projects/astropi-iss-speed/3
 
-    if (coral and classified and (img_counter + img_sequence) < img_limit) or (not coral and (img_counter + img_sequence) < img_limit):
+    if (coral and classified and (img_saved + img_sequence) < img_limit) or (not coral and (img_saved + img_sequence) < img_limit):
         storage_img += img_save(img_counter)  # save images
+        img_saved += img_sequence
     else:
         img_delete(img_counter)  # delete images
 
