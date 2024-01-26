@@ -163,7 +163,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
         classified = False  # save or delete images based on classifications
 
         #* Open image and convert it to coral-friendly format
-        image = Image.open(f"{temporary_folder}/img_{img_counter}.jpg").convert('RGB').resize(size, Image.ANTIALIAS)  # open image
+        image = Image.open(f"{temporary_folder}/img_{img_counter - 1}.jpg").convert('RGB').resize(size, Image.ANTIALIAS)  # open image
 
         #* Classify image
         common.set_input(interpreter, image)  # load interpreter and image to TPU
