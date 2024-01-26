@@ -68,6 +68,24 @@ def convert(angle):  # convert coordinates to degrees
     exif_angle = f'{degrees:.0f}/1,{minutes:.0f}/1,{seconds*10:.0f}/10'
     return sign < 0, exif_angle
 
+def convert_to_cv(image_1, image_2):  # convert image to opencv format
+    image_1_cv = cv2.imread(image_1, 0)
+    image_2_cv = cv2.imread(image_2, 0)
+    return image_1_cv, image_2_cv
+
+def calculate_features(image_1, image_2, feature_number):  # calculate common features
+    orb = cv2.ORB_create(nfeatures = feature_number)
+    keypoints_1, descriptors_1 = orb.detectAndCompute(image_1, None)
+    keypoints_2, descriptors_2 = orb.detectAndCompute(image_2, None)
+    return keypoints_1, keypoints_2, descriptors_1, descriptors_2
+
+def calculate_matches(descriptors_1, descriptors_2):  # get matching features
+    brute_force = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
+    matches = brute_force.match(descriptors_1, descriptors_2)
+    matches = sorted(matches, key=lambda x: x.distance)
+    print(matches)
+    return matches
+
 
 #* camera setup (set iamge resolution)
 camera = PiCamera()
