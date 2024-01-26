@@ -184,7 +184,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
     if (coral and classified and (img_saved + img_sequence) <= img_limit) or (not coral and (img_saved + img_sequence) <= img_limit):
         storage_img += img_save(img_counter)  # save images
         img_saved += img_sequence
-        print(f"Used storage: {storage_img}")
+        print(f"Used storage: {round((storage_img)/(1024*1024), 2)}")
     else:
         img_delete(img_counter)  # delete images
 
