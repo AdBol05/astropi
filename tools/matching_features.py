@@ -34,7 +34,7 @@ def calculate_matches(descriptors_1, descriptors_2):  # get matching features
     brute_force = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
     matches = brute_force.match(descriptors_1, descriptors_2)
     matches = sorted(matches, key=lambda x: x.distance)
-    print(matches)
+    #print(matches)
     return matches
 
 def find_matching_coordinates(keypoints_1, keypoints_2, matches):  # get coordinates from image features
@@ -77,6 +77,11 @@ def find_matching_coordinates(keypoints_1, keypoints_2, matches):
         coordinates_1.append((x1,y1))
         coordinates_2.append((x2,y2))
     return coordinates_1, coordinates_2
+
+def calculate_speed_in_kmps(feature_distance, GSD, time_difference):
+    distance = feature_distance * GSD / 100000
+    speed = distance / time_difference
+    return speed
 
 #time_difference = get_time_difference(image_1, image_2) # Get time difference between images
 image_1_cv, image_2_cv = convert_to_cv(image_1, image_2) # Create OpenCV image objects
