@@ -3,8 +3,11 @@ from datetime import datetime
 import cv2
 import math
 
-image_1 = '/home/adam/Dokumenty/astropi/secret/LightningDetectionV2/train/data/usable/lightning_10095_frame_0010.jpg'
-image_2 = '/home/adam/Dokumenty/astropi/secret/LightningDetectionV2/train/data/usable/lightning_10095_frame_0200.jpg'
+# image_1 = '/home/adam/Dokumenty/astropi/secret/LightningDetectionV2/train/data/usable/lightning_10095_frame_0010.jpg'
+# image_2 = '/home/adam/Dokumenty/astropi/secret/LightningDetectionV2/train/data/usable/lightning_10095_frame_0200.jpg'
+
+image_1 = '/home/adam/Dokumenty/astropi/secret/LightningDetectionV2/train/data/usable/lightning_10001_frame_0001.jpg'
+image_2 = '/home/adam/Dokumenty/astropi/secret/LightningDetectionV2/train/data/usable/lightning_10001_frame_0299.jpg'
 
 def get_time(image):
     with open(image, 'rb') as image_file:
