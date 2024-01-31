@@ -149,7 +149,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
         west, exif_longitude = convert(point.longitude)
 
         # Set image EXIF data
-        camera.exif_tags['DateTimeOriginal'] = datetime.now()
+        camera.exif_tags['DateTimeOriginal'] = str(datetime.now().isoformat())
         camera.exif_tags['GPS.GPSLatitude'] = exif_latitude
         camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
         camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
