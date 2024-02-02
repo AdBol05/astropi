@@ -122,6 +122,10 @@ def calculate_mean_distance(coordinates_1, coordinates_2):  # calculate distance
         all_distances = all_distances + distance
     return all_distances / len(merged_coordinates)
 
+def calculateGSD(elevation, resolution_x, resolution_y, focal_lenght, image_width):
+    GSD = 0
+    return GSD
+
 #* camera setup (set iamge resolution)
 camera = PiCamera()
 camera.resolution = (camera_width, camera_height)
@@ -153,7 +157,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
         west, exif_longitude = convert(point.longitude)
 
         #TODO: calculate GSD
-        #GSD = calculateGSD(pont.elevation.m, camera_width, camera_height)
+        #GSD = calculateGSD(pont.elevation.m, camera_width, camera_height, 7, 15)
 
         # Set image EXIF data
         camera.exif_tags['DateTimeOriginal'] = str(datetime.now().strftime("%Y:%m:%d, %H:%M:%S"))
