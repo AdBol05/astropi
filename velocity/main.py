@@ -136,7 +136,7 @@ try:  # attempt to to initialize coral TPU
 except:
     e = sys.exc_info()  # get error message
     coral = False
-    print(f"Failed initialize coral TPU")  # print error
+    print(f"Failed to initialize coral TPU")  # print error
     print("  Error: {}".format( e))  # print error details
 
 #* main loop
