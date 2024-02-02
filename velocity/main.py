@@ -35,7 +35,7 @@ storage_limit = 250000000 # image storage limit
 storage_img = 0  # used image storage
 storage_txt = 0  # used text storage
 
-# camera resolution (max 4056*3040)
+# camera resolution (max 4056*3040 -> crashes (out of resources))
 camera_width = 2028
 camera_height = 1520
 
