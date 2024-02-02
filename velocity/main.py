@@ -35,6 +35,10 @@ storage_limit = 250000000 # image storage limit
 storage_img = 0  # used image storage
 storage_txt = 0  # used text storage
 
+# camera resolution (max 4056*3040)
+camera_width = 1296
+camera_height = 972
+
 #* create output and temporary directories if they don't exist
 if not os.path.exists(temporary_folder):
     print(f"Creating temporary directory in: {temporary_folder}")  # debug
@@ -120,7 +124,7 @@ def calculate_mean_distance(coordinates_1, coordinates_2):  # calculate distance
 
 #* camera setup (set iamge resolution)
 camera = PiCamera()
-camera.resolution = (1296, 972)  # max 4056*3040
+camera.resolution = (camera_width, camera_height)  # max 4056*3040
 
 print(camera.resolution)
 
@@ -150,7 +154,8 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
         south, exif_latitude = convert(point.latitude)  # convert ccords to EXIF-friendly format
         west, exif_longitude = convert(point.longitude)
 
-        #GSD = calculateGSD(pont.elevation.m, )
+        #TODO: calculate GSD
+        #GSD = calculateGSD(pont.elevation.m, camera_width, camera_height)
 
         # Set image EXIF data
         camera.exif_tags['DateTimeOriginal'] = str(datetime.now().strftime("%Y:%m:%d, %H:%M:%S"))
