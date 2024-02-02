@@ -36,8 +36,8 @@ storage_img = 0  # used image storage
 storage_txt = 0  # used text storage
 
 # camera resolution (max 4056*3040)
-camera_width = 1296
-camera_height = 972
+camera_width = 1333
+camera_height = 1000
 
 #* create output and temporary directories if they don't exist
 if not os.path.exists(temporary_folder):
