@@ -156,8 +156,6 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
         south, exif_latitude = convert(point.latitude)  # convert ccords to EXIF-friendly format
         west, exif_longitude = convert(point.longitude)
 
-        #TODO: calculate GSD
-        #GSD = calculateGSD(pont.elevation.m, camera_width, camera_height, 7, 15)
 
         # Set image EXIF data
         camera.exif_tags['DateTimeOriginal'] = str(datetime.now().strftime("%Y:%m:%d, %H:%M:%S"))
@@ -190,6 +188,9 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
             if(f'{labels.get(c.id, c.id)}'  == 'usable' and float(f'{c.score:.5f}') >= 0.8):  # if classified as usable with accuracy higher than 0.8
                 classified = True  # mark image as usable for distance calculation
 
+    #TODO: calculate GSD based on current altitude
+    #GSD = calculateGSD(pont.elevation.m, camera_width, camera_height, 7, 15)
+                
     #TODO: calculate distance
     #? https://projects.raspberrypi.org/en/projects/astropi-iss-speed/3
 
