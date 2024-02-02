@@ -3,11 +3,11 @@ from datetime import datetime
 import cv2
 import math
 
-# image_1 = '/home/adam/Dokumenty/astropi/secret/LightningDetectionV2/train/data/usable/lightning_10095_frame_0010.jpg'
-# image_2 = '/home/adam/Dokumenty/astropi/secret/LightningDetectionV2/train/data/usable/lightning_10095_frame_0200.jpg'
+image_1 = '/home/adam/Dokumenty/astropi/secret/velocity/img_1001.jpg'
+image_2 = '/home/adam/Dokumenty/astropi/secret/velocity/img_1008.jpg'
 
-image_1 = '/home/adam/Dokumenty/astropi/secret/LightningDetectionV2/train/data/usable/lightning_10001_frame_0001.jpg'
-image_2 = '/home/adam/Dokumenty/astropi/secret/LightningDetectionV2/train/data/usable/lightning_10001_frame_0299.jpg'
+# image_1 = '/home/adam/Dokumenty/astropi/secret/LightningDetectionV2/train/data/usable/lightning_10001_frame_0001.jpg'
+# image_2 = '/home/adam/Dokumenty/astropi/secret/LightningDetectionV2/train/data/usable/lightning_10001_frame_0299.jpg'
 
 def get_time(image):
     with open(image, 'rb') as image_file:
@@ -86,13 +86,16 @@ def calculate_speed_in_kmps(feature_distance, GSD, time_difference):
     speed = distance / time_difference
     return speed
 
-#time_difference = get_time_difference(image_1, image_2) # Get time difference between images
+time_difference = get_time_difference(image_1, image_2) # Get time difference between images
 image_1_cv, image_2_cv = convert_to_cv(image_1, image_2) # Create OpenCV image objects
 keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) # Get keypoints and descriptors
 matches = calculate_matches(descriptors_1, descriptors_2) # Match descriptors
 coordinates_1, coordinates_2 = find_matching_coordinates(keypoints_1, keypoints_2, matches)
 distance = calculate_mean_distance(coordinates_1, coordinates_2)
+speed = calculate_speed_in_kmps(distance, 12648, time_difference)
 #print(matches)
 print(coordinates_1[0], coordinates_2[0])
 print(distance)
+print(time_difference)
+print(speed)
 display_matches(image_1_cv, keypoints_1, image_2_cv, keypoints_2, matches) # Display matches

@@ -120,7 +120,7 @@ def calculate_mean_distance(coordinates_1, coordinates_2):  # calculate distance
 
 #* camera setup (set iamge resolution)
 camera = PiCamera()
-camera.resolution = (1296, 972)  # max 4056*3040
+camera.resolution = (4096, 3040)  # max 4056*3040
 
 #* attempt to initialize coral TPU
 coral = False
