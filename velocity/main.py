@@ -122,6 +122,8 @@ def calculate_mean_distance(coordinates_1, coordinates_2):  # calculate distance
 camera = PiCamera()
 camera.resolution = (4056, 3040)  # max 4056*3040
 
+print(camera.resolution)
+
 #* attempt to initialize coral TPU
 coral = False
 try:  # attempt to to initialize coral TPU
@@ -147,6 +149,8 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
         point = ISS.coordinates()  # get current coordinates
         south, exif_latitude = convert(point.latitude)  # convert ccords to EXIF-friendly format
         west, exif_longitude = convert(point.longitude)
+
+        #GSD = calculateGSD(pont.elevation.m, )
 
         # Set image EXIF data
         camera.exif_tags['DateTimeOriginal'] = str(datetime.now().strftime("%Y:%m:%d, %H:%M:%S"))
