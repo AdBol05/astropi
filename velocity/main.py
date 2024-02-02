@@ -148,7 +148,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
         south, exif_latitude = convert(point.latitude)  # convert ccords to EXIF-friendly format
         west, exif_longitude = convert(point.longitude)
 
-        ISOdate = str(datetime.now().strftime("%Y:%m%:d, %H:%M:%S"))
+        ISOdate = str(datetime.now().strftime("%Y:%m:%d, %H:%M:%S"))
         print(ISOdate) # debug
 
         # Set image EXIF data
