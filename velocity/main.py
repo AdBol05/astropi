@@ -30,7 +30,6 @@ label_file = base_folder/'viewtype_labels.txt' # set label file path
 img_counter = 1000  # image counter (start from 1000 for better naming scheme)
 img_saved = 0  # number of saved images
 img_limit = 40  # max number of images
-img_sequence = 2  # number of images to take in one loop iteration
 storage_limit = 250000000 # image storage limit
 storage_img = 0  # used image storage
 storage_txt = 0  # used text storage
@@ -60,7 +59,7 @@ def write_to_txt(filename, data):
 def img_save(counter):
     print("Saving images...")
     size = 0
-    for i in range(img_sequence):  # loop over last images
+    for i in range(2):  # loop over last images
         id = counter - (i + 1)  # resolve image number
         path = f"{output_folder}/img_{id}.jpg"  # resolve image path
         os.replace(f"{temporary_folder}/img_{id}.jpg", path)  # move image to output folder
@@ -71,7 +70,7 @@ def img_save(counter):
 
 def img_delete(counter):
     print("Deleting images...")
-    for i in range(img_sequence):  # loop over last images
+    for i in range(2):  # loop over last images
         id = counter - (i + 1)  # resolve image number
         path = f"{temporary_folder}/img_{id}.jpg"  # resolve image path
         os.remove(path)  # delete image
@@ -146,7 +145,7 @@ def capture(counter):
 
         camera.capture(path)  # capture camera and save the image
         print(f"{counter} / {img_saved}")  # debug
-
+        return path
 
 def calculateGSD(elevation, sensor_size, focal_lenght, image_width):
     #TODO calculate GSD
@@ -209,9 +208,9 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
     #TODO: calculate distance
     #? https://projects.raspberrypi.org/en/projects/astropi-iss-speed/3
 
-    if (coral and classified and (img_saved + img_sequence) <= img_limit) or (not coral and (img_saved + img_sequence) <= img_limit):
+    if (coral and classified and (img_saved + 2) <= img_limit) or (not coral and (img_saved + 2) <= img_limit):
         storage_img += img_save(img_counter)  # save images
-        img_saved += img_sequence
+        img_saved += 2
         print(f"Used storage: {round((storage_img)/(1024*1024), 2)}MB")
     else:
         img_delete(img_counter)  # delete images
