@@ -127,6 +127,24 @@ def calculate_speed_in_kmps(feature_distance, GSD, time_difference):  # calculat
     speed = distance / time_difference
     return speed
 
+def capture(counter):
+        coords = ISS.coordinates()  # get current coordinates
+        south, exif_latitude = convert(coords.latitude)  # convert ccords to EXIF-friendly format
+        west, exif_longitude = convert(coords.longitude)
+
+        # Set image EXIF data
+        camera.exif_tags['DateTimeOriginal'] = str(datetime.now().strftime("%Y:%m:%d, %H:%M:%S"))
+        camera.exif_tags['GPS.GPSLatitude'] = exif_latitude
+        camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
+        camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
+        camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
+
+        path = f"{temporary_folder}/img_{counter}.jpg"
+
+        camera.capture(path)  # capture camera and save the image
+        print(f"{counter} / {img_saved}")  # debug
+
+
 def calculateGSD(elevation, sensor_size, focal_lenght, image_width):
     #TODO calculate GSD
     GSD = 0
@@ -156,24 +174,14 @@ except:
 #* main loop
 while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit):  # run until storage is full or time expires
     print("Capturing images...")
-    for i in range(img_sequence):
-        img_counter += 1  # increment image counter
-        point = ISS.coordinates()  # get current coordinates
-        south, exif_latitude = convert(point.latitude)  # convert ccords to EXIF-friendly format
-        west, exif_longitude = convert(point.longitude)
 
+    img_counter += 1  # increment image counter
+    img1 = capture(img_counter)
+    sleep(5)
 
-        # Set image EXIF data
-        camera.exif_tags['DateTimeOriginal'] = str(datetime.now().strftime("%Y:%m:%d, %H:%M:%S"))
-        camera.exif_tags['GPS.GPSLatitude'] = exif_latitude
-        camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
-        camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
-        camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
-
-        camera.capture(f"{temporary_folder}/img_{img_counter}.jpg")  # capture camera and save the image
-
-        print(f"{img_counter} / {img_saved}")  # debug
-        sleep(5)
+    img_counter += 1  # increment image counter
+    img2 = capture(img_counter)
+    sleep(5)
     
     if coral:  # Classify first image only to save time. The images should not change drastically during one iteration
         print("Classifying images...")
