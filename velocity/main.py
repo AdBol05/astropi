@@ -86,6 +86,19 @@ def convert_to_cv(image_1, image_2):  # convert image to opencv format
     image_2_cv = cv2.imread(image_2, 0)
     return image_1_cv, image_2_cv
 
+def get_time(image):
+    with open(image, 'rb') as image_file:
+        img = Image(image_file)
+        time_str = img.get("datetime_original")
+        time = datetime.strptime(time_str, '%Y:%m:%d %H:%M:%S')
+    return time
+
+def get_time_difference(image_1, image_2):
+    time_1 = get_time(image_1)
+    time_2 = get_time(image_2)
+    time_difference = time_2 - time_1
+    return time_difference.seconds
+
 def calculate_features(image_1, image_2, feature_number):  # calculate common features
     orb = cv2.ORB_create(nfeatures = feature_number)
     keypoints_1, descriptors_1 = orb.detectAndCompute(image_1, None)
@@ -207,6 +220,18 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
                 
     #TODO: calculate distance
     #? https://projects.raspberrypi.org/en/projects/astropi-iss-speed/3
+                
+    print("Processing images...")
+    time_difference = get_time_difference(img1, img2) # Get time difference between images
+    image_1_cv, image_2_cv = convert_to_cv(img1, img2) # Create OpenCV image objects
+    keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) # Get keypoints and descriptors
+    matches = calculate_matches(descriptors_1, descriptors_2) # Match descriptors
+    coordinates_1, coordinates_2 = find_matching_coordinates(keypoints_1, keypoints_2, matches)
+    distance = calculate_mean_distance(coordinates_1, coordinates_2)
+
+    print(coordinates_1[0], coordinates_2[0])
+    print(distance)
+    print(time_difference)
 
     if (coral and classified and (img_saved + 2) <= img_limit) or (not coral and (img_saved + 2) <= img_limit):
         storage_img += img_save(img_counter)  # save images
