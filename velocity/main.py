@@ -214,22 +214,23 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
             if(f'{labels.get(c.id, c.id)}'  == 'usable' and float(f'{c.score:.5f}') >= 0.8):  # if classified as usable with accuracy higher than 0.8
                 classified = True  # mark image as usable for distance calculation
 
-    print("Processing images...")
-    #TODO: calculate GSD based on current altitude
-    #GSD = calculateGSD(pont.elevation.m, sensorsize, focallength, imagewidth)
+    if (not coral) or (coral and classified):
+        print("Processing images...")
+        #TODO: calculate GSD based on current altitude
+        #GSD = calculateGSD(pont.elevation.m, sensorsize, focallength, imagewidth)
 
-    time_difference = get_time_difference(img1, img2) # Get time difference between images
+        time_difference = get_time_difference(img1, img2) # Get time difference between images
 
-    image_1_cv, image_2_cv = convert_to_cv(img1, img2) # Create OpenCV image objects
-    keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) # Get keypoints and descriptors
-    matches = calculate_matches(descriptors_1, descriptors_2) # Match descriptors
-    coordinates_1, coordinates_2 = find_matching_coordinates(keypoints_1, keypoints_2, matches)
-    
-    distance = calculate_mean_distance(coordinates_1, coordinates_2)
-    #TODO: calculate speed
+        image_1_cv, image_2_cv = convert_to_cv(img1, img2) # Create OpenCV image objects
+        keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) # Get keypoints and descriptors
+        matches = calculate_matches(descriptors_1, descriptors_2) # Match descriptors
+        coordinates_1, coordinates_2 = find_matching_coordinates(keypoints_1, keypoints_2, matches)
 
-    print(time_difference)
-    print(distance)
+        distance = calculate_mean_distance(coordinates_1, coordinates_2)
+        #TODO: calculate speed
+
+        print(time_difference)
+        print(distance)
 
     if (coral and classified and (img_saved + 2) <= img_limit) or (not coral and (img_saved + 2) <= img_limit):
         storage_img += img_save(img_counter)  # save images
