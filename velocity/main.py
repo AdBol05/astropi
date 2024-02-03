@@ -18,7 +18,7 @@ import math
 
 #* define variables
 startTime = datetime.now()  # get program start time
-endTime = startTime + timedelta(minutes=9)  # run program for 9 minutes
+endTime = startTime + timedelta(minutes=9, seconds=30)  # run program for 9 minutes
 
 base_folder = Path(__file__).parent.resolve()  # determine working directory
 output_folder = base_folder/'output'  # set output folder path
@@ -128,6 +128,8 @@ def calculate_speed_in_kmps(feature_distance, GSD, time_difference):  # calculat
     return speed
 
 def capture(counter):
+        img_counter += 1  # increment image counter
+        
         coords = ISS.coordinates()  # get current coordinates
         south, exif_latitude = convert(coords.latitude)  # convert ccords to EXIF-friendly format
         west, exif_longitude = convert(coords.longitude)
@@ -175,11 +177,9 @@ except:
 while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit):  # run until storage is full or time expires
     print("Capturing images...")
 
-    img_counter += 1  # increment image counter
     img1 = capture(img_counter)
     sleep(5)
 
-    img_counter += 1  # increment image counter
     img2 = capture(img_counter)
     sleep(5)
     
