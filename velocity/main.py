@@ -10,7 +10,7 @@ from pycoral.adapters import classify
 from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.dataset import read_label_file
 from exif import Image
-from PIL import Image
+#from PIL import Image
 from orbit import ISS
 from skyfield.api import load
 import cv2
