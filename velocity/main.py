@@ -217,10 +217,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
 
     #TODO: calculate GSD based on current altitude
     #GSD = calculateGSD(pont.elevation.m, sensorsize, focallength, imagewidth)
-                
-    #TODO: calculate distance
-    #? https://projects.raspberrypi.org/en/projects/astropi-iss-speed/3
-                
+
     print("Processing images...")
     time_difference = get_time_difference(img1, img2) # Get time difference between images
     image_1_cv, image_2_cv = convert_to_cv(img1, img2) # Create OpenCV image objects
@@ -228,6 +225,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
     matches = calculate_matches(descriptors_1, descriptors_2) # Match descriptors
     coordinates_1, coordinates_2 = find_matching_coordinates(keypoints_1, keypoints_2, matches)
     distance = calculate_mean_distance(coordinates_1, coordinates_2)
+    #TODO: calculate speed
 
     print(coordinates_1[0], coordinates_2[0])
     print(distance)
