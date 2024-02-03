@@ -127,7 +127,8 @@ def calculate_speed_in_kmps(feature_distance, GSD, time_difference):  # calculat
     speed = distance / time_difference
     return speed
 
-def calculateGSD(elevation, resolution_x, resolution_y, focal_lenght, image_width):
+def calculateGSD(elevation, sensor_size, focal_lenght, image_width):
+    #TODO calculate GSD
     GSD = 0
     return GSD
 
@@ -174,7 +175,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
         print(f"{img_counter} / {img_saved}")  # debug
         sleep(5)
     
-    if coral:
+    if coral:  # Classify first image only to save time. The images should not change drastically during one iteration
         print("Classifying images...")
         classified = True  # save or delete images based on classifications
         #! change -> True for testing purposes
@@ -194,7 +195,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
                 classified = True  # mark image as usable for distance calculation
 
     #TODO: calculate GSD based on current altitude
-    #GSD = calculateGSD(pont.elevation.m, camera_width, camera_height, 7, 15)
+    #GSD = calculateGSD(pont.elevation.m, sensorsize, focallength, imagewidth)
                 
     #TODO: calculate distance
     #? https://projects.raspberrypi.org/en/projects/astropi-iss-speed/3
