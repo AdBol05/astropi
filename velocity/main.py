@@ -10,7 +10,7 @@ from pycoral.adapters import classify
 from pycoral.utils.edgetpu import make_interpreter
 from pycoral.utils.dataset import read_label_file
 from exif import Image
-#from PIL import Image
+from PIL import Image as PILImage
 from orbit import ISS
 from skyfield.api import load
 import cv2
@@ -202,7 +202,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
         #! change -> True for testing purposes
 
         #* Open image and convert it to coral-friendly format
-        image = Image.open(f"{temporary_folder}/img_{img_counter - 1}.jpg").convert('RGB').resize(size, Image.ANTIALIAS)  # open image
+        image = PILImage.open(f"{temporary_folder}/img_{img_counter - 1}.jpg").convert('RGB').resize(size, PILImage.ANTIALIAS)  # open image
 
         #* Classify image
         common.set_input(interpreter, image)  # load interpreter and image to TPU
