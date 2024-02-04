@@ -157,7 +157,7 @@ def capture(counter):
         camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
         camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
         camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
-        camera.exif_tags['GPS.GPSAltitude'] = altitude.numerator
+        camera.exif_tags['GPS.GPSAltitude'] = (altitude.numerator, altitude.denominator)
 
         path = f"{temporary_folder}/img_{counter}.jpg"
 
