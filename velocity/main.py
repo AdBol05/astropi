@@ -232,8 +232,8 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
         distance = calculate_mean_distance(coordinates_1, coordinates_2)
         #TODO: calculate speed
 
-        print(time_difference)
-        print(distance)
+        print(f"Time difference: {time_difference}")
+        print(f"Distance: {distance}")
 
     if (coral and classified and (img_saved + 2) <= img_limit) or (not coral and (img_saved + 2) <= img_limit):
         storage_img += img_save(img_counter)  # save images
