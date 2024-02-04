@@ -138,7 +138,7 @@ def calculate_speed_in_kmps(feature_distance, GSD, time_difference):  # calculat
     speed = distance / time_difference
     return speed
 
-def capture(counter, coords):
+def capture(counter):
         global img_counter
         img_counter  += 1  # increment image counter
         
@@ -146,15 +146,13 @@ def capture(counter, coords):
         south, exif_latitude = convert(coords.latitude)  # convert ccords to EXIF-friendly format
         west, exif_longitude = convert(coords.longitude)
 
-        #print(coords.elevation.m)
-
         # Set image EXIF data
         camera.exif_tags['DateTimeOriginal'] = str(datetime.now().strftime("%Y:%m:%d, %H:%M:%S"))
         camera.exif_tags['GPS.GPSLatitude'] = exif_latitude
         camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
         camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
         camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
-#        camera.exif_tags['GPS.GPSAltitude'] = coords.elevation.m
+        camera.exif_tags['GPS.GPSAltitude'] = coords.elevation.m
 
         path = f"{temporary_folder}/img_{counter}.jpg"
 
