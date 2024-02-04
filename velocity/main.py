@@ -218,22 +218,26 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
                 classified = True  # mark image as usable for distance calculation
 
     if (not coral) or (coral and classified):
-        print("Processing images...")
-        #TODO: calculate GSD based on current altitude
-        #GSD = calculateGSD(ISS.coordinates().elevation.m, sensorsize, focallength, imagewidth)
+        try:
+            print("Processing images...")
+            #TODO: calculate GSD based on current altitude
+            #GSD = calculateGSD(ISS.coordinates().elevation.m, sensorsize, focallength, imagewidth)
 
-        time_difference = get_time_difference(img1, img2) # Get time difference between images
+            time_difference = get_time_difference(img1, img2) # Get time difference between images
+            image_1_cv, image_2_cv = convert_to_cv(img1, img2) # Create OpenCV image objects
+            keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) # Get keypoints and descriptors
+            matches = calculate_matches(descriptors_1, descriptors_2) # Match descriptors
+            coordinates_1, coordinates_2 = find_matching_coordinates(keypoints_1, keypoints_2, matches)
 
-        image_1_cv, image_2_cv = convert_to_cv(img1, img2) # Create OpenCV image objects
-        keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) # Get keypoints and descriptors
-        matches = calculate_matches(descriptors_1, descriptors_2) # Match descriptors
-        coordinates_1, coordinates_2 = find_matching_coordinates(keypoints_1, keypoints_2, matches)
+            distance = calculate_mean_distance(coordinates_1, coordinates_2)
+            #TODO: calculate speed
 
-        distance = calculate_mean_distance(coordinates_1, coordinates_2)
-        #TODO: calculate speed
-
-        print(f"Time difference: {time_difference}")
-        print(f"Distance: {distance}")
+            print(f"Time difference: {time_difference}")
+            print(f"Distance: {distance}")
+        except:
+            e = sys.exc_info()  # get error message
+            print(f"Failed to process images")  # print error
+            print("  Error: {}".format( e))  # print error details
 
     if (coral and classified and (img_saved + 2) <= img_limit) or (not coral and (img_saved + 2) <= img_limit):
         storage_img += img_save(img_counter)  # save images
