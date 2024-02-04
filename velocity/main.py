@@ -146,6 +146,8 @@ def capture(counter, coords):
         south, exif_latitude = convert(coords.latitude)  # convert ccords to EXIF-friendly format
         west, exif_longitude = convert(coords.longitude)
 
+        print(coords.elevation.m)
+
         # Set image EXIF data
         camera.exif_tags['DateTimeOriginal'] = str(datetime.now().strftime("%Y:%m:%d, %H:%M:%S"))
         camera.exif_tags['GPS.GPSLatitude'] = exif_latitude
