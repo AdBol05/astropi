@@ -149,8 +149,7 @@ def capture(counter):
         altitude = Fraction(str(round(coords.elevation.m)))
         
         print(coords.elevation.m)
-        print(altitude.numerator)
-        print(altitude.denominator)
+        print(altitude)
 
         # Set image EXIF data
         camera.exif_tags['DateTimeOriginal'] = str(datetime.now().strftime("%Y:%m:%d, %H:%M:%S"))
@@ -158,7 +157,7 @@ def capture(counter):
         camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
         camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
         camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
-        camera.exif_tags['GPS.GPSAltitude'] = (altitude.numerator, altitude.denominator)
+        camera.exif_tags['GPS.GPSAltitude'] = altitude
 
         path = f"{temporary_folder}/img_{counter}.jpg"
 
