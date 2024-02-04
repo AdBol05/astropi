@@ -138,7 +138,7 @@ def calculate_speed_in_kmps(feature_distance, GSD, time_difference):  # calculat
     speed = distance / time_difference
     return speed
 
-def capture(counter):
+def capture(counter, coords):
         global img_counter
         img_counter  += 1  # increment image counter
         
@@ -152,6 +152,7 @@ def capture(counter):
         camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
         camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
         camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
+        camera.exif_tags['GPS.GPSAltitude'] = coords.elevation.m
 
         path = f"{temporary_folder}/img_{counter}.jpg"
 
@@ -217,7 +218,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
     if (not coral) or (coral and classified):
         print("Processing images...")
         #TODO: calculate GSD based on current altitude
-        #GSD = calculateGSD(pont.elevation.m, sensorsize, focallength, imagewidth)
+        #GSD = calculateGSD(ISS.coordinates().elevation.m, sensorsize, focallength, imagewidth)
 
         time_difference = get_time_difference(img1, img2) # Get time difference between images
 
