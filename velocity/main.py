@@ -165,9 +165,8 @@ def capture(counter):
         return path
 
 def calculateGSD(elevation, sensor_size, focal_lenght, image_width):
-    #TODO calculate GSD
-    GSD = 0
-    return GSD
+    gsd = (elevation * sensor_size) / (focal_lenght * image_width)
+    return gsd
 
 #* camera setup (set iamge resolution)
 camera = PiCamera()
