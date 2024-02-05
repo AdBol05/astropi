@@ -38,6 +38,8 @@ storage_txt = 0  # used text storage
 # camera resolution (max 4056*3040 -> crashes (out of resources))
 camera_width = 2028
 camera_height = 1520
+focal_lenght = 7     #?
+sensor_width = 3.76  #?
 
 #* create output and temporary directories if they don't exist
 if not os.path.exists(temporary_folder):
@@ -221,7 +223,8 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
         try:
             print("Processing images...")
             #TODO: calculate GSD based on current altitude
-            #GSD = calculateGSD(ISS.coordinates().elevation.m, sensorsize, focallength, imagewidth)
+            gsd = calculateGSD(ISS.coordinates().elevation.m, sensor_width, focal_lenght, camera_width)
+            print(gsd)
 
             time_difference = get_time_difference(img1, img2) # Get time difference between images
             image_1_cv, image_2_cv = convert_to_cv(img1, img2) # Create OpenCV image objects
