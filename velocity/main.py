@@ -146,7 +146,7 @@ def capture(counter):
         img_counter  += 1  # increment image counter
         
         coords = ISS.coordinates()  # get current coordinates
-        south, exif_latitude = convert(coords.latitude)  # convert ccords to EXIF-friendly format
+        south, exif_latitude = convert(coords.latitude)  # convert coords to EXIF-friendly format
         west, exif_longitude = convert(coords.longitude)
         altitude = Fraction(str(round(coords.elevation.m)))
 
