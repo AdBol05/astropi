@@ -228,12 +228,16 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
             print(f"Time difference: {time_difference}")
 
             image_1_cv, image_2_cv = convert_to_cv(img1, img2) # Create OpenCV image objects
+            print("Converted images to OpenCV format")
+
             keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) # Get keypoints and descriptors
+            print("Calculated features")
 
             matches = calculate_matches(descriptors_1, descriptors_2) # Match descriptors
             print(f"Matches: {len(matches)}")
             
             coordinates_1, coordinates_2 = find_matching_coordinates(keypoints_1, keypoints_2, matches)
+            print("Found matching coordinates")
 
             distance = calculate_mean_distance(coordinates_1, coordinates_2)
             print(f"Distance: {distance}")
