@@ -150,8 +150,6 @@ def capture(counter):
         west, exif_longitude = convert(coords.longitude)
         altitude = Fraction(str(round(coords.elevation.m)))
 
-        print(f"{altitude.numerator}/{altitude.denominator}")
-
         # Set image EXIF data
         camera.exif_tags['DateTimeOriginal'] = str(datetime.now().strftime("%Y:%m:%d, %H:%M:%S"))
         camera.exif_tags['GPS.GPSLatitude'] = exif_latitude
@@ -225,7 +223,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
             print("Processing images...")
             #TODO: calculate GSD based on current altitude
             gsd = calculateGSD(ISS.coordinates().elevation.m, sensor_width, focal_lenght, camera_width)
-            print(gsd)
+            print(f"GSD: {gsd}")
 
             time_difference = get_time_difference(img1, img2) # Get time difference between images
             print(f"Time difference: {time_difference}")
