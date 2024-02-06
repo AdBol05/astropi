@@ -148,7 +148,7 @@ def capture(counter):
         coords = ISS.coordinates()  # get current coordinates
         south, exif_latitude = convert(coords.latitude)  # convert ccords to EXIF-friendly format
         west, exif_longitude = convert(coords.longitude)
-        altitude = Fraction(str(round(coords.elevation.m)))
+        #altitude = Fraction(str(round(coords.elevation.m)))
 
         # Set image EXIF data
         camera.exif_tags['DateTimeOriginal'] = str(datetime.now().strftime("%Y:%m:%d, %H:%M:%S"))
@@ -156,7 +156,7 @@ def capture(counter):
         camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
         camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
         camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
-        camera.exif_tags['GPS.GPSAltitude'] = str((altitude.numerator, altitude.denominator))
+        camera.exif_tags['GPS.GPSAltitude'] = str(coords.elevation.m) #str((altitude.numerator, altitude.denominator))
 
         path = f"{temporary_folder}/img_{counter}.jpg"
 
