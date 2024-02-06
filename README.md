@@ -28,14 +28,17 @@ Runinng the program:
 Measuring changes in life environment of ISS caused by human presence using temperature, humidity, pressure and pir sensors.
 
 # Particle_detection
-Detecting particles using raspberry pi HQ camera. Deleting empty images and saving only images with a particle detected.
+Detecting particles using raspberry pi HQ camera. Deleting empty images and saving only images with a particle present.
 
 # Deceleration
-Measuring chages in speed of ISS caused by Earth’s magfnetic field.
+Measuring chages in speed of ISS caused by Earth’s magnetic field.
 
 # Lightning detection
 Detects spikes in magnetic field caused by storms on Earth and tries to photograp Blue jets, red sprites and ELVES
 ![250px-Upperatmoslight1](https://user-images.githubusercontent.com/98588523/154854886-024aa0d7-b9f0-4820-b4e0-ee78c8081846.jpg)
+
+# Velocity
+Measuring the velocity of ISS relative to Earth's surface.
 
 # Coral
 Retrained model used for Particle detection

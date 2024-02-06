@@ -228,16 +228,18 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
             print(gsd)
 
             time_difference = get_time_difference(img1, img2) # Get time difference between images
+            print(f"Time difference: {time_difference}")
+
             image_1_cv, image_2_cv = convert_to_cv(img1, img2) # Create OpenCV image objects
             keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) # Get keypoints and descriptors
             matches = calculate_matches(descriptors_1, descriptors_2) # Match descriptors
             coordinates_1, coordinates_2 = find_matching_coordinates(keypoints_1, keypoints_2, matches)
 
             distance = calculate_mean_distance(coordinates_1, coordinates_2)
+            print(f"Distance: {distance}")
+            
             #TODO: calculate speed
 
-            print(f"Time difference: {time_difference}")
-            print(f"Distance: {distance}")
         except:
             e = sys.exc_info()  # get error message
             print(f"Failed to process images")  # print error
