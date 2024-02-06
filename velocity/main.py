@@ -19,7 +19,7 @@ from fractions import Fraction
 
 #* define variables
 startTime = datetime.now()  # get program start time
-endTime = startTime + timedelta(minutes=9, seconds=15)  # run program for 9 minutes
+endTime = startTime + timedelta(minutes=9, seconds=20)  # run program for 9 minutes
 
 base_folder = Path(__file__).parent.resolve()  # determine working directory
 output_folder = base_folder/'output'  # set output folder path
