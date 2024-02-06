@@ -243,7 +243,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
             distance = calculate_mean_distance(coordinates_1, coordinates_2)
             print(f"Distance: {distance}")
             
-            speed = calculate_speed_in_kmps(distance, gsd, time_difference)
+            speed = round(calculate_speed_in_kmps(distance, gsd, time_difference), 5)
             print(f"Speed: {speed}")
 
             storage_txt = write_to_txt(data_file, speed)
