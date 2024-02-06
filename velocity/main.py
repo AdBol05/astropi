@@ -245,7 +245,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
             speed = calculate_speed_in_kmps(distance, gsd, time_difference)
             print(f"Speed: {speed}")
 
-            write_to_txt(speed)
+            write_to_txt(data_file, speed)
 
         except:
             e = sys.exc_info()  # get error message
