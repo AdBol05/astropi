@@ -221,7 +221,6 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
     if (not coral) or (coral and classified):
         try:
             print("Processing images...")
-            #TODO: calculate GSD based on current altitude
             gsd = calculateGSD(ISS.coordinates().elevation.m, sensor_width, focal_lenght, camera_width)
             print(f"GSD: {gsd}")
 
@@ -232,7 +231,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
             keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) # Get keypoints and descriptors
 
             matches = calculate_matches(descriptors_1, descriptors_2) # Match descriptors
-            print(f"Matches: {matches}")
+            print(f"Matches: {len(matches)}")
             
             coordinates_1, coordinates_2 = find_matching_coordinates(keypoints_1, keypoints_2, matches)
 
