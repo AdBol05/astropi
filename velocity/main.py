@@ -168,18 +168,18 @@ except:
 #* main loop
 while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit):  # run until storage is full or time expires
     print("Capturing images...")
-    images = []
+    images = [] # array of paths to two last images
     for i in range(2):
         images.append(capture(img_counter))
         sleep(5)
     
     if coral:  # Classify first image only to save time. The images should not change drastically during one iteration
         print("Classifying images...")
-        classified = True  # save or delete images based on classifications
+        classified = False  # save or delete images based on classifications
         #! change -> True for testing purposes
 
-        #* Open image and convert it to coral-friendly format
-        image = PILImage.open(f"{base_folder}/img_{img_counter - 1}.jpg").convert('RGB').resize(size, PILImage.ANTIALIAS)  # open image
+        #* Open first image and convert it to coral-friendly format -> no need to classify both images since they will not change significantly
+        image = PILImage.open(images[0]).convert('RGB').resize(size, PILImage.ANTIALIAS)  # open image
 
         #* Classify image
         common.set_input(interpreter, image)  # load interpreter and image to TPU
