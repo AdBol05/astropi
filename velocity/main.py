@@ -196,7 +196,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
         try:
             print("Processing images...")
             gsd = calculateGSD(ISS.coordinates().elevation.m, sensor_width, focal_lenght, camera_width)
-            
+
             time_difference = get_time_difference(images[0], images[1]) # Get time difference between images
             image_1_cv, image_2_cv = convert_to_cv(images[0], images[1]) # Create OpenCV image objects
             keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) # Get keypoints and descriptors
@@ -220,7 +220,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
     else:
         img_delete(images)  # delete images
 
-    sleep(30)
+    sleep(10)
 
 #* final output message
 print("#------------------------------------------------------------------------------------------------------#")
