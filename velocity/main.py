@@ -121,7 +121,7 @@ def calculate_speed_in_kmps(feature_distance, GSD, time_difference):  # calculat
 def capture(counter):
         global img_counter
         img_counter  += 1  # increment image counter
-        
+
         coords = ISS.coordinates()  # get current coordinates
         south, exif_latitude = convert(coords.latitude)  # convert coords to EXIF-friendly format
         west, exif_longitude = convert(coords.longitude)
@@ -173,7 +173,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
     for i in range(2):
         images.append(capture(img_counter))
         sleep(5)
-    
+
     if coral:  # Classify first image only to save time. The images should not change drastically during one iteration
         print("Classifying images...")
         classified = False  # save or delete images based on classifications
@@ -200,9 +200,9 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
             time_difference = get_time_difference(images[0], images[1]) # Get time difference between images
             image_1_cv, image_2_cv = convert_to_cv(images[0], images[1]) # Create OpenCV image objects
             keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) # Get keypoints and descriptors
-            matches = calculate_matches(descriptors_1, descriptors_2) # Match descriptors            
+            matches = calculate_matches(descriptors_1, descriptors_2) # Match descriptors
             coordinates_1, coordinates_2 = find_matching_coordinates(keypoints_1, keypoints_2, matches)
-            distance = calculate_mean_distance(coordinates_1, coordinates_2)            
+            distance = calculate_mean_distance(coordinates_1, coordinates_2)
             speed = round(calculate_speed_in_kmps(distance, gsd, time_difference), 5)
 
             storage_txt = write_to_txt(data_file, speed)
