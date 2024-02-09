@@ -22,9 +22,7 @@ startTime = datetime.now()  # get program start time
 endTime = startTime + timedelta(minutes=9, seconds=15)  # run program for 9 minutes
 
 base_folder = Path(__file__).parent.resolve()  # determine working directory
-output_folder = base_folder/'output'  # set output folder path
-temporary_folder = base_folder/'temp'  # set temporary folder path
-data_file = output_folder/'data.txt'  # set data.csv path
+data_file = base_folder/'data.txt'  # set data.csv path
 model_file = base_folder/'viewtype.tflite' # set model path
 label_file = base_folder/'viewtype_labels.txt' # set label file path
 
@@ -41,15 +39,6 @@ camera_height = 1520
 focal_lenght = 7     #?
 sensor_width = 3.76  #?
 
-#* create output and temporary directories if they don't exist
-if not os.path.exists(temporary_folder):
-    print(f"Creating temporary directory in: {temporary_folder}")  # debug
-    os.mkdir(temporary_folder)
-
-if not os.path.exists(output_folder):
-    os.mkdir(output_folder)
-    print(f"Creating output directory in: {output_folder}")  # debug
-
 #* define functions
 def average(list):
     return sum(list) / len(list)
@@ -60,23 +49,11 @@ def write_to_txt(filename, data):
         print("Written data to txt file")
     return os.path.getsize(filename)
 
-def img_save(counter):
-    print("Saving images...")
-    size = 0
-    for i in range(2):  # loop over last images
-        id = counter - (i + 1)  # resolve image number
-        path = f"{output_folder}/img_{id}.jpg"  # resolve image path
-        os.replace(f"{temporary_folder}/img_{id}.jpg", path)  # move image to output folder
-        size += os.path.getsize(path)  # add image size to counter
-        print(f"saving to: {path}")  # debug
-
-    return size  # return size of all moved file so it can be added to used storage
-
 def img_delete(counter):
     print("Deleting images...")
     for i in range(2):  # loop over last images
         id = counter - (i + 1)  # resolve image number
-        path = f"{temporary_folder}/img_{id}.jpg"  # resolve image path
+        path = f"{base_folder}/img_{id}.jpg"  # resolve image path
         os.remove(path)  # delete image
         print(f"Removing: {path}")  # debug
 
@@ -159,7 +136,7 @@ def capture(counter):
         camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
         camera.exif_tags['GPS.GPSAltitude'] = str(f"{altitude.numerator}/{altitude.denominator}")
 
-        path = f"{temporary_folder}/img_{counter}.jpg"
+        path = f"{base_folder}/img_{counter}.jpg"
 
         camera.capture(path)  # capture camera and save the image
         print(f"{counter} / {img_saved}")  # debug
@@ -206,7 +183,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
         #! change -> True for testing purposes
 
         #* Open image and convert it to coral-friendly format
-        image = PILImage.open(f"{temporary_folder}/img_{img_counter - 1}.jpg").convert('RGB').resize(size, PILImage.ANTIALIAS)  # open image
+        image = PILImage.open(f"{base_folder}/img_{img_counter - 1}.jpg").convert('RGB').resize(size, PILImage.ANTIALIAS)  # open image
 
         #* Classify image
         common.set_input(interpreter, image)  # load interpreter and image to TPU
@@ -254,8 +231,9 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
             print("  Error: {}".format( e))  # print error details
 
     if (coral and classified and (img_saved + 2) <= img_limit) or (not coral and (img_saved + 2) <= img_limit):
-        storage_img += img_save(img_counter)  # save images
-        img_saved += 2
+        for i in range(2):
+            storage_img += os.path.getsize(f"{base_folder}/img_{img_counter - i}.jpg")
+            img_saved += 1
         print(f"Used storage: {round((storage_img + storage_txt)/(1024*1024), 2)}MB")
     else:
         img_delete(img_counter)  # delete images
@@ -264,7 +242,6 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
 
 #* final output message
 print("#------------------------------------------------------------------------------------------------------#")
-print(f"Program ended. All output files are located in {output_folder}")  # debug
 print(f"Time elapsed: {datetime.now() - startTime}")
 print(f"Storage used: {round((storage_img + storage_txt)/(1024*1024), 2)}/{round(storage_limit/(1024*1024), 2)}MB,")
 print(f"Saved images: {img_saved}")
