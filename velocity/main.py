@@ -19,7 +19,7 @@ from fractions import Fraction
 
 #* define variables
 startTime = datetime.now()  # get program start time
-endTime = startTime + timedelta(minutes=9, seconds=15)  # run program for 9 minutes
+endTime = startTime + timedelta(minutes=9, seconds=45)  # run program for 9 minutes
 failsafeTime = endTime - timedelta(seconds=60)  # time after which it is safe to take images regardless of classification
 
 base_folder = Path(__file__).parent.resolve()  # determine working directory
