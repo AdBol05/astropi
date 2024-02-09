@@ -51,11 +51,9 @@ def write_to_txt(filename, data):
 
 def img_delete(counter):
     print("Deleting images...")
-    for i in range(2):  # loop over last images
-        id = counter - (i + 1)  # resolve image number
-        path = f"{base_folder}/img_{id}.jpg"  # resolve image path
-        os.remove(path)  # delete image
-        print(f"Removing: {path}")  # debug
+    for i, image in images:
+        os.remove(image)  # delete image
+        print(f"Removing: {image} #{i}")  # debug
 
 def convert(angle):  # convert coordinates to degrees
     sign, degrees, minutes, seconds = angle.signed_dms()
@@ -170,12 +168,10 @@ except:
 #* main loop
 while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit):  # run until storage is full or time expires
     print("Capturing images...")
-
-    img1 = capture(img_counter)
-    sleep(5)
-
-    img2 = capture(img_counter)
-    sleep(5)
+    images = []
+    for i in range(2):
+        images.append(capture(img_counter))
+        sleep(5)
     
     if coral:  # Classify first image only to save time. The images should not change drastically during one iteration
         print("Classifying images...")
@@ -202,10 +198,10 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
             gsd = calculateGSD(ISS.coordinates().elevation.m, sensor_width, focal_lenght, camera_width)
             print(f"GSD: {gsd}")
 
-            time_difference = get_time_difference(img1, img2) # Get time difference between images
+            time_difference = get_time_difference(images[0], images[1]) # Get time difference between images
             print(f"Time difference: {time_difference}")
 
-            image_1_cv, image_2_cv = convert_to_cv(img1, img2) # Create OpenCV image objects
+            image_1_cv, image_2_cv = convert_to_cv(images[0], images[1]) # Create OpenCV image objects
             print("Converted images to OpenCV format")
 
             keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) # Get keypoints and descriptors
@@ -232,11 +228,11 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
 
     if (coral and classified and (img_saved + 2) <= img_limit) or (not coral and (img_saved + 2) <= img_limit):
         for i in range(2):
-            storage_img += os.path.getsize(f"{base_folder}/img_{img_counter - (i + 1)}.jpg")
+            storage_img += os.path.getsize(images[i - 1])
             img_saved += 1
         print(f"Used storage: {round((storage_img + storage_txt)/(1024*1024), 2)}MB")
     else:
-        img_delete(img_counter)  # delete images
+        img_delete(images)  # delete images
 
     sleep(30)
 
