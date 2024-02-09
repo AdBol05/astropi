@@ -232,7 +232,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
 
     if (coral and classified and (img_saved + 2) <= img_limit) or (not coral and (img_saved + 2) <= img_limit):
         for i in range(2):
-            storage_img += os.path.getsize(f"{base_folder}/img_{img_counter - i}.jpg")
+            storage_img += os.path.getsize(f"{base_folder}/img_{img_counter - (i - 1)}.jpg")
             img_saved += 1
         print(f"Used storage: {round((storage_img + storage_txt)/(1024*1024), 2)}MB")
     else:
