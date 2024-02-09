@@ -212,7 +212,7 @@ while(datetime.now() < endTime and (storage_img + storage_txt) <= storage_limit)
             print(f"Failed to process images")  # print error
             print("  Error: {}".format( e))  # print error details
 
-    if (coral and classified and (img_saved + 2) <= img_limit) or (not coral and (img_saved + 2) <= img_limit):
+    if (coral and classified and (img_saved + 2) <= img_limit) or (not coral and (img_saved + 2) <= img_limit) or ((endTime - datetime.now()).seconds < 45 and img_saved < 10):
         for i in range(2):
             storage_img += os.path.getsize(images[i - 1])
             img_saved += 1
