@@ -20,7 +20,7 @@ from fractions import Fraction
 #* define variables
 startTime = datetime.now()  # get program start time
 endTime = startTime + timedelta(minutes=9, seconds=40)  # run program for 9 minutes
-failsafeTime = endTime - timedelta(seconds=60)  # time after which it is safe to take images regardless of classification
+failsafeTime = endTime - timedelta(minutes=2)  # time after which it is safe to take images regardless of classification
 
 base_folder = Path(__file__).parent.resolve()  # determine working directory
 data_file = base_folder/'data.txt'  # set data.csv path
