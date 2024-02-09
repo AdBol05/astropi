@@ -50,7 +50,7 @@ def write_to_txt(filename, data):
         print("Written data to txt file")
     return os.path.getsize(filename)
 
-def img_delete(counter):
+def img_delete(images):
     print("Deleting images...")
     for img in images:
         os.remove(img)  # delete image
