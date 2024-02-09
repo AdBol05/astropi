@@ -51,9 +51,9 @@ def write_to_txt(filename, data):
 
 def img_delete(counter):
     print("Deleting images...")
-    for i, image in images:
-        os.remove(image)  # delete image
-        print(f"Removing: {image} #{i}")  # debug
+    for i in images:
+        os.remove(images[i - 1])  # delete image
+        print(f"Removing: {images[i - 1]}")  # debug
 
 def convert(angle):  # convert coordinates to degrees
     sign, degrees, minutes, seconds = angle.signed_dms()
