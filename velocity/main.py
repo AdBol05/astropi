@@ -231,6 +231,7 @@ while(datetime.now() < endTime and (storage_img) <= storage_limit):  # run until
     sleep(10)
 
 #* write final speed to txt file
+print(speed)
 write_to_txt(data_file, speed)
 
 #* final output message
