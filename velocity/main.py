@@ -215,7 +215,6 @@ while(datetime.now() < endTime and (storage_img) <= storage_limit):  # run until
             coordinates_1, coordinates_2 = find_matching_coordinates(keypoints_1, keypoints_2, matches)
             distance = calculate_mean_distance(coordinates_1, coordinates_2)
             speed.append(round(calculate_speed_in_kmps(distance, gsd, time_difference), 5))
-            print(speed)
 
         except:
             e = sys.exc_info()  # get error message
