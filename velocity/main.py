@@ -48,6 +48,7 @@ def average(list):
 def write_to_txt(filename, data):
     if len(data) > 0:
         try:
+            print(f"Number of values in data array: {len(data)}")
             # calculate average speed
             merged_speed = 0
             for value in data:
@@ -237,7 +238,6 @@ while(datetime.now() < endTime and (storage_img) <= storage_limit):  # run until
     sleep(10)
 
 #* write final speed to txt file
-print(speed)
 write_to_txt(data_file, speed)
 
 #* final output message
