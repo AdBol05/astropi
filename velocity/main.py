@@ -47,16 +47,21 @@ def average(list):
 
 def write_to_txt(filename, data):
     if len(data) > 0:
-        # calculate average speed
-        merged_speed = 0
-        for value in data:
-            merged_speed += value
-        speed = merged_speed / len(data)
+        try:
+            # calculate average speed
+            merged_speed = 0
+            for value in data:
+                merged_speed += value
+            speed = merged_speed / len(data)
 
-        # write average speed to file
-        with open(filename, 'a') as f:
-            f.write("{:.4f}".format(speed) + '\n')
-            print("Written data to txt file")
+            # write average speed to file
+            with open(filename, 'a') as f:
+                f.write("{:.4f}".format(speed) + '\n')
+                print("Written data to txt file")
+        except:
+            e = sys.exc_info()  # get error message
+            print(f"Failed to write to txt file")  # print error
+            print("  Error: {}".format( e))  # print error details
     else:
         print("No data to be saved!")
 
