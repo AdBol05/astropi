@@ -39,7 +39,7 @@ camera_height = 1520
 focal_lenght = 7     #?
 sensor_width = 3.76  #?
 
-speed = []  # array of speed vaules to be averaged
+speed = []  # array of speed values to be averaged
 
 #* define functions
 def average(list):
