@@ -23,7 +23,7 @@ endTime = startTime + timedelta(minutes=9, seconds=40)  # run program for 9 minu
 failsafeTime = endTime - timedelta(minutes=2)  # time after which it is safe to take images regardless of classification
 
 base_folder = Path(__file__).parent.resolve()  # determine working directory
-data_file = base_folder/'data.txt'  # set data.csv path
+data_file = base_folder/'result.txt'  # set data.csv path
 model_file = base_folder/'viewtype.tflite' # set model path
 label_file = base_folder/'viewtype_labels.txt' # set label file path
 
