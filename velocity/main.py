@@ -255,8 +255,8 @@ while(datetime.now() < endTime and (storage_img) <= storage_limit):  # run until
 write_to_txt(data_file, speed)
 
 #* final output message
-print("#------------------------------------------------------------------------------------------------------#")
+print("#-------------------------------------------------------#")
 print(f"Time elapsed: {datetime.now() - startTime}")
 print(f"Storage used: {round((storage_img)/(1024*1024), 2)}/{round(storage_limit/(1024*1024), 2)}MB,")
 print(f"Saved images: {img_saved}")
-print("#------------------------------------------------------------------------------------------------------#")
+print("#-------------------------------------------------------#")
