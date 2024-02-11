@@ -50,10 +50,7 @@ def write_to_txt(filename, data):
         try:
             print(f"Number of values in data array: {len(data)}")
             # calculate average speed
-            merged_speed = 0
-            for value in data:
-                merged_speed += value
-            speed = merged_speed / len(data)
+            speed = average(data)
 
             # write average speed to file
             with open(filename, 'a') as f:
