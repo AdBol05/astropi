@@ -224,6 +224,8 @@ while(datetime.now() < endTime and (storage_img) <= storage_limit):  # run until
             
             matches = calculate_matches(descriptors_1, descriptors_2) # Match descriptors
             print(f"Matches: {len(matches)}")
+
+            matches = []  #! test, delete afterwards!
             
             if len(matches) == 0:  # skip loop iteration if no matches were found
                 print("No matches found")
