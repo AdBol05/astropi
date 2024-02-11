@@ -212,15 +212,25 @@ while(datetime.now() < endTime and (storage_img) <= storage_limit):  # run until
     if (not coral) or (coral and classified):
         try:
             print("Processing images...")
+
             gsd = calculateGSD(ISS.coordinates().elevation.m, sensor_width, focal_lenght, camera_width)
+            print(f"GSD: {gsd}")
 
             time_difference = get_time_difference(images[0], images[1]) # Get time difference between images
+            print(f"Time difference: {time_difference}")
+
             image_1_cv, image_2_cv = convert_to_cv(images[0], images[1]) # Create OpenCV image objects
             keypoints_1, keypoints_2, descriptors_1, descriptors_2 = calculate_features(image_1_cv, image_2_cv, 1000) # Get keypoints and descriptors
+            
             matches = calculate_matches(descriptors_1, descriptors_2) # Match descriptors
+            print(f"Matches: {len(matches)}")
+            
             coordinates_1, coordinates_2 = find_matching_coordinates(keypoints_1, keypoints_2, matches)
             distance = calculate_mean_distance(coordinates_1, coordinates_2)
+            print(f"Distance: {distance}")
+
             speed.append(round(calculate_speed_in_kmps(distance, gsd, time_difference), 5))
+            print(f"Speed values: {len(speed)}")
 
         except:
             e = sys.exc_info()  # get error message
