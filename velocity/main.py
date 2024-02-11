@@ -49,11 +49,8 @@ def write_to_txt(filename, data):
     if len(data) > 0:
         try:
             print(f"Number of values in data array: {len(data)}")
-            # calculate average speed
-            speed = average(data)
-
-            # write average speed to file
-            with open(filename, 'a') as f:
+            speed = average(data)  # calculate average speed
+            with open(filename, 'a') as f:   # write average speed to file
                 f.write("{:.4f}".format(speed) + '\n')
                 print("Written data to txt file")
         except:
@@ -65,7 +62,7 @@ def write_to_txt(filename, data):
 
 def img_delete(images):
     print("Deleting images...")
-    for img in images:
+    for img in images:  # get paths from array
         os.remove(img)  # delete image
         print(f"Removing: {img}")  # debug
 
@@ -79,14 +76,14 @@ def convert_to_cv(image_1, image_2):  # convert image to opencv format
     image_2_cv = cv2.imread(image_2, 0)
     return image_1_cv, image_2_cv
 
-def get_time(image):
+def get_time(image):  # get time of image creation from exif
     with open(image, 'rb') as image_file:
         img = Image(image_file)
         time_str = img.get("datetime_original")
-        time = datetime.strptime(time_str, '%Y:%m:%d %H:%M:%S')
+        time = datetime.strptime(time_str, '%Y:%m:%d %H:%M:%S')  # format time
     return time
 
-def get_time_difference(image_1, image_2):
+def get_time_difference(image_1, image_2):  # calculate time differnce between images
     time_1 = get_time(image_1)
     time_2 = get_time(image_2)
     time_difference = time_2 - time_1
@@ -148,13 +145,13 @@ def capture(counter):
         camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
         camera.exif_tags['GPS.GPSAltitude'] = str(f"{altitude.numerator}/{altitude.denominator}")
 
-        path = f"{base_folder}/img_{counter}.jpg"
+        path = f"{base_folder}/img_{counter}.jpg"  # resolve image path
 
         camera.capture(path)  # capture camera and save the image
         print(f"{counter} / {img_saved}")  # debug
-        return path
+        return path  # return path so it can be appended to an array
 
-def calculateGSD(elevation, sensor_size, focal_lenght, image_width):
+def calculateGSD(elevation, sensor_size, focal_lenght, image_width):  # calculate GPS based on current altitude
     gsd = (elevation * sensor_size) / (focal_lenght * image_width)
     return gsd
 
@@ -163,7 +160,7 @@ camera = PiCamera()
 camera.resolution = (camera_width, camera_height)
 
 #* attempt to initialize coral TPU
-coral = False
+coral = False  # coral setup indicator (True if coral initialized correctly)
 try:  # attempt to to initialize coral TPU
     print("Initializing coral TPU")  # debug
     interpreter = make_interpreter(f"{model_file}")  # create an interpreter instance
@@ -183,7 +180,7 @@ except:
 while(datetime.now() < endTime and (storage_img) <= storage_limit):  # run until storage is full or time expires
     print("Capturing images...")
     images = [] # array of paths to two last images
-    for i in range(2):
+    for i in range(2):  # add image paths to array
         images.append(capture(img_counter))
         sleep(5)
 
@@ -210,7 +207,7 @@ while(datetime.now() < endTime and (storage_img) <= storage_limit):  # run until
         try:
             print("Processing images...")
 
-            gsd = calculateGSD(ISS.coordinates().elevation.m, sensor_width, focal_lenght, camera_width)
+            gsd = calculateGSD(ISS.coordinates().elevation.m, sensor_width, focal_lenght, camera_width)  # recalculate GSD for every set of images
             print(f"GSD: {gsd}")
 
             time_difference = get_time_difference(images[0], images[1]) # Get time difference between images
@@ -230,7 +227,7 @@ while(datetime.now() < endTime and (storage_img) <= storage_limit):  # run until
             distance = calculate_mean_distance(coordinates_1, coordinates_2)
             print(f"Distance: {distance}")
 
-            speed.append(round(calculate_speed_in_kmps(distance, gsd, time_difference), 5))
+            speed.append(round(calculate_speed_in_kmps(distance, gsd, time_difference), 5))  # add current speed to array
             print(f"Speed values: {len(speed)}")
 
         except:
@@ -238,8 +235,12 @@ while(datetime.now() < endTime and (storage_img) <= storage_limit):  # run until
             print(f"Failed to process images")  # print error
             print("  Error: {}".format( e))  # print error details
 
+    # When coral is active, save only classified images
+    # When coral is inactive, save all images
+    # When time is almost up, save all images regardless of coral and classification
+    # Always check number of saved images
     if (coral and classified and (img_saved + 2) <= img_limit) or (not coral and (img_saved + 2) <= img_limit) or (datetime.now() >= failsafeTime and img_saved <= 10):
-        for i in range(2):
+        for i in range(2):  # add size of last set of images to storage and increment image counter
             storage_img += os.path.getsize(images[i - 1])
             img_saved += 1
         print(f"Used storage: {round((storage_img)/(1024*1024), 2)}MB")
@@ -252,8 +253,8 @@ while(datetime.now() < endTime and (storage_img) <= storage_limit):  # run until
 write_to_txt(data_file, speed)
 
 #* final output message
-print("#-------------------------------------------------------#")
+print("#-----------------------------------------#")
 print(f"Time elapsed: {datetime.now() - startTime}")
 print(f"Storage used: {round((storage_img)/(1024*1024), 2)}/{round(storage_limit/(1024*1024), 2)}MB,")
 print(f"Saved images: {img_saved}")
-print("#-------------------------------------------------------#")
+print("#-----------------------------------------#")
