@@ -186,8 +186,7 @@ while(datetime.now() < endTime and (storage_img) <= storage_limit):  # run until
 
     if coral:  # Classify first image only to save time. The images should not change drastically during one iteration
         print("Classifying images...")
-        classified = True  # save or delete images based on classifications
-        #! change -> True for testing purposes
+        classified = False  # save or delete images based on classifications
 
         #* Open first image and convert it to coral-friendly format -> no need to classify both images since they will not change significantly
         image = PILImage.open(images[0]).convert('RGB').resize(size, PILImage.ANTIALIAS)  # open image
