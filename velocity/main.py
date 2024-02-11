@@ -225,6 +225,9 @@ while(datetime.now() < endTime and (storage_img) <= storage_limit):  # run until
             matches = calculate_matches(descriptors_1, descriptors_2) # Match descriptors
             print(f"Matches: {len(matches)}")
             
+            if len(matches) == 0:
+                continue
+
             coordinates_1, coordinates_2 = find_matching_coordinates(keypoints_1, keypoints_2, matches)
             distance = calculate_mean_distance(coordinates_1, coordinates_2)
             print(f"Distance: {distance}")
