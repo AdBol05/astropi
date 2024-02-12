@@ -225,8 +225,8 @@ while(datetime.now() < endTime and (storage) <= storage_limit):  # run until sto
             distance = calculate_mean_distance(coordinates_1, coordinates_2)
             current_speed = round(calculate_speed_in_kmps(distance, gsd, time_difference), 5)  # calculate current speed
             
-            #if img_counter != 1000:  # ignore first iteration
-            #    storage -= os.path.getsize(backup_file)  # substract old backup file size
+            if storage == 0:  # ignore first iteration
+                storage -= os.path.getsize(backup_file)  # substract old backup file size
 
             storage += write_to_txt(backup_file, [current_speed])  # add current size of backup file
             
