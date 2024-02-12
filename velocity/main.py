@@ -30,8 +30,8 @@ label_file = base_folder/'viewtype_labels.txt' # set label file path
 img_counter = 1000  # image counter (start from 1000 for better naming scheme)
 img_saved = 0  # number of saved images
 img_limit = 40  # max number of images
-storage_limit = 250000000 # image storage limit
-storage_img = 0  # used image storage
+storage_limit = 250000000 # storage limit
+storage = 0  # used image storage
 
 # camera resolution (max 4056*3040 -> crashes (out of resources))
 camera_width = 2028
@@ -178,7 +178,7 @@ except:
     print("  Error: {}".format( e))  # print error details
 
 #* main loop
-while(datetime.now() < endTime and (storage_img) <= storage_limit):  # run until storage is full or time expires
+while(datetime.now() < endTime and (storage) <= storage_limit):  # run until storage is full or time expires
     print("Capturing images...")
     images = [] # array of paths to two last images
     for i in range(2):  # add image paths to array
@@ -219,7 +219,9 @@ while(datetime.now() < endTime and (storage_img) <= storage_limit):  # run until
 
             coordinates_1, coordinates_2 = find_matching_coordinates(keypoints_1, keypoints_2, matches)
             distance = calculate_mean_distance(coordinates_1, coordinates_2)
-            speed.append(round(calculate_speed_in_kmps(distance, gsd, time_difference), 5))  # add current speed to array
+            current_speed = round(calculate_speed_in_kmps(distance, gsd, time_difference), 5)  # calculate current speed
+            
+            speed.append(current_speed)  # add current speed to array
 
         except:
             e = sys.exc_info()  # get error message
@@ -232,9 +234,9 @@ while(datetime.now() < endTime and (storage_img) <= storage_limit):  # run until
     # Always check number of saved images
     if (coral and classified and (img_saved + 2) <= img_limit) or (not coral and (img_saved + 2) <= img_limit) or (datetime.now() >= failsafeTime and img_saved <= 10):
         for i in range(2):  # add size of last set of images to storage and increment image counter
-            storage_img += os.path.getsize(images[i - 1])
+            storage += os.path.getsize(images[i - 1])
             img_saved += 1
-        print(f"Used storage: {round((storage_img)/(1024*1024), 2)}MB")
+        print(f"Used storage: {round((storage)/(1024*1024), 2)}MB")
     else:
         img_delete(images)  # delete images
 
@@ -246,6 +248,6 @@ write_to_txt(data_file, speed)
 #* final output message
 print("#-----------------------------------------#")
 print(f"Time elapsed: {datetime.now() - startTime}")
-print(f"Storage used: {round((storage_img)/(1024*1024), 2)}/{round(storage_limit/(1024*1024), 2)}MB,")
+print(f"Storage used: {round((storage)/(1024*1024), 2)}/{round(storage_limit/(1024*1024), 2)}MB,")
 print(f"Saved images: {img_saved}")
 print("#-----------------------------------------#")
