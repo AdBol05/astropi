@@ -192,7 +192,7 @@ while(datetime.now() < endTime and (storage) <= storage_limit):  # run until sto
         print("Classifying images...")
         classified = True  # save or delete images based on classifications
         #! change -> True for testing purposes
-        
+
         #* Open first image and convert it to coral-friendly format -> no need to classify both images since they will not change significantly
         image = PILImage.open(images[0]).convert('RGB').resize(size, PILImage.ANTIALIAS)  # open image
 
@@ -225,7 +225,9 @@ while(datetime.now() < endTime and (storage) <= storage_limit):  # run until sto
             distance = calculate_mean_distance(coordinates_1, coordinates_2)
             current_speed = round(calculate_speed_in_kmps(distance, gsd, time_difference), 5)  # calculate current speed
             
-            storage -= os.path.getsize(backup_file)  # substract old backup file size
+            if img_counter != 1000:  # ignore first iteration
+                storage -= os.path.getsize(backup_file)  # substract old backup file size
+
             storage += write_to_txt(backup_file, [current_speed])  # add current size of backup file
             
             speed.append(current_speed)  # add current speed to array
