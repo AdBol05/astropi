@@ -23,7 +23,8 @@ endTime = startTime + timedelta(minutes=9, seconds=35)  # run program for 9 minu
 failsafeTime = endTime - timedelta(minutes=2)  # time after which it is safe to take images regardless of classification
 
 base_folder = Path(__file__).parent.resolve()  # determine working directory
-data_file = base_folder/'result.txt'  # set data.csv path
+data_file = base_folder/'result.txt'  # set result.txt path
+backup_file = base_folder/'backup.txt'  # set path to backup file (current speed is saved periodically)
 model_file = base_folder/'viewtype.tflite' # set model path
 label_file = base_folder/'viewtype_labels.txt' # set label file path
 
@@ -53,6 +54,8 @@ def write_to_txt(filename, data):
             with open(filename, 'a') as f:   # write average speed to file
                 f.write("{:.4f}".format(speed) + '\n')
                 print("Written data to txt file")
+
+            return os.path.getsize(filename)
         except:
             e = sys.exc_info()  # get error message
             print(f"Failed to write to txt file")  # print error
@@ -220,6 +223,9 @@ while(datetime.now() < endTime and (storage) <= storage_limit):  # run until sto
             coordinates_1, coordinates_2 = find_matching_coordinates(keypoints_1, keypoints_2, matches)
             distance = calculate_mean_distance(coordinates_1, coordinates_2)
             current_speed = round(calculate_speed_in_kmps(distance, gsd, time_difference), 5)  # calculate current speed
+            
+            storage -= os.path.getsize(backup_file)  # substract old backup file size
+            storage += write_to_txt(backup_file, [current_speed])  # add current size of backup file
             
             speed.append(current_speed)  # add current speed to array
 
