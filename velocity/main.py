@@ -251,7 +251,7 @@ while(datetime.now() < endTime and (storage) <= storage_limit):  # run until sto
     sleep(10)
 
 #* write final speed to txt file
-write_to_txt(data_file, speed)
+storage += write_to_txt(data_file, speed)
 
 #* final output message
 print("#-----------------------------------------#")
