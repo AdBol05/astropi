@@ -32,7 +32,7 @@ img_counter = 1000  # image counter (start from 1000 for better naming scheme)
 img_saved = 0  # number of saved images
 img_limit = 40  # max number of images
 storage_limit = 250000000 # storage limit
-storage = 0  # used image storage
+storage = 0  # used storage
 
 # camera resolution (max 4056*3040 -> crashes (out of resources))
 camera_width = 2028
