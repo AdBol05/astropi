@@ -71,6 +71,34 @@ def convert(angle):  # convert coordinates to degrees
     exif_angle = f'{degrees:.0f}/1,{minutes:.0f}/1,{seconds*10:.0f}/10'
     return sign < 0, exif_angle
 
+def capture(counter):
+        global img_counter
+        img_counter  += 1  # increment image counter
+
+        coords = ISS.coordinates()  # get current coordinates
+        south, exif_latitude = convert(coords.latitude)  # convert coords to EXIF-friendly format
+        west, exif_longitude = convert(coords.longitude)
+        altitude = Fraction(str(round(coords.elevation.m)))
+
+        # Set image EXIF data
+        camera.exif_tags['DateTimeOriginal'] = str(datetime.now().strftime("%Y:%m:%d, %H:%M:%S"))
+        camera.exif_tags['GPS.GPSLatitude'] = exif_latitude
+        camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
+        camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
+        camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
+        camera.exif_tags['GPS.GPSAltitude'] = str(f"{altitude.numerator}/{altitude.denominator}")
+
+        path = f"{base_folder}/img_{counter}.jpg"  # resolve image path
+
+        camera.capture(path)  # capture camera and save the image
+        print(f"{counter} / {img_saved}")  # debug
+        return path  # return path so it can be appended to an array
+
+def calculateGSD(elevation, sensor_size, focal_lenght, image_width):  # calculate GPS based on current altitude
+    gsd = (elevation * sensor_size) / (focal_lenght * image_width)
+    return gsd
+
+#* functions from https://projects.raspberrypi.org/en/projects/astropi-iss-speed
 def convert_to_cv(image_1, image_2):  # convert image to opencv format
     image_1_cv = cv2.imread(image_1, 0)
     image_2_cv = cv2.imread(image_2, 0)
@@ -127,33 +155,6 @@ def calculate_speed_in_kmps(feature_distance, GSD, time_difference):  # calculat
     distance = feature_distance * GSD / 100000
     speed = distance / time_difference
     return speed
-
-def capture(counter):
-        global img_counter
-        img_counter  += 1  # increment image counter
-
-        coords = ISS.coordinates()  # get current coordinates
-        south, exif_latitude = convert(coords.latitude)  # convert coords to EXIF-friendly format
-        west, exif_longitude = convert(coords.longitude)
-        altitude = Fraction(str(round(coords.elevation.m)))
-
-        # Set image EXIF data
-        camera.exif_tags['DateTimeOriginal'] = str(datetime.now().strftime("%Y:%m:%d, %H:%M:%S"))
-        camera.exif_tags['GPS.GPSLatitude'] = exif_latitude
-        camera.exif_tags['GPS.GPSLatitudeRef'] = "S" if south else "N"
-        camera.exif_tags['GPS.GPSLongitude'] = exif_longitude
-        camera.exif_tags['GPS.GPSLongitudeRef'] = "W" if west else "E"
-        camera.exif_tags['GPS.GPSAltitude'] = str(f"{altitude.numerator}/{altitude.denominator}")
-
-        path = f"{base_folder}/img_{counter}.jpg"  # resolve image path
-
-        camera.capture(path)  # capture camera and save the image
-        print(f"{counter} / {img_saved}")  # debug
-        return path  # return path so it can be appended to an array
-
-def calculateGSD(elevation, sensor_size, focal_lenght, image_width):  # calculate GPS based on current altitude
-    gsd = (elevation * sensor_size) / (focal_lenght * image_width)
-    return gsd
 
 #* camera setup (set iamge resolution)
 camera = PiCamera()
