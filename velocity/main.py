@@ -63,6 +63,8 @@ def write_to_txt(filename, data):
     else:
         print("No data to be saved!")
 
+    return 0
+
 def img_delete(images):
     print("Deleting images...")
     for img in images:  # get paths from array
