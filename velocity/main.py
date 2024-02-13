@@ -212,6 +212,7 @@ while(datetime.now() < endTime and (storage) <= storage_limit):  # run until sto
         try:
             print("Processing images...")
             gsd = calculateGSD(ISS.coordinates().elevation.m, sensor_width, focal_lenght, camera_width)  # recalculate GSD for every set of images
+            print(f"GSD: {gsd}")
 
             time_difference = get_time_difference(images[0], images[1]) # Get time difference between images
             image_1_cv, image_2_cv = convert_to_cv(images[0], images[1]) # Create OpenCV image objects
@@ -226,6 +227,9 @@ while(datetime.now() < endTime and (storage) <= storage_limit):  # run until sto
             distance = calculate_mean_distance(coordinates_1, coordinates_2)
             current_speed = round(calculate_speed_in_kmps(distance, gsd, time_difference), 5)  # calculate current speed
             
+            print(f"Distance: {distance}")
+            print(f"Current Speed: {current_speed}")
+
             if storage != 0:  # ignore first iteration
                 storage -= os.path.getsize(backup_file)  # substract old backup file size
 
