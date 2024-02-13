@@ -100,7 +100,7 @@ def capture(counter):
         return path  # return path so it can be appended to an array
 
 def calculateGSD(elevation, sensor_size, focal_lenght, image_width):  # calculate GPS based on current altitude
-    gsd = (elevation * sensor_size) / (focal_lenght * image_width)
+    gsd = (elevation * sensor_size) / (focal_lenght * image_width) * 100
     return gsd
 
 #* functions from https://projects.raspberrypi.org/en/projects/astropi-iss-speed
