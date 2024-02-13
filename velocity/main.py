@@ -36,7 +36,7 @@ storage = 0  # used storage
 
 # camera resolution (max 4056*3040 -> crashes (out of resources))
 camera_width = 3042
-camera_height = 22s80
+camera_height = 2280
 focal_lenght = 5
 sensor_width = 6.287
 
