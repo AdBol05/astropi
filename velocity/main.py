@@ -35,8 +35,8 @@ storage_limit = 250000000 # storage limit
 storage = 0  # used storage
 
 # camera resolution (max 4056*3040 -> crashes (out of resources))
-camera_width = 3042
-camera_height = 2280
+camera_width = 4056
+camera_height = 3040
 focal_lenght = 7     #?
 sensor_width = 3.76  #?
 
