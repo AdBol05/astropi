@@ -115,7 +115,8 @@ def get_time(image):  # get time of image creation from exif
     return time
 
 def get_time_difference(image_1, image_2):  # calculate time differnce between images
-    return get_time(image_1) - get_time(image_2)
+    time_difference = get_time(image_1) - get_time(image_2)
+    return time_difference.seconds
 
 def calculate_features(image_1, image_2, feature_number):  # calculate common features
     orb = cv2.ORB_create(nfeatures = feature_number)
