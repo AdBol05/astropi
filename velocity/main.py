@@ -42,10 +42,10 @@ sensor_width = 6.287
 speed = []  # array of speed values to be averaged
 
 #* define functions
-def average(list):
+def average(list):  # get acgerage of values in list
     return sum(list) / len(list)
 
-def write_to_txt(filename, data):
+def write_to_txt(filename, data):  # write data from list to file
     if len(data) > 0:
         try:
             print(f"Number of values in data array: {len(data)}")
@@ -75,7 +75,7 @@ def convert(angle):  # convert coordinates to degrees
     exif_angle = f'{degrees:.0f}/1,{minutes:.0f}/1,{seconds*10:.0f}/10'
     return sign < 0, exif_angle
 
-def capture(counter):
+def capture(counter):  # capture camera, add exif data, save to file and return file path
         global img_counter
         img_counter  += 1  # increment image counter
 
@@ -145,7 +145,7 @@ def find_matching_coordinates(keypoints_1, keypoints_2, matches):  # get coordin
         coordinates_2.append((x2,y2))
     return coordinates_1, coordinates_2
 
-def calculate_mean_distance(coordinates_1, coordinates_2):  # calculate distance between two coordinates
+def calculate_mean_distance(coordinates_1, coordinates_2):  # calculate average distance between two coordinates
     all_distances = 0
     merged_coordinates = list(zip(coordinates_1, coordinates_2))
     for coordinate in merged_coordinates:
