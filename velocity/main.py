@@ -110,16 +110,12 @@ def convert_to_cv(image_1, image_2):  # convert image to opencv format
 
 def get_time(image):  # get time of image creation from exif
     with open(image, 'rb') as image_file:
-        img = Image(image_file)
-        time_str = img.get("datetime_original")
+        time_str = Image(image_file).get("datetime_original")  # read time from image file
         time = datetime.strptime(time_str, '%Y:%m:%d %H:%M:%S')  # format time
     return time
 
 def get_time_difference(image_1, image_2):  # calculate time differnce between images
-    time_1 = get_time(image_1)
-    time_2 = get_time(image_2)
-    time_difference = time_2 - time_1
-    return time_difference.seconds
+    return get_time(image_1) - get_time(image_2)
 
 def calculate_features(image_1, image_2, feature_number):  # calculate common features
     orb = cv2.ORB_create(nfeatures = feature_number)
@@ -156,8 +152,8 @@ def calculate_mean_distance(coordinates_1, coordinates_2):  # calculate average 
     return all_distances / len(merged_coordinates)
 
 def calculate_speed_in_kmps(feature_distance, GSD, time_difference):  # calculate speed usind the distance, GSD and time difference
-    distance = feature_distance * GSD / 100000
-    speed = distance / time_difference
+    distance = feature_distance * GSD / 100000  # calculate distance in kilometers
+    speed = distance / time_difference  # calculate speed
     return speed
 
 #* camera setup (set iamge resolution)
@@ -191,7 +187,8 @@ while(datetime.now() < endTime and (storage) <= storage_limit):  # run until sto
 
     if coral:  # Classify first image only to save time. The images should not change drastically during one iteration
         print("Classifying images...")
-        classified = False  # save or delete images based on classifications
+        classified = True  # save or delete images based on classifications
+        #! change -> True for testing purposes
 
         #* Open first image and convert it to coral-friendly format -> no need to classify both images since they will not change significantly
         image = PILImage.open(images[0]).convert('RGB').resize(size, PILImage.ANTIALIAS)  # open image
@@ -222,6 +219,7 @@ while(datetime.now() < endTime and (storage) <= storage_limit):  # run until sto
                 print("No matches found")
                 continue
 
+            # get matching coordinates from image and calulate their distance
             coordinates_1, coordinates_2 = find_matching_coordinates(keypoints_1, keypoints_2, matches)
             distance = calculate_mean_distance(coordinates_1, coordinates_2)
             current_speed = round(calculate_speed_in_kmps(distance, gsd, time_difference), 5)  # calculate current speed
