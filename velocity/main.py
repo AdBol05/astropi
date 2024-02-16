@@ -30,7 +30,7 @@ label_file = base_folder/'viewtype_labels.txt' # set label file path
 img_counter = 1000  # image counter (start from 1000 for better naming scheme)
 img_saved = 0  # number of saved images
 img_limit = 40  # max number of images
-storage_limit = 250000000 # storage limit
+storage_limit = 230000000 # storage limit
 storage = 0  # used storage
 
 # camera resolution (max 4056*3040 -> crashes (out of resources))
